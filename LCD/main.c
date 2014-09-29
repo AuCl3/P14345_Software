@@ -207,60 +207,45 @@ void DisplayLine( int line, char* array )
 	 if( line == 0 )
 	 {
 		 
-			/*while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
+			while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
 			{
 			}
 			USART_SendData(USART1, 0xFE); //Command
-			*/
+			
 			
 			while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
 			{
 			}
-			USART_SendData(USART1, 0x80); //Move to position
-		 
-			while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
-			{
-			}
-			USART_SendData(USART1, 0x00); //Position of Line 0
+			USART_SendData(USART1, 0x80); //Move to position 0 ( 0x80 + 0x00 )
 	 }
 	 
 	 if( line == 1 )
 	 {
 		 
-			/*while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
+			while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
 			{
 			}
 			USART_SendData(USART1, 0xFE); //Command
-			*/
+			
 			
 			while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
 			{
 			}
-			USART_SendData(USART1, 0x80); //Move to position
-		 
-			while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
-			{
-			}
-			USART_SendData(USART1, 0x40); //Position of Line 1
+			USART_SendData(USART1, 0xC0); //Move to position 64 ( 0x80 + 0x40 = 0xC0 )
 	 }
 	 
 	 if( line == 2 )
 	 {
 		 
-			/*while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
+			while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
 			{
 			}
 			USART_SendData(USART1, 0xFE); //Command
-			*/
+			
 			while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
 			{
 			}
-			USART_SendData(USART1, 0x80); //Move to position
-		 
-			while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
-			{
-			}
-			USART_SendData(USART1, 0x14); //Position of Line 2
+			USART_SendData(USART1, 0x94); //Move to position 20 ( 0x80 + 0x14 = 0x94 )
 	 }
 	 
 	 
@@ -275,7 +260,7 @@ void DisplayLine( int line, char* array )
 			while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
 			{
 			}
-			USART_SendData(USART1, array[point] ); //Position of Line 3
+			USART_SendData(USART1, array[point] ); 
 	
 			
 			point++;

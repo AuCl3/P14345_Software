@@ -74,82 +74,93 @@ int main(void)
 	 while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
 	 {
 	 }
-		USART_SendData(USART1, 0xFE); //Clear Display
+		USART_SendData(USART1, 0x7C); //Command
 	 
 	 	while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
 	 {
 	 }
-		USART_SendData(USART1, 0x0C); //Clear Display
+		USART_SendData(USART1, 0x09); //Clear Display
 	 
-	while(1)
-	{
-	
-		while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
+	 
+	 while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
 	 {
 	 }
-		USART_SendData(USART1, 0xFE); //Clear Display
+		USART_SendData(USART1, 0xFE); //Command
 	 
 	 	while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
 	 {
 	 }
 		USART_SendData(USART1, 0x01); //Clear Display
 	 
+	 while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
+	 {
+	 }
+		USART_SendData(USART1, 0xFE); //Command
+	 
 	 	while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
 	 {
 	 }
-		USART_SendData(USART1, 'T'); //Clear Display
+		USART_SendData(USART1, 0x0D); //Blinking Cursor ON
 	 
-		x = 1;
 	 
-	 while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
-	 {
-	 }
-		USART_SendData(USART1, 'A'); //Clear Display
-	 
-		x = 1;
-		
-	while( x > 0 )
+	while(1)
 	{
-
-	while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
-	 {
-	 }
-		USART_SendData(USART1, 'D'); //Clear Display
+		 
+			while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
+			{
+			}
+			USART_SendData(USART1, 0xFE); //Command
+			
+			
+			while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
+			{
+			}
+			USART_SendData(USART1, 0x80); //Move to position 0 ( 0x80 + 0x00 )
+		 
+			
+			while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
+			{
+			}
+			USART_SendData(USART1, 'A');
 	 
-	 x = x-1;
+		 
+			
+			while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
+			{
+			}
+			USART_SendData(USART1, 0xFE); //Command
+			
+			
+			while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
+			{
+			}
+			USART_SendData(USART1, 0xC0); //Move to position 64 ( 0x80 + 0x40 = 0xC0 ) 
+			
+			
+			while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
+			{
+			}
+			USART_SendData(USART1, 'B');
 	 
-	}
-
-	 while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
-	 {
-	 }
-		USART_SendData(USART1, 'A'); //Clear Display
-	 /*
-	  while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
-	 {
-	 }
-		USART_SendData(USART1, 'L'); 
+		 
+			
+			while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
+			{
+			}
+			USART_SendData(USART1, 0xFE); //Command
+			
+			while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
+			{
+			}
+			USART_SendData(USART1, 0x94); //Move to position 20 ( 0x80 + 0x14 = 0x94 ) 
+		
+			
+			while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
+			{
+			}
+			USART_SendData(USART1, 'C');
 	 
-	 while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
-	 {
-	 }
-		USART_SendData(USART1, 0x7C);
 	 
-	 while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
-	 {
-	 }
-		USART_SendData(USART1, 0x80); 
-	 
-	 while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
-	 {
-	 }
-		USART_SendData(USART1, 0x14);
-	 
-	 while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
-	 {
-	 }
-		USART_SendData(USART1, 'K'); 
-*/
 	}
  
 }

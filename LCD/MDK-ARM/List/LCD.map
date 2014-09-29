@@ -1192,7 +1192,7 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
-      2580        492          0         56         24       2693   main.o
+      2580        492          0         56         24       2689   main.o
         64         26        392          0       1536        964   startup_stm32f30x.o
          0          0          0          0          0      14808   stm32f30x_adc.o
        500         22          0          0          0       8749   stm32f30x_gpio.o
@@ -1204,7 +1204,7 @@ Image component sizes
        476         40          0         20          0       1775   system_stm32f30x.o
 
     ----------------------------------------------------------------------
-     10600        756        424        132       1620     355035   Object Totals
+     10600        756        424        132       1620     355031   Object Totals
          0          0         32          0          0          0   (incl. Generated)
          2          0          0          6          0          0   (incl. Padding)
 
@@ -1279,8 +1279,8 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-     15928        972        600        132       1716     354839   Grand Totals
-     15928        972        600        132       1716     354839   ELF Image Totals
+     15928        972        600        132       1716     354835   Grand Totals
+     15928        972        600        132       1716     354835   ELF Image Totals
      15928        972        600        132          0          0   ROM Totals
 
 ==============================================================================
