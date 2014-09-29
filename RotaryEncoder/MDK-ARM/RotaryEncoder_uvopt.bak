@@ -174,7 +174,7 @@
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>&lt;1&gt;..\main.c</Filename>
+          <Filename>&lt;2&gt;..\main.c</Filename>
           <ExecCommand></ExecCommand>
           <Expression>\\RotaryEncoder\../main.c\119</Expression>
         </Bp>
@@ -190,7 +190,7 @@
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
           <BreakIfRCount>1</BreakIfRCount>
-          <Filename>&lt;1&gt;..\main.c</Filename>
+          <Filename>&lt;2&gt;..\main.c</Filename>
           <ExecCommand></ExecCommand>
           <Expression>\\RotaryEncoder\../main.c\139</Expression>
         </Bp>
@@ -668,10 +668,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>11</ColumnNumber>
+      <ColumnNumber>2</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>182</TopLine>
+      <CurrentLine>48</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
