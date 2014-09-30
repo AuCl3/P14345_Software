@@ -165,7 +165,7 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>566</LineNumber>
+          <LineNumber>563</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>0</Address>
           <ByteObject>0</ByteObject>
@@ -181,7 +181,7 @@
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>539</LineNumber>
+          <LineNumber>597</LineNumber>
           <EnabledFlag>1</EnabledFlag>
           <Address>0</Address>
           <ByteObject>0</ByteObject>
@@ -680,8 +680,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>33</TopLine>
-      <CurrentLine>44</CurrentLine>
+      <TopLine>63</TopLine>
+      <CurrentLine>125</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>

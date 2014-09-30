@@ -165,15 +165,15 @@
         <Bp>
           <Number>0</Number>
           <Type>0</Type>
-          <LineNumber>566</LineNumber>
+          <LineNumber>525</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134227950</Address>
+          <Address>0</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
+          <BreakIfRCount>0</BreakIfRCount>
           <Filename>&lt;3&gt;..\main.c</Filename>
           <ExecCommand></ExecCommand>
           <Expression></Expression>
@@ -181,15 +181,15 @@
         <Bp>
           <Number>1</Number>
           <Type>0</Type>
-          <LineNumber>301</LineNumber>
+          <LineNumber>430</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134226060</Address>
+          <Address>0</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
+          <BreakIfRCount>0</BreakIfRCount>
           <Filename>&lt;3&gt;..\main.c</Filename>
           <ExecCommand></ExecCommand>
           <Expression></Expression>
@@ -197,15 +197,15 @@
         <Bp>
           <Number>2</Number>
           <Type>0</Type>
-          <LineNumber>184</LineNumber>
+          <LineNumber>315</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134226002</Address>
+          <Address>0</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
+          <BreakIfRCount>0</BreakIfRCount>
           <Filename>&lt;3&gt;..\main.c</Filename>
           <ExecCommand></ExecCommand>
           <Expression></Expression>
@@ -213,15 +213,15 @@
         <Bp>
           <Number>3</Number>
           <Type>0</Type>
-          <LineNumber>169</LineNumber>
+          <LineNumber>312</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134225964</Address>
+          <Address>0</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
+          <BreakIfRCount>0</BreakIfRCount>
           <Filename>&lt;3&gt;..\main.c</Filename>
           <ExecCommand></ExecCommand>
           <Expression></Expression>
@@ -229,34 +229,50 @@
         <Bp>
           <Number>4</Number>
           <Type>0</Type>
-          <LineNumber>420</LineNumber>
+          <LineNumber>309</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134227108</Address>
+          <Address>0</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
+          <BreakIfRCount>0</BreakIfRCount>
           <Filename>&lt;3&gt;..\main.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\LCD\../main.c\420</Expression>
+          <Expression></Expression>
         </Bp>
         <Bp>
           <Number>5</Number>
           <Type>0</Type>
-          <LineNumber>539</LineNumber>
+          <LineNumber>563</LineNumber>
           <EnabledFlag>1</EnabledFlag>
-          <Address>134227846</Address>
+          <Address>0</Address>
           <ByteObject>0</ByteObject>
           <HtxType>0</HtxType>
           <ManyObjects>0</ManyObjects>
           <SizeOfObject>0</SizeOfObject>
           <BreakByAccess>0</BreakByAccess>
-          <BreakIfRCount>1</BreakIfRCount>
+          <BreakIfRCount>0</BreakIfRCount>
           <Filename>&lt;3&gt;..\main.c</Filename>
           <ExecCommand></ExecCommand>
-          <Expression>\\LCD\../main.c\539</Expression>
+          <Expression></Expression>
+        </Bp>
+        <Bp>
+          <Number>6</Number>
+          <Type>0</Type>
+          <LineNumber>597</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>0</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>0</BreakIfRCount>
+          <Filename>&lt;3&gt;..\main.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression></Expression>
         </Bp>
       </Breakpoint>
       <MemoryWindow1>
@@ -314,8 +330,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>166</TopLine>
+      <CurrentLine>179</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\CMSIS\Device\ST\STM32F30x\Source\Templates\arm\startup_stm32f30x.s</PathWithFileName>
       <FilenameWithoutPath>startup_stm32f30x.s</FilenameWithoutPath>
@@ -506,8 +522,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>287</TopLine>
+      <CurrentLine>304</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\STM32F30x_StdPeriph_Driver\src\stm32f30x_gpio.c</PathWithFileName>
       <FilenameWithoutPath>stm32f30x_gpio.c</FilenameWithoutPath>
@@ -722,8 +738,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>532</TopLine>
-      <CurrentLine>539</CurrentLine>
+      <TopLine>283</TopLine>
+      <CurrentLine>563</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
