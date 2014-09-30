@@ -71,16 +71,7 @@ int main(void)
    
   USART_Cmd(USART1,ENABLE);
 	 
-	 while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
-	 {
-	 }
-		USART_SendData(USART1, 0x7C); //Command
-	 
-	 	while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
-	 {
-	 }
-		USART_SendData(USART1, 0x09); //Clear Display
-	 
+
 	 
 	 while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
 	 {
