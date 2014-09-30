@@ -67,6 +67,7 @@
 /* Private function prototypes -----------------------------------------------*/
 
 	int Rotary( void );
+	void Display(USART_TypeDef*, uint16_t );
 	void DisplayLine( int , char* );
 	void UI_hl( void );
 	
@@ -195,6 +196,28 @@ int Rotary()
 
 
 
+
+
+
+
+void Display(USART_TypeDef* USARTx, uint16_t Data)
+{
+	//Check if USART still busy
+	while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
+	{
+	}
+	
+	//Send data
+	USART_SendData(USARTx, Data);
+	
+} //end Display function
+
+
+
+
+
+
+
 void DisplayLine( int line, char* array )
 {
 	
@@ -206,48 +229,21 @@ void DisplayLine( int line, char* array )
 	
 	 if( line == 0 )
 	 {
-		 
-			while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
-			{
-			}
-			USART_SendData(USART1, 0xFE); //Command
-			
-			
-			while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
-			{
-			}
-			USART_SendData(USART1, 0x80); //Move to position 0 ( 0x80 + 0x00 )
+			Display(USART1, 0xFE); //Command
+			Display(USART1, 0x80); //Move to position 0 ( 0x80 + 0x00 )
 	 }
 	 
 	 if( line == 1 )
 	 {
-		 
-			while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
-			{
-			}
-			USART_SendData(USART1, 0xFE); //Command
-			
-			
-			while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
-			{
-			}
-			USART_SendData(USART1, 0xC0); //Move to position 64 ( 0x80 + 0x40 = 0xC0 )
+			Display(USART1, 0xFE); //Command
+			Display(USART1, 0xC0); //Move to position 64 ( 0x80 + 0x40 = 0xC0 )
 	 }
 	 
 	 if( line == 2 )
 	 {
-		 
-			while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
-			{
-			}
-			USART_SendData(USART1, 0xFE); //Command
-			
-			while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
-			{
-			}
-			USART_SendData(USART1, 0x94); //Move to position 20 ( 0x80 + 0x14 = 0x94 )
+			Display(USART1, 0xFE); //Command
+			Display(USART1, 0x94); //Move to position 20 ( 0x80 + 0x14 = 0x94 )
 	 }
-	 
 	 
 	 
 	 
@@ -255,14 +251,9 @@ void DisplayLine( int line, char* array )
 	 
 	 while( point < arraysize )
 	 {
-		 
-
-			while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
-			{
-			}
-			USART_SendData(USART1, array[point] ); 
+		
+			Display(USART1, array[point] ); 
 	
-			
 			point++;
 		 
 	 } //end while
@@ -534,70 +525,103 @@ void UI_hl(void)
 		default:
 			break;
 		}
-		if ( GPIO_ReadInputDataBit( GPIOE, GPIO_Pin_10 ) > 0 && buttonFlag == 0 )
+		
+		
+		/* Rotary Button code */
+		
+		//If flag is low and INPUT = HIGH, flag = HIGH
+		if ( rotaryPressFlag == 0 )
 		{
-			buttonFlag = 1;
-			switch ( currentLevel )
+			if( GPIO_ReadInputDataBit( GPIOE, GPIO_Pin_9 ) > 0 )
 			{
-				case 1:
-					// Do Nothing
-					break;
-				case 2:
-					currentLevel --;
-					DisplayLine ( 1, "                    " );
-					if ( autoEN == 1 )
-						autoEN = 0;
-					if ( bypassEN == 1 )
-						bypassEN = 0;
-					break;
-				case 3:
-					currentLevel --;
-					DisplayLine ( 2, "                    " );
-					break;
-				case 4:
-					// Do Nothing
-					break;
+				rotaryPressFlag = 1;
+				switch ( currentLevel )
+				{
+					case 1:
+						currentLevel ++;
+						switch ( level1CurrentSelection )
+						{
+							case 0:
+								DisplayLine ( 1, "     Threshold      " );
+								level2CurrentSelection = 0;
+								break;
+							case 1:
+								DisplayLine ( 1, "      Disabled      " );
+								break;
+							case 2:
+								DisplayLine ( 1, "      Disabled      " );
+								break;
+						}
+						break;
+					case 2:
+						currentLevel ++;
+						break;
+					case 3:
+						currentLevel ++;
+						break;
+					case 4:
+						// Do Nothing
+						break;
+				}
 			}
 		}
+	
+		//Otherwise, if flag = HIGH, wait until INPUT = LOW to reset flag
 		else
-			buttonFlag = 0;
-		if ( GPIO_ReadInputDataBit( GPIOE, GPIO_Pin_9 ) > 0 && rotaryPressFlag == 0 )
 		{
-			rotaryPressFlag = 1;
-			switch ( currentLevel )
+			if( GPIO_ReadInputDataBit( GPIOE, GPIO_Pin_9 ) == 0 )
 			{
-				case 1:
-					currentLevel ++;
-					switch ( level1CurrentSelection )
-					{
-						case 0:
-							DisplayLine ( 1, "     Threshold      " );
-							level2CurrentSelection = 0;
-							break;
-						case 1:
-							DisplayLine ( 1, "      Disabled      " );
-							break;
-						case 2:
-							DisplayLine ( 1, "      Disabled      " );
-							break;
-					}
-					break;
-				case 2:
-					currentLevel ++;
-					break;
-				case 3:
-					currentLevel ++;
-					break;
-				case 4:
-					// Do Nothing
-					break;
+				rotaryPressFlag = 0;
 			}
 		}
+		
+		
+		/* Back Button code */
+		
+		//If flag is low and INPUT = HIGH, flag = HIGH
+		if ( buttonFlag == 0 )
+		{
+			if( GPIO_ReadInputDataBit( GPIOE, GPIO_Pin_10 ) > 0 )
+			{
+				buttonFlag = 1;
+				switch ( currentLevel )
+				{
+					case 1:
+						// Do Nothing
+						break;
+					case 2:
+						currentLevel-- ;
+						DisplayLine ( 1, "                    " );
+						if ( autoEN == 1 )
+							autoEN = 0;
+						if ( bypassEN == 1 )
+							bypassEN = 0;
+						break;
+					case 3:
+						currentLevel-- ;
+						DisplayLine ( 2, "                    " );
+						break;
+					case 4:
+						currentLevel-- ;
+						break;
+				}	
+			}
+		}
+			
+		//Otherwise, if flag = HIGH, wait until INPUT = LOW to reset flag
 		else
-			rotaryPressFlag = 0;
-	}
-}
-
+		{
+			if( GPIO_ReadInputDataBit( GPIOE, GPIO_Pin_10 ) == 0 )
+			{
+				buttonFlag = 0;
+			}
+		}
+		
+		
+		
+		
+	}  //end while
+} //end UI_hl
 
 
 
