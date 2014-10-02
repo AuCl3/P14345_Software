@@ -1,6 +1,6 @@
 /**
   ******************************************************************************
-  * @file    RotaryEncoder/main.c
+  * @file    RotaryEncoder / main.c
   * @author  Jeffrey Auclair
   * @version V1.0.0
   * @date    9/11/14
@@ -8,9 +8,11 @@
   ******************************************************************************
   */ 
 
+
 /* Includes ------------------------------------------------------------------*/
 
 #include "main.h"
+
 
 /** @addtogroup STM32F3_Discovery_SD_Projects
   * @{
@@ -20,31 +22,34 @@
   * @{
   */ 
 
+
 /* Private typedef -----------------------------------------------------------*/
+
+	GPIO_InitTypeDef        GPIO_InitStructure;
+		
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 
-	
-		uint8_t RotaryPosition = 1;
-		uint8_t CW;
-		uint8_t CCW;
-		GPIO_InitTypeDef        GPIO_InitStructure;
+		uint8_t 			RotaryPosition = 1;
+		uint8_t 			CW;
+		uint8_t 			CCW;
 		
 		
-
 /* Private function prototypes -----------------------------------------------*/
-
 /* Private functions ---------------------------------------------------------*/
+
+
+
 
 /**
   * @brief  Main program.
   * @param  None
   * @retval None
   */
+	
 int main(void)
 {
-	
 	
 	/* GPIOE Periph clock enable */
   RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOE, ENABLE);
@@ -90,8 +95,6 @@ int main(void)
 	STM_EVAL_LEDOff(LED7);
 	
 	
-	
-	
 	while (1)
   {
 		
@@ -104,6 +107,7 @@ int main(void)
 		//Want to only accept data if one is zero and other goes from low to high
 		//Change occurs when value != old value
 		//Old value should be equal to 0, current value should be high ( greater than 0 )
+		
 		if( CW > 0 )
 		{
 			
@@ -143,48 +147,11 @@ int main(void)
 				}
 			}
 		}
+
 		
-		
-		/*
-		if( CW > 0 )
-		{
-			if( RotaryPosition < 10 )
-			{
-				RotaryPosition++;
-			}
-			
-			STM_EVAL_LEDToggle(LED6);
-			
-			while( CW > 0 || CCW > 0 )
-			{
-				CW = GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_8);
-		
-				CCW = GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_9);
-			}
-			
-		}
-		
-		if( CCW > 0 )
-		{
-			if( RotaryPosition > 0 )
-			{
-				RotaryPosition--;
-			}
-			STM_EVAL_LEDToggle(LED7);
-			
-			while( CW > 0 || CCW > 0 )
-			{
-				CW = GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_8);
-		
-				CCW = GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_9);
-			}
-			
-		}
-		*/
   } //end while
 	
 } //end main
-
 
 
 

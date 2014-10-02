@@ -1,38 +1,52 @@
 /**
   ******************************************************************************
-  * @file    blank.c
-  * @author  name
-  * @version V1.0
-  * @date    0/0/00
+  * @file    UART / main.c
+  * @author  Jeffrey Auclair
+  * @version V1.0.0
+  * @date    10/2/14
   * @brief   Main program body
   ******************************************************************************
   */ 
+
 
 /* Includes ------------------------------------------------------------------*/
 
 #include "main.h"
 
+
 /** @addtogroup STM32F3_Discovery_SD_Projects
   * @{
   */
 
-/** @addtogroup [program name]
+/** @addtogroup UART
   * @{
   */ 
 
+
 /* Private typedef -----------------------------------------------------------*/
+
+		GPIO_InitTypeDef        GPIOC_InitStructure;
+		USART_InitTypeDef 			USART1_InitStructure;
+		
+		
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-	GPIO_InitTypeDef        GPIOC_InitStructure;
-	USART_InitTypeDef 			USART1_InitStructure;
+
+	int x = 0;
+	
 	
 /* Private function prototypes -----------------------------------------------*/
+
 	void GPIOC_Init(void);
 	void USART1_Init(void);
 	
-	int x = 0;
+	void Display(USART_TypeDef*, uint16_t );
+	
+	
 /* Private functions ---------------------------------------------------------*/
+
+
 
 
 /**
@@ -40,6 +54,7 @@
   * @param  None
   * @retval None
   */
+	
 int main(void)
 {
 	
@@ -73,90 +88,53 @@ int main(void)
 	 
 
 	 
-	 while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
-	 {
-	 }
-		USART_SendData(USART1, 0xFE); //Command
+	Display(USART1, 0xFE); //Command
+	Display(USART1, 0x01); //Clear Display
 	 
-	 	while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
-	 {
-	 }
-		USART_SendData(USART1, 0x01); //Clear Display
-	 
-	 while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
-	 {
-	 }
-		USART_SendData(USART1, 0xFE); //Command
-	 
-	 	while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
-	 {
-	 }
-		USART_SendData(USART1, 0x0D); //Blinking Cursor ON
+	Display(USART1, 0xFE); //Command
+	Display(USART1, 0x0D); //Blinking Cursor ON
 	 
 	 
 	while(1)
 	{
 		 
-			while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
-			{
-			}
-			USART_SendData(USART1, 0xFE); //Command
-			
-			
-			while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
-			{
-			}
-			USART_SendData(USART1, 0x80); //Move to position 0 ( 0x80 + 0x00 )
+		Display(USART1, 0xFE); //Command
+		Display(USART1, 0x80); //Move to position 0 ( 0x80 + 0x00 )
 		 
-			
-			while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
-			{
-			}
-			USART_SendData(USART1, 'A');
+		Display(USART1, 'A');
 	 
-		 
+		Display(USART1, 0xFE); //Command
+		Display(USART1, 0xC0); //Move to position 64 ( 0x80 + 0x40 = 0xC0 ) 
 			
-			while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
-			{
-			}
-			USART_SendData(USART1, 0xFE); //Command
-			
-			
-			while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
-			{
-			}
-			USART_SendData(USART1, 0xC0); //Move to position 64 ( 0x80 + 0x40 = 0xC0 ) 
-			
-			
-			while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
-			{
-			}
-			USART_SendData(USART1, 'B');
+		Display(USART1, 'B');
 	 
-		 
-			
-			while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
-			{
-			}
-			USART_SendData(USART1, 0xFE); //Command
-			
-			while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
-			{
-			}
-			USART_SendData(USART1, 0x94); //Move to position 20 ( 0x80 + 0x14 = 0x94 ) 
-		
-			
-			while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
-			{
-			}
-			USART_SendData(USART1, 'C');
+		Display(USART1, 0xFE); //Command
+		Display(USART1, 0x94); //Move to position 20 ( 0x80 + 0x14 = 0x94 )
+		Display(USART1, 'C');
 	 
-	 
-	}
+	} //end while
  
-}
+} //end main
 
 
+
+
+/**
+  * @brief  Display.
+  * @param  USART BUS, DATA;
+  * @retval None
+  */
+
+void Display(USART_TypeDef* USARTx, uint16_t Data)
+{
+	
+	//Check if USART still busy
+	while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET);
+	
+	//Send data
+	USART_SendData(USARTx, Data);
+	
+} //end Display function
 	
 
 

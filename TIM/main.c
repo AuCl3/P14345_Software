@@ -1,45 +1,62 @@
 /**
   ******************************************************************************
-  * @file    main.c/TIM.c
-  * @author  name
-  * @version V1.0
-  * @date    0/0/00
+  * @file    TIM / main.c
+  * @author  Jeffrey Auclair
+  * @version V1.0.0
+  * @date    10/2/14
   * @brief   Main program body
   ******************************************************************************
   */ 
+
 
 /* Includes ------------------------------------------------------------------*/
 
 #include "main.h"
 
+
 /** @addtogroup STM32F3_Discovery_SD_Projects
   * @{
   */
 
-/** @addtogroup [program name]
+/** @addtogroup TIM
   * @{
   */ 
 
+
 /* Private typedef -----------------------------------------------------------*/
+
+	TIM_TimeBaseInitTypeDef  	TIM_TimeBaseStructure;
+	TIM_OCInitTypeDef  				TIM_OCInitStructure;
+	NVIC_InitTypeDef 					NVIC_InitStructure;
+
+
 /* Private define ------------------------------------------------------------*/
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
-TIM_TimeBaseInitTypeDef  TIM_TimeBaseStructure;
-TIM_OCInitTypeDef  TIM_OCInitStructure;
-__IO uint16_t CCR1_Val = 1;
-uint16_t PrescalerValue = 0;
 
-uint16_t Attack = 1000;
-uint16_t Count = 0;
+__IO 	uint16_t 		CCR1_Val = 1;
+			uint16_t 		PrescalerValue = 0;
+
+			uint16_t 		Attack = 1000;
+			uint16_t 		Count = 0;
+
+
 /* Private function prototypes -----------------------------------------------*/
-static void TIM_Config(void);
+
+	static void TIM_Config(void);
+
+
 /* Private functions ---------------------------------------------------------*/
+
+
+
 
 /**
   * @brief  Main program.
   * @param  None
   * @retval None
   */
+	
 int main(void)
 {
 
@@ -90,9 +107,15 @@ int main(void)
 
 
 
+
+/**
+  * @brief  TIM Configuration.
+  * @param  None
+  * @retval None
+  */
+
 static void TIM_Config(void)
 {
-NVIC_InitTypeDef NVIC_InitStructure;
 
   /* TIM3 clock enable */
   RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
@@ -110,7 +133,12 @@ NVIC_InitTypeDef NVIC_InitStructure;
   /* Turn on LED3, LED4, LED5 and LED6 */
   STM_EVAL_LEDOn(LED3);
 	STM_EVAL_LEDOff(LED10);
-}
+	
+} //end TIM_Config
+
+
+
+
 
 
 #ifdef  USE_FULL_ASSERT

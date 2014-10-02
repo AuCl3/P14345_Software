@@ -732,8 +732,8 @@ Image Symbol Table
     SystemCoreClock                          0x20000044   Data           4  system_stm32f30x.o(.data)
     AHBPrescTable                            0x20000048   Data          16  system_stm32f30x.o(.data)
     ADC_InitStructure                        0x20000058   Data          32  main.o(.bss)
-    DAC_InitStructure                        0x20000078   Data          16  main.o(.bss)
-    ADC_CommonInitStructure                  0x20000088   Data          20  main.o(.bss)
+    ADC_CommonInitStructure                  0x20000078   Data          20  main.o(.bss)
+    DAC_InitStructure                        0x2000008c   Data          16  main.o(.bss)
     __libspace_start                         0x2000009c   Data          96  libspace.o(.bss)
     __temporary_stack_top$libspace           0x200000fc   Data           0  libspace.o(.bss)
 

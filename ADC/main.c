@@ -1,44 +1,51 @@
 /**
   ******************************************************************************
-  * @file    blank.c
-  * @author  name
-  * @version V1.0
-  * @date    0/0/00
+  * @file    ADC / main.c
+  * @author  Jeffrey Auclair
+  * @version V1.0.0
+  * @date    10/2/14
   * @brief   Main program body
   ******************************************************************************
   */ 
+
 
 /* Includes ------------------------------------------------------------------*/
 
 #include "main.h"
 
+
 /** @addtogroup STM32F3_Discovery_SD_Projects
   * @{
   */
 
-/** @addtogroup [program name]
+/** @addtogroup ADC
   * @{
   */ 
-
+	
+	
 /* Private typedef -----------------------------------------------------------*/
 
-	ADC_InitTypeDef		ADC_InitStructure;
-	DAC_InitTypeDef            DAC_InitStructure;
-	ADC_CommonInitTypeDef ADC_CommonInitStructure;
-	GPIO_InitTypeDef      GPIO_InitStructure;
+	ADC_InitTypeDef					ADC_InitStructure;
+	ADC_CommonInitTypeDef 	ADC_CommonInitStructure;
+	DAC_InitTypeDef   			DAC_InitStructure;
+	GPIO_InitTypeDef      	GPIO_InitStructure;
+	
 	
 /* Private define ------------------------------------------------------------*/
 
 	#define DAC_DHR12R2_ADDRESS      0x40007414
 	#define DAC_DHR8R1_ADDRESS       0x40007410
 	
+	
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
 
-__IO uint16_t  ADC1ConvertedValue = 0, ADC1ConvertedVoltage = 0, calibration_value = 0;
-__IO uint32_t TimingDelay = 0;
+__IO 	uint16_t  	ADC1ConvertedValue = 0, ADC1ConvertedVoltage = 0;
+__IO 	uint16_t  	calibration_value = 0;
+__IO 	uint32_t 		TimingDelay = 0;
 
-		uint16_t Data = 0;
+			uint16_t 		Data = 0;
+
 
 /* Private function prototypes -----------------------------------------------*/
 
@@ -48,19 +55,27 @@ __IO uint32_t TimingDelay = 0;
 	
 /* Private functions ---------------------------------------------------------*/
 
+
+
+
 /**
   * @brief  Main program.
   * @param  None
   * @retval None
   */
+	
 int main(void)
 {
- 
+	
+	/* Configure ADC and DAC */
 	ADC_Config();
 	DAC_Config();
 	
+	
+	/* Loop forever */
 	while(1)
 	{
+		
 		/* Test EOC flag */
     while(ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) == RESET);
     
@@ -74,10 +89,19 @@ int main(void)
     /* Compute the voltage */
     ADC1ConvertedVoltage = (ADC1ConvertedValue *3300)/0xFFF;
 	
-	}
-}
+		
+	} //end while
+	
+} //end main
 
 
+
+
+/**
+  * @brief  ADC Configuration.
+  * @param  None
+  * @retval None
+  */
 
 void ADC_Config( void )
 {
@@ -139,14 +163,21 @@ void ADC_Config( void )
   /* Start ADC1 Software Conversion */ 
   ADC_StartConversion(ADC1);
 	
-}
+	
+} //end ADC_Config
 
+
+
+
+/**
+  * @brief  DAC Configuration.
+  * @param  None
+  * @retval None
+  */
 
 void DAC_Config( void )
 {
 	
-	
-
   /* DAC Periph clock enable */
   RCC_APB1PeriphClockCmd(RCC_APB1Periph_DAC, ENABLE);
 
@@ -170,16 +201,29 @@ void DAC_Config( void )
   /* Enable DAC Channel1 */
   DAC_Cmd(DAC_Channel_1, ENABLE);
 	
-}
+	
+} //end DAC_Config
 
 
+
+
+/**
+  * @brief  Delay.
+  * @param  nTime
+  * @retval None
+  */
 
 void Delay(__IO uint32_t nTime)
 { 
   TimingDelay = nTime;
 
   while(TimingDelay != 0);
-}
+	
+} //end Delay
+
+
+
+
 
 
 #ifdef  USE_FULL_ASSERT
