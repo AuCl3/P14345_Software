@@ -76,6 +76,8 @@ int main(void)
 	while(1)
 	{
 		
+		
+		
 		/* Test EOC flag */
     while(ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) == RESET);
     
@@ -84,11 +86,22 @@ int main(void)
 		
 		Data = ADC1ConvertedValue;
 		
+		if( Data > 0xAAA )
+		{
+			/* Output to DAC */
 		DAC_SetChannel1Data(DAC_Align_12b_R, Data);
-    
-    /* Compute the voltage */
-    ADC1ConvertedVoltage = (ADC1ConvertedValue *3300)/0xFFF;
-	
+			
+		}
+		
+		else
+		{
+			/* Output to DAC */
+		DAC_SetChannel1Data(DAC_Align_12b_R, 0x000 );	
+		}
+		
+		
+		
+		
 		
 	} //end while
 	
