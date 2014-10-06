@@ -67,10 +67,14 @@ __IO 	uint32_t 		TimingDelay = 0;
 int main(void)
 {
 	
+	uint16_t out = 0;
+	
+	
 	/* Configure ADC and DAC */
 	ADC_Config();
 	DAC_Config();
 	
+
 	
 	/* Loop forever */
 	while(1)
@@ -86,18 +90,24 @@ int main(void)
 		
 		Data = ADC1ConvertedValue;
 		
-		if( Data > 0xAAA )
-		{
-			/* Output to DAC */
-		DAC_SetChannel1Data(DAC_Align_12b_R, Data);
-			
-		}
 		
+		if( Data > 0x555 )
+		{
+			if( out < 0x0FFF )
+			{
+				out = out + 50;
+			}
+
+		}
 		else
 		{
-			/* Output to DAC */
-		DAC_SetChannel1Data(DAC_Align_12b_R, 0x000 );	
+			out = 0;
+		
 		}
+		
+			/* Output to DAC */
+		DAC_SetChannel1Data(DAC_Align_12b_R, out);
+		
 		
 		
 		

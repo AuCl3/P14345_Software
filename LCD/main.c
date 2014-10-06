@@ -129,7 +129,11 @@ int main(void)
 	/* Turn on USART1 */
 	USART_Cmd(USART1,ENABLE);
 	
-	
+	/* Initialize Display */
+	DisplayLine ( 0, "                    " );
+	DisplayLine ( 1, "                    " );
+	DisplayLine ( 2, "                    " );
+	DisplayLine ( 3, "                    " );
 	
 	
 	//Enter UI forever
@@ -281,32 +285,48 @@ void UI_hl(void)
 	
 	while ( 1 )
 	{
+		
+		
 		switch ( Rotary () )
 		{
+			
+			
 		case 0:			// No change
 			rotaryFlag = 0;
 			break;
+		
+		
 		case 1:			// Clockwise
 			if ( rotaryFlag == 1 )
 				break;
 			rotaryFlag = 1;
+			
+			
+			
 			switch ( currentLevel )
 			{
+				
+				
 				case 1:
-					level1CurrentSelection ++;
 					switch (level1CurrentSelection)
 					{
 						case 0:
-							DisplayLine ( 0, "       Manual       " );
-							break;
-						case 1:
+							level1CurrentSelection = 1;
 							DisplayLine ( 0, "      Automode      " );
 							break;
-						case 2:
+						case 1:
+							level1CurrentSelection = 2;
 							DisplayLine ( 0, "       Bypass       " );
+							break;
+						case 2:
+							level1CurrentSelection = 0;
+							DisplayLine ( 0, "       Manual       " );
 							break;
 					}
 					break;
+					
+					
+					
 				case 2:
 					switch (level1CurrentSelection)
 					{
@@ -334,6 +354,8 @@ void UI_hl(void)
 									break;
 							}
 							break;
+							
+							
 						case 1:
 							if ( autoEN == 1 )
 							{
@@ -345,6 +367,7 @@ void UI_hl(void)
 								autoEN = 1;
 								DisplayLine ( 1, "      Enabled       " );
 							}	
+							break;
 						case 2:
 							if ( bypassEN == 1 )
 							{
@@ -355,9 +378,13 @@ void UI_hl(void)
 							{
 								bypassEN = 1;
 								DisplayLine ( 1, "      Enabled       " );
-							}	
+							}
+							break;							
 					}
 					break;
+					
+					
+					
 				case 3:
 					switch ( level2CurrentSelection )
 					{
@@ -409,25 +436,30 @@ void UI_hl(void)
 			if ( rotaryFlag == 1 )
 				break;
 			rotaryFlag = 1;
+			
+			
 			switch ( currentLevel )
 			{
 				case 1:
-					level1CurrentSelection --;
 					switch ( level1CurrentSelection )
 					{
 						case 0:
-							DisplayLine ( 0, "       Manual       " );
+							level1CurrentSelection = 2;
+							DisplayLine ( 0, "       Bypass       " );
 							break;
 						case 1:
-							DisplayLine (0, "      Automode      " );
+							level1CurrentSelection = 0;
+							DisplayLine ( 0, "       Manual       " );
 							break;
 						case 2:
-							DisplayLine ( 0, "       Bypass       " );
+							level1CurrentSelection = 1;
+							DisplayLine (0, "      Automode      " );
+							
 							break;
 					}
 					break;
 				case 2:
-					switch ( level2CurrentSelection )
+					switch ( level1CurrentSelection )
 					{
 						case 0:
 							if ( level2CurrentSelection == 0 )
@@ -452,6 +484,7 @@ void UI_hl(void)
 									DisplayLine ( 1, "       Ratio        " );
 									break;
 							}
+							break;
 						case 1:
 							if ( autoEN == 1 )
 							{
@@ -463,6 +496,7 @@ void UI_hl(void)
 								autoEN = 1;
 								DisplayLine ( 1, "      Enabled       " );
 							}	
+							break;
 						case 2:
 							if ( bypassEN == 1 )
 							{
@@ -474,6 +508,7 @@ void UI_hl(void)
 								bypassEN = 1;
 								DisplayLine ( 1, "      Enabled       " );
 							}	
+							break;
 					}
 					break;
 				case 3:
@@ -554,12 +589,10 @@ void UI_hl(void)
 						}
 						break;
 					case 2:
-						currentLevel ++;
+						if ( level1CurrentSelection == 0 )
+							currentLevel ++;
 						break;
 					case 3:
-						currentLevel ++;
-						break;
-					case 4:
 						// Do Nothing
 						break;
 				}
@@ -600,9 +633,6 @@ void UI_hl(void)
 					case 3:
 						currentLevel-- ;
 						DisplayLine ( 2, "                    " );
-						break;
-					case 4:
-						currentLevel-- ;
 						break;
 				}	
 			}

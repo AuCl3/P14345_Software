@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Obj\LCD.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Obj\LCD.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 76]: Last Updated: Tue Sep 30 18:34:36 2014
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 76]: Last Updated: Sun Oct 05 21:48:16 2014
 <BR><P>
 <H3>Maximum Stack Usage =        320 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -1003,7 +1003,8 @@ Global Symbols
 </UL>
 <BR>[Calls]<UL><LI><a href="#[87]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Display
 </UL>
-<BR>[Called By]<UL><LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UI_hl
+<BR>[Called By]<UL><LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
+<LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UI_hl
 </UL>
 
 <P><STRONG><a name="[8b]"></a>Rotary</STRONG> (Thumb, 106 bytes, Stack size 16 bytes, main.o(.text))
@@ -1014,7 +1015,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UI_hl
 </UL>
 
-<P><STRONG><a name="[8d]"></a>UI_hl</STRONG> (Thumb, 2064 bytes, Stack size 0 bytes, main.o(.text))
+<P><STRONG><a name="[8d]"></a>UI_hl</STRONG> (Thumb, 2060 bytes, Stack size 0 bytes, main.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 120 + Unknown Stack Size
 <LI>Call Chain = UI_hl &rArr; __2sprintf &rArr; _printf_char_common &rArr; __printf
 </UL>
@@ -1029,7 +1030,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[67]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[67]"></a>main</STRONG> (Thumb, 130 bytes, Stack size 0 bytes, main.o(.text))
+<P><STRONG><a name="[67]"></a>main</STRONG> (Thumb, 162 bytes, Stack size 0 bytes, main.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 120 + Unknown Stack Size
 <LI>Call Chain = main &rArr; UI_hl &rArr; __2sprintf &rArr; _printf_char_common &rArr; __printf
 </UL>
@@ -1038,6 +1039,7 @@ Global Symbols
 <LI><a href="#[92]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;RCC_AHBPeriphClockCmd
 <LI><a href="#[93]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_Init
 <LI><a href="#[8d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UI_hl
+<LI><a href="#[8a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DisplayLine
 <LI><a href="#[96]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_Cmd
 <LI><a href="#[85]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;USART_Init
 </UL>
@@ -1047,7 +1049,7 @@ Global Symbols
 <P><STRONG><a name="[4]"></a>NMI_Handler</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, stm32f30x_it.o(.text))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f30x.o(RESET)
 </UL>
-<P><STRONG><a name="[5]"></a>HardFault_Handler</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, stm32f30x_it.o(.text))
+<P><STRONG><a name="[5]"></a>HardFault_Handler</STRONG> (Thumb, 10 bytes, Stack size 0 bytes, stm32f30x_it.o(.text))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f30x.o(RESET)
 </UL>
 <P><STRONG><a name="[6]"></a>MemManage_Handler</STRONG> (Thumb, 4 bytes, Stack size 0 bytes, stm32f30x_it.o(.text))
