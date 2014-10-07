@@ -90,7 +90,7 @@ int main(void)
 		
 		Data = ADC1ConvertedValue;
 		
-		
+		/*
 		if( Data > 0x555 )
 		{
 			if( out < 0x0FFF )
@@ -105,8 +105,9 @@ int main(void)
 		
 		}
 		
+		*/
 			/* Output to DAC */
-		DAC_SetChannel1Data(DAC_Align_12b_R, out);
+		DAC_SetChannel1Data(DAC_Align_12b_R, Data);
 		
 		
 		

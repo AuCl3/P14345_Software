@@ -287,8 +287,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>2287</TopLine>
+      <CurrentLine>2300</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\STM32F30x_StdPeriph_Driver\src\stm32f30x_adc.c</PathWithFileName>
       <FilenameWithoutPath>stm32f30x_adc.c</FilenameWithoutPath>
@@ -429,10 +429,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>16</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>286</TopLine>
-      <CurrentLine>304</CurrentLine>
+      <TopLine>288</TopLine>
+      <CurrentLine>297</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\STM32F30x_StdPeriph_Driver\src\stm32f30x_gpio.c</PathWithFileName>
       <FilenameWithoutPath>stm32f30x_gpio.c</FilenameWithoutPath>
@@ -605,10 +605,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>19</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>1892</TopLine>
+      <CurrentLine>1903</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\STM32F30x_StdPeriph_Driver\src\stm32f30x_usart.c</PathWithFileName>
       <FilenameWithoutPath>stm32f30x_usart.c</FilenameWithoutPath>
@@ -647,8 +647,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>48</TopLine>
+      <CurrentLine>59</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
