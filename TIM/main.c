@@ -43,7 +43,7 @@ __IO 	uint16_t 		CCR1_Val = 1;
 
 /* Private function prototypes -----------------------------------------------*/
 
-	static void TIM_Config(void);
+	void TIM_Config(void);
 
 
 /* Private functions ---------------------------------------------------------*/
@@ -114,7 +114,7 @@ int main(void)
   * @retval None
   */
 
-static void TIM_Config(void)
+void TIM_Config(void)
 {
 
   /* TIM3 clock enable */

@@ -134,13 +134,14 @@ void ADC_Config( void )
 	
 	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_ADC12, ENABLE);
 	
+	
 	/* Setup SysTick Timer for 1 µsec interrupts  */
-  if (SysTick_Config(SystemCoreClock / 1000000))
-  { 
+  //if (SysTick_Config(SystemCoreClock / 1000000))
+ // { 
     /* Capture error */ 
-    while (1)
-    {}
-  }
+  //  while (1)
+  //  {}
+  //}
 	
 	
 	 /* GPIOC Periph clock enable */
