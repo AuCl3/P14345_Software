@@ -1,16 +1,16 @@
 /**
   ******************************************************************************
-  * @file    blank.c
-  * @author  name
+  * @file    main.c
+  * @author  P14345
   * @version V1.0
   * @date    0/0/00
-  * @brief   Main program body
+  * @brief   Program body
   ******************************************************************************
   */ 
 
 /* Includes ------------------------------------------------------------------*/
 
-#include "main.h"
+//#include "main.h"
 
 
 
@@ -38,7 +38,7 @@
 	static const double thresholdMin = -20;
 	static const double attackMin = 0.1;
 	static const double attackMax = 30;
-	static const double ratioMin = 0.1;
+	static const double ratioMin = 1;
 	static const double ratioMax = 20;
 	static const double releaseMin = 0.1;
 	static const double releaseMax = 1.2;
@@ -70,6 +70,7 @@
 	void Display(USART_TypeDef*, uint16_t );
 	void DisplayLine( int , char* );
 	void UI_hl( void );
+	char* DoubleToChar ( double );
 	
 /* Private functions ---------------------------------------------------------*/
 
@@ -78,6 +79,232 @@
   * @param  None
   * @retval None
   */
+	
+char* DoubleToChar ( double in )
+{
+	if ( in == -20 )
+		return "       -20.0        ";
+	else if ( in == -19.5 )
+		return "       -19.5        ";
+	else if ( in == -19 )
+		return "       -19.0        ";
+	else if ( in == -18.5 )
+		return "       -18.5        ";
+	else if ( in == -18 )
+		return "       -18.0        ";
+	else if ( in == -17.5 )
+		return "       -17.5        ";
+	else if ( in == -17 )
+		return "       -17.0        ";
+	else if ( in == -16.5 )
+		return "       -16.5        ";
+	else if ( in == -16 )
+		return "       -16.0        ";
+	else if ( in == -15.5 )
+		return "       -15.5        ";
+	else if ( in == -15 )
+		return "       -15.0        ";
+	else if ( in == -14.5 )
+		return "       -14.5        ";
+	else if ( in == -14 )
+		return "       -14.0        ";
+	else if ( in == -13.5 )
+		return "       -13.5        ";
+	else if ( in == -13 )
+		return "       -13.0        ";
+	else if ( in == -12.5 )
+		return "       -12.5        ";
+	else if ( in == -12 )
+		return "       -12.0        ";
+	else if ( in == -11.5 )
+		return "       -11.5        ";
+	else if ( in == -11 )
+		return "       -11.0        ";
+	else if ( in == -10.5 )
+		return "       -10.5        ";
+	else if ( in == -10 )
+		return "       -10.0        ";
+	else if ( in == -9.5 )
+		return "        -9.5        ";
+	else if ( in == -9 )
+		return "        -9.0        ";
+	else if ( in == -8.5 )
+		return "        -8.5        ";
+	else if ( in == -8 )
+		return "        -8.0        ";
+	else if ( in == -7.5 )
+		return "        -7.5        ";
+	else if ( in == -7 )
+		return "        -7.0        ";
+	else if ( in == -6.5 )
+		return "        -6.5        ";
+	else if ( in == -6 )
+		return "        -6.0        ";
+	else if ( in == -5.5 )
+		return "        -5.5        ";
+	else if ( in == -5 )
+		return "        -5.0        ";
+	else if ( in == -4.5 )
+		return "        -4.5        ";
+	else if ( in == -4 )
+		return "        -4.0        ";
+	else if ( in == -3 )
+		return "        -3.0        ";
+	else if ( in == -2.5 )
+		return "        -2.5        ";
+	else if ( in == -2 )
+		return "        -2.0        ";
+	else if ( in == -1.5 )
+		return "        -1.5        ";
+	else if ( in == -1 )
+		return "        -1.0        ";
+	else if ( in == -0.5 )
+		return "        -0.5        ";
+	else if ( in == 0 )
+		return "         0.0        ";
+	else if ( in == 0.5 )
+		return "         0.5        ";
+	else if ( in == 1 )
+		return "         1.0        ";
+	else if ( in == 1.5 )
+		return "         1.5        ";
+	else if ( in == 2 )
+		return "         2.0        ";
+	else if ( in == 2.5 )
+		return "         2.5        ";
+	else if ( in == 3 )
+		return "         3.0        ";
+	else if ( in == 3.5 )
+		return "         3.5        ";
+	else if ( in == 4 )
+		return "         4.0        ";
+	else if ( in == 4.5 )
+		return "         4.5        ";
+	else if ( in == 5 )
+		return "         5.0        ";
+	else if ( in == 5.5 )
+		return "         5.5        ";
+	else if ( in == 6 )
+		return "         6.0        ";
+	else if ( in == 6.5 )
+		return "         6.5        ";
+	else if ( in == 7 )
+		return "         7.0        ";
+	else if ( in == 7.5 )
+		return "         7.5        ";
+	else if ( in == 8 )
+		return "         8.0        ";
+	else if ( in == 8.5 )
+		return "         8.5        ";
+	else if ( in == 9 )
+		return "         9.0        ";
+	else if ( in == 9.5 )
+		return "         9.5        ";
+	else if ( in == 10 )
+		return "        10.0        ";
+	else if ( in == 10.5 )
+		return "        10.5        ";
+	else if ( in == 11 )
+		return "        11.0        ";
+	else if ( in == 11.5 )
+		return "        11.5        ";	
+	else if ( in == 12 )
+		return "        12.0        ";
+	else if ( in == 12.5 )
+		return "        12.5        ";
+	else if ( in == 13 )
+		return "        13.0        ";
+	else if ( in == 13.5 )
+		return "        13.5        ";
+	else if ( in == 14 )
+		return "        14.0        ";
+	else if ( in == 14.5 )
+		return "        14.5        ";
+	else if ( in == 15 )
+		return "        15.0        ";
+	else if ( in == 15.5 )
+		return "        15.5        ";
+	else if ( in == 16 )
+		return "        16.0        ";
+	else if ( in == 16.5 )
+		return "        16.5        ";
+	else if ( in == 17 )
+		return "        17.0        ";
+	else if ( in == 17.5 )
+		return "        17.5        ";
+	else if ( in == 18 )
+		return "        18.0        ";
+	else if ( in == 18.5 )
+		return "        18.5        ";
+	else if ( in == 19 )
+		return "        19.0        ";
+	else if ( in == 19.5 )
+		return "        19.5        ";
+	else if ( in == 20 )
+		return "        20.0        ";
+	else if ( in == 20.5 )
+		return "        20.5        ";
+	else if ( in == 21 )
+		return "        21.0        ";
+	else if ( in == 21.5 )
+		return "        21.5        ";
+	else if ( in == 22 )
+		return "        22.0        ";
+	else if ( in == 22.5 )
+		return "        22.5        ";
+	else if ( in == 23 )
+		return "        23.0        ";
+	else if ( in == 23.5 )
+		return "        23.5        ";
+	else if ( in == 24 )
+		return "        24.0        ";
+	else if ( in == 24.5 )
+		return "        24.5        ";
+	else if ( in == 25 )
+		return "        25.0        ";
+	else if ( in == 25.5 )
+		return "        25.5        ";
+	else if ( in == 26 )
+		return "        26.0        ";
+	else if ( in == 26.5 )
+		return "        26.5        ";
+	else if ( in == 27 )
+		return "        27.0        ";
+	else if ( in == 27.5 )
+		return "        27.5        ";
+	else if ( in == 28 )
+		return "        28.5        ";
+	else if ( in == 29 )
+		return "        29.0        ";
+	else if ( in == 29.5 )
+		return "        29.5        ";
+	else if ( in == 30 )
+		return "        30.0        ";
+	else if ( in == 0.15 )
+		return "        0.15        ";
+	else if ( in == 0.25 )
+		return "        0.25        ";
+	else if ( in == 0.35 )
+		return "        0.35        ";
+	else if ( in == 0.45 )
+		return "        0.45        ";
+	else if ( in == 0.55 )
+		return "        0.55        ";
+	else if ( in == 0.65 )
+		return "        0.65        ";
+	else if ( in == 0.75 )
+		return "        0.75        ";
+	else if ( in == 0.85 )
+		return "        0.85        ";
+	else if ( in == 0.95 )
+		return "        0.95        ";
+	else if ( in == 1.05 )
+		return "        1.05        ";
+	else if ( in == 1.15 )
+		return "        1.15        ";
+	return "                     ";
+}
+
 int main(void)
 {
  
@@ -92,7 +319,7 @@ int main(void)
   /* Configure PE8, PE9, and PE10 in input pushpull mode */
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9 | GPIO_Pin_10;
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
-  //GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
   GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;
   GPIO_Init(GPIOE, &GPIO_InitStructure);
@@ -279,8 +506,6 @@ void UI_hl(void)
 	int rotaryPressFlag = 0;
 	int rotaryFlag = 0;
 	
-	char* strLine;
-	
 	DisplayLine ( 0, "       Manual       " );
 	
 	while ( 1 )
@@ -392,36 +617,31 @@ void UI_hl(void)
 							if ( threshold == thresholdMax )
 								break;
 							threshold += thresholdStep;
-							sprintf ( strLine, "%g", threshold );
-							DisplayLine ( 2, strLine);
+							DisplayLine ( 2, DoubleToChar( threshold ) );
 							break;
 						case 1:
 							if ( mug == mugMax )
 								break;
 							mug += mugStep;
-							sprintf ( strLine, "%g", mug );
-							DisplayLine ( 2, strLine);
+							DisplayLine ( 2, DoubleToChar( mug ) );
 							break;
 						case 2:
 							if ( attack == attackMax)
 								break;
 							attack += attackStep;
-							sprintf ( strLine, "%g", attack );
-							DisplayLine ( 2, strLine);
+							DisplayLine ( 2, DoubleToChar( attack ) );
 							break;
 						case 3:
 							if ( release == releaseMax )
 								break;
 							release += releaseStep;
-							sprintf ( strLine, "%g", release );
-							DisplayLine ( 2, strLine );
+							DisplayLine ( 2, DoubleToChar( release ) );
 							break;
 						case 4:
 							if ( ratio == ratioMax )
 								break;
 							ratio += ratioStep;
-							sprintf ( strLine, "%g", ratio );
-							DisplayLine ( 2, strLine );
+							DisplayLine ( 2, DoubleToChar( ratio ) );
 							break;
 						default:
 							break;
@@ -518,35 +738,31 @@ void UI_hl(void)
 							if ( threshold == thresholdMin )
 								break;
 							threshold -= thresholdStep;
-							sprintf ( strLine, "%g", threshold );
-							DisplayLine ( 2, strLine );
+							DisplayLine ( 2, DoubleToChar( threshold ) );
 							break;
 						case 1:
 							if ( mug == mugMin)
 								break;
 							mug -= mugStep;
-							sprintf ( strLine, "%g", mug );
-							DisplayLine ( 2, strLine );
+							DisplayLine ( 2, DoubleToChar( mug ) );
 							break;
 						case 2:
 							if ( attack == attackMin )
 								break;
 							attack -= attackStep;
-							sprintf ( strLine, "%g", attack );
-							DisplayLine ( 2, strLine );
+							DisplayLine ( 2, DoubleToChar( attack ) );
 							break;
 						case 3:
 							if ( release == releaseMin )
 								break;
 							release -= releaseStep;
-							sprintf ( strLine, "%g", release );
-							DisplayLine ( 2, strLine );
+							DisplayLine ( 2, DoubleToChar( release ) );
 							break;
 						case 4:
 							if ( ratio == ratioMin )
 								break;
 							ratio -= ratioStep;
-							sprintf ( strLine, "%g", ratio );
+							DisplayLine ( 2, DoubleToChar( ratio ) );
 							break;
 						default:
 							break;
