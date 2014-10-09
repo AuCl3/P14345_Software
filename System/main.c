@@ -1,12 +1,14 @@
 /**
   ******************************************************************************
-  * @file    main.c
+  * @file    System / main.c
   * @author  P14345
-  * @version V1.0
-  * @date    0/0/00
+  * @version V1.0.0
+  * @date    10/9/14
   * @brief   Program body
   ******************************************************************************
   */ 
+
+/*----------------------------------------------------------------------------*/
 
 /* Includes ------------------------------------------------------------------*/
 
@@ -19,12 +21,33 @@
   * @{
   */
 
-/** @addtogroup [program name]
+/** @addtogroup System
   * @{
   */ 
 
 /* Private typedef -----------------------------------------------------------*/
+
+	ADC_InitTypeDef						ADC_InitStructure;
+	ADC_CommonInitTypeDef 		ADC_CommonInitStructure;
+	
+	DAC_InitTypeDef   				DAC_InitStructure;
+	
+	GPIO_InitTypeDef       		GPIO_InitStructure;
+	
+	TIM_TimeBaseInitTypeDef  	TIM_TimeBaseStructure;
+	TIM_OCInitTypeDef  				TIM_OCInitStructure;
+	NVIC_InitTypeDef 					NVIC_InitStructure;
+
+	USART_InitTypeDef 				UART4_InitStructure;
+	
+	
 /* Private define ------------------------------------------------------------*/
+
+	//DAC data addresses
+	#define DAC_DHR12R2_ADDRESS      0x40007414
+	#define DAC_DHR8R1_ADDRESS       0x40007410
+	
+	
 /* Private macro -------------------------------------------------------------*/
 /* Private constants ---------------------------------------------------------*/
 
@@ -59,302 +82,382 @@
 	
 /* Private variables ---------------------------------------------------------*/
 
+__IO 	uint16_t 		CCR1_TIM2_Val = 1;
+__IO 	uint16_t 		CCR1_TIM3_Val = 1;
+			
+__IO 	uint16_t  	ADC1ConvertedValue = 0;
+__IO 	uint16_t  	ADC1ConvertedVoltage = 0;
+__IO 	uint16_t  	calibration_value = 0;
+__IO 	uint32_t 		TimingDelay = 0;
 
-
-	GPIO_InitTypeDef        GPIO_InitStructure;
-	USART_InitTypeDef 			USART1_InitStructure;
+			uint16_t 		Data = 0;
+			
 	
 /* Private function prototypes -----------------------------------------------*/
 
-	int Rotary( void );
-	void Display(USART_TypeDef*, uint16_t );
-	void DisplayLine( int , char* );
+	void ADC_Config(void);
+	void DAC_Config(void);
+	
+	void INPUT_Config(void);
+	
+	void TIM2_Config(void);
+	void TIM3_Config(void);
+	
+	void UART_Config(void);
+	
+	void DisplayLine( int line, char* array );
+	void Display(USART_TypeDef* USARTx, uint16_t Data);
+	
 	void UI_hl( void );
+	int Rotary( void );
+	
 	char* DoubleToChar ( double );
 	
 /* Private functions ---------------------------------------------------------*/
 
+/*----------------------------------------------------------------------------*/
+
+
+
+
+
+
+/*----------------------------------------------------------------------------*/
 /**
   * @brief  Main program.
   * @param  None
   * @retval None
   */
-	
-char* DoubleToChar ( double in )
-{
-	if ( in == -20 )
-		return "       -20.0        ";
-	else if ( in == -19.5 )
-		return "       -19.5        ";
-	else if ( in == -19 )
-		return "       -19.0        ";
-	else if ( in == -18.5 )
-		return "       -18.5        ";
-	else if ( in == -18 )
-		return "       -18.0        ";
-	else if ( in == -17.5 )
-		return "       -17.5        ";
-	else if ( in == -17 )
-		return "       -17.0        ";
-	else if ( in == -16.5 )
-		return "       -16.5        ";
-	else if ( in == -16 )
-		return "       -16.0        ";
-	else if ( in == -15.5 )
-		return "       -15.5        ";
-	else if ( in == -15 )
-		return "       -15.0        ";
-	else if ( in == -14.5 )
-		return "       -14.5        ";
-	else if ( in == -14 )
-		return "       -14.0        ";
-	else if ( in == -13.5 )
-		return "       -13.5        ";
-	else if ( in == -13 )
-		return "       -13.0        ";
-	else if ( in == -12.5 )
-		return "       -12.5        ";
-	else if ( in == -12 )
-		return "       -12.0        ";
-	else if ( in == -11.5 )
-		return "       -11.5        ";
-	else if ( in == -11 )
-		return "       -11.0        ";
-	else if ( in == -10.5 )
-		return "       -10.5        ";
-	else if ( in == -10 )
-		return "       -10.0        ";
-	else if ( in == -9.5 )
-		return "        -9.5        ";
-	else if ( in == -9 )
-		return "        -9.0        ";
-	else if ( in == -8.5 )
-		return "        -8.5        ";
-	else if ( in == -8 )
-		return "        -8.0        ";
-	else if ( in == -7.5 )
-		return "        -7.5        ";
-	else if ( in == -7 )
-		return "        -7.0        ";
-	else if ( in == -6.5 )
-		return "        -6.5        ";
-	else if ( in == -6 )
-		return "        -6.0        ";
-	else if ( in == -5.5 )
-		return "        -5.5        ";
-	else if ( in == -5 )
-		return "        -5.0        ";
-	else if ( in == -4.5 )
-		return "        -4.5        ";
-	else if ( in == -4 )
-		return "        -4.0        ";
-	else if ( in == -3 )
-		return "        -3.0        ";
-	else if ( in == -2.5 )
-		return "        -2.5        ";
-	else if ( in == -2 )
-		return "        -2.0        ";
-	else if ( in == -1.5 )
-		return "        -1.5        ";
-	else if ( in == -1 )
-		return "        -1.0        ";
-	else if ( in == -0.5 )
-		return "        -0.5        ";
-	else if ( in == 0 )
-		return "         0.0        ";
-	else if ( in == 0.5 )
-		return "         0.5        ";
-	else if ( in == 1 )
-		return "         1.0        ";
-	else if ( in == 1.5 )
-		return "         1.5        ";
-	else if ( in == 2 )
-		return "         2.0        ";
-	else if ( in == 2.5 )
-		return "         2.5        ";
-	else if ( in == 3 )
-		return "         3.0        ";
-	else if ( in == 3.5 )
-		return "         3.5        ";
-	else if ( in == 4 )
-		return "         4.0        ";
-	else if ( in == 4.5 )
-		return "         4.5        ";
-	else if ( in == 5 )
-		return "         5.0        ";
-	else if ( in == 5.5 )
-		return "         5.5        ";
-	else if ( in == 6 )
-		return "         6.0        ";
-	else if ( in == 6.5 )
-		return "         6.5        ";
-	else if ( in == 7 )
-		return "         7.0        ";
-	else if ( in == 7.5 )
-		return "         7.5        ";
-	else if ( in == 8 )
-		return "         8.0        ";
-	else if ( in == 8.5 )
-		return "         8.5        ";
-	else if ( in == 9 )
-		return "         9.0        ";
-	else if ( in == 9.5 )
-		return "         9.5        ";
-	else if ( in == 10 )
-		return "        10.0        ";
-	else if ( in == 10.5 )
-		return "        10.5        ";
-	else if ( in == 11 )
-		return "        11.0        ";
-	else if ( in == 11.5 )
-		return "        11.5        ";	
-	else if ( in == 12 )
-		return "        12.0        ";
-	else if ( in == 12.5 )
-		return "        12.5        ";
-	else if ( in == 13 )
-		return "        13.0        ";
-	else if ( in == 13.5 )
-		return "        13.5        ";
-	else if ( in == 14 )
-		return "        14.0        ";
-	else if ( in == 14.5 )
-		return "        14.5        ";
-	else if ( in == 15 )
-		return "        15.0        ";
-	else if ( in == 15.5 )
-		return "        15.5        ";
-	else if ( in == 16 )
-		return "        16.0        ";
-	else if ( in == 16.5 )
-		return "        16.5        ";
-	else if ( in == 17 )
-		return "        17.0        ";
-	else if ( in == 17.5 )
-		return "        17.5        ";
-	else if ( in == 18 )
-		return "        18.0        ";
-	else if ( in == 18.5 )
-		return "        18.5        ";
-	else if ( in == 19 )
-		return "        19.0        ";
-	else if ( in == 19.5 )
-		return "        19.5        ";
-	else if ( in == 20 )
-		return "        20.0        ";
-	else if ( in == 20.5 )
-		return "        20.5        ";
-	else if ( in == 21 )
-		return "        21.0        ";
-	else if ( in == 21.5 )
-		return "        21.5        ";
-	else if ( in == 22 )
-		return "        22.0        ";
-	else if ( in == 22.5 )
-		return "        22.5        ";
-	else if ( in == 23 )
-		return "        23.0        ";
-	else if ( in == 23.5 )
-		return "        23.5        ";
-	else if ( in == 24 )
-		return "        24.0        ";
-	else if ( in == 24.5 )
-		return "        24.5        ";
-	else if ( in == 25 )
-		return "        25.0        ";
-	else if ( in == 25.5 )
-		return "        25.5        ";
-	else if ( in == 26 )
-		return "        26.0        ";
-	else if ( in == 26.5 )
-		return "        26.5        ";
-	else if ( in == 27 )
-		return "        27.0        ";
-	else if ( in == 27.5 )
-		return "        27.5        ";
-	else if ( in == 28 )
-		return "        28.5        ";
-	else if ( in == 29 )
-		return "        29.0        ";
-	else if ( in == 29.5 )
-		return "        29.5        ";
-	else if ( in == 30 )
-		return "        30.0        ";
-	else if ( in == 0.15 )
-		return "        0.15        ";
-	else if ( in == 0.25 )
-		return "        0.25        ";
-	else if ( in == 0.35 )
-		return "        0.35        ";
-	else if ( in == 0.45 )
-		return "        0.45        ";
-	else if ( in == 0.55 )
-		return "        0.55        ";
-	else if ( in == 0.65 )
-		return "        0.65        ";
-	else if ( in == 0.75 )
-		return "        0.75        ";
-	else if ( in == 0.85 )
-		return "        0.85        ";
-	else if ( in == 0.95 )
-		return "        0.95        ";
-	else if ( in == 1.05 )
-		return "        1.05        ";
-	else if ( in == 1.15 )
-		return "        1.15        ";
-	return "                     ";
-}
+/*----------------------------------------------------------------------------*/	
+
+
+
 
 int main(void)
 {
  
+	INPUT_Config();
+	
+	TIM2_Config();
+	TIM3_Config();
+	
+	ADC_Config();
+	DAC_Config();
+	
+	UART_Config();
 	
 	
+	while(1)
+	{
+		UI_hl();
+	}
 	
-	/* Enable Rotary Encoder Inputs */
+} //end main
+
+
+
+
+
+
+/*----------------------------------------------------------------------------*/
+/**
+  * @brief  ADC Configuration.
+  * @param  None
+  * @retval None
+  */
+/*----------------------------------------------------------------------------*/
+
+void ADC_Config( void )
+{
+	
+	RCC_ADCCLKConfig(RCC_ADC12PLLCLK_Div2);
+	
+	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_ADC12, ENABLE);
+	
+	
+	/* Setup SysTick Timer for 1 µsec interrupts  */
+  if (SysTick_Config(SystemCoreClock / 1000000))
+  { 
+    /* Capture error */ 
+    while (1)
+    {}
+  }
+	
+	
+	 /* GPIOC Periph clock enable */
+  RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
+
+  /* Configure ADC Channel7 as analog input */
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 ;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;
+  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL ;
+  GPIO_Init(GPIOA, &GPIO_InitStructure);
+  
+	ADC_SelectCalibrationMode(ADC1, ADC_CalibrationMode_Single);
+  ADC_StartCalibration(ADC1);
+  
+  while(ADC_GetCalibrationStatus(ADC1) != RESET );
+  calibration_value = ADC_GetCalibrationValue(ADC1);
+     
+  ADC_CommonInitStructure.ADC_Mode = ADC_Mode_Independent;                                                                    
+  ADC_CommonInitStructure.ADC_Clock = ADC_Clock_AsynClkMode;                    
+  ADC_CommonInitStructure.ADC_DMAAccessMode = ADC_DMAAccessMode_Disabled;             
+  ADC_CommonInitStructure.ADC_DMAMode = ADC_DMAMode_OneShot;                  
+  ADC_CommonInitStructure.ADC_TwoSamplingDelay = 0;          
+  ADC_CommonInit(ADC1, &ADC_CommonInitStructure);
+  
+  ADC_InitStructure.ADC_ContinuousConvMode = ADC_ContinuousConvMode_Enable;
+  ADC_InitStructure.ADC_Resolution = ADC_Resolution_12b; 
+  ADC_InitStructure.ADC_ExternalTrigConvEvent = ADC_ExternalTrigConvEvent_0;         
+  ADC_InitStructure.ADC_ExternalTrigEventEdge = ADC_ExternalTrigEventEdge_None;
+  ADC_InitStructure.ADC_DataAlign = ADC_DataAlign_Right;
+  ADC_InitStructure.ADC_OverrunMode = ADC_OverrunMode_Disable;   
+  ADC_InitStructure.ADC_AutoInjMode = ADC_AutoInjec_Disable;  
+  ADC_InitStructure.ADC_NbrOfRegChannel = 1;
+  ADC_Init(ADC1, &ADC_InitStructure);
+	
+	/* ADC1 regular channel1 configuration */ 
+  ADC_RegularChannelConfig(ADC1, ADC_Channel_1, 1, ADC_SampleTime_7Cycles5);
+   
+  /* Enable ADC1 */
+  ADC_Cmd(ADC1, ENABLE);
+  
+  /* wait for ADRDY */
+  while(!ADC_GetFlagStatus(ADC1, ADC_FLAG_RDY));
+  
+  /* Start ADC1 Software Conversion */ 
+  ADC_StartConversion(ADC1);
+	
+	
+} //end ADC_Config
+
+
+
+
+
+
+/*----------------------------------------------------------------------------*/
+/**
+  * @brief  DAC Configuration.
+  * @param  None
+  * @retval None
+  */
+/*----------------------------------------------------------------------------*/
+
+void DAC_Config( void )
+{
+	
+  /* DAC Periph clock enable */
+  RCC_APB1PeriphClockCmd(RCC_APB1Periph_DAC, ENABLE);
+
+  /* GPIOA clock enable */
+  RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
+  
+  /* Configure PA.04 (DAC_OUT1) as analog */
+  GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_4;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;
+  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+  GPIO_Init(GPIOA, &GPIO_InitStructure);
+	
+	/* DAC channel1 Configuration */
+  DAC_DeInit(); 
+  DAC_InitStructure.DAC_Trigger = DAC_Trigger_None;
+  DAC_InitStructure.DAC_WaveGeneration = DAC_WaveGeneration_None;
+  DAC_InitStructure.DAC_OutputBuffer = DAC_OutputBuffer_Enable;
+	
+  /* DAC Channel1 Init */
+  DAC_Init(DAC_Channel_1, &DAC_InitStructure);
+        
+ 
+
+} //end DAC_Config
+
+
+
+
+
+
+/*----------------------------------------------------------------------------*/
+/**
+  * @brief  Input Configuration.
+  * @param  None
+  * @retval None
+  */
+/*----------------------------------------------------------------------------*/
+
+void INPUT_Config(void)
+{
 	
 	/* GPIOE Periph clock enable */
   RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOE, ENABLE);
 
-  /* Configure PE8, PE9, and PE10 in input pushpull mode */
+  /* Configure PE8, PE9, and PE10 in input pulldown mode */
   GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9 | GPIO_Pin_10;
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
-  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
   GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;
+	
   GPIO_Init(GPIOE, &GPIO_InitStructure);
 	
 	
+} //end IO_config
+
+
+
+
+
+
+/*----------------------------------------------------------------------------*/
+/**
+  * @brief  TIM2 Configuration.
+  * @param  None
+  * @retval None
+  */
+/*----------------------------------------------------------------------------*/
+
+void TIM2_Config(void)
+{
+
+  /* TIM2 clock enable */
+  RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
+
+
+  /* Time base configuration */
+  TIM_TimeBaseStructure.TIM_Period = 0;
+  TIM_TimeBaseStructure.TIM_Prescaler = 359;
+  TIM_TimeBaseStructure.TIM_ClockDivision = 0;
+  TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
+
+  TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);
+	
+
+  /* Output Compare Timing Mode configuration: Channel1 */
+  TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_Timing;
+  TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
+  TIM_OCInitStructure.TIM_Pulse = CCR1_TIM2_Val;
+  TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
+
+  TIM_OC1PreloadConfig(TIM2, TIM_OCPreload_Disable);
 	
 	
-	/* Enable USART1 */
+	/* Enable the TIM2 global Interrupt */
+  NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
+  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+  NVIC_Init(&NVIC_InitStructure);
+	
+	/* TIM Interrupts enable */
+ TIM_ITConfig(TIM2, TIM_IT_CC1, ENABLE);
+	
+	
+} //end TIM2_Config
+
+
+
+
+
+
+/*----------------------------------------------------------------------------*/
+/**
+  * @brief  TIM3 Configuration.
+  * @param  None
+  * @retval None
+  */
+/*----------------------------------------------------------------------------*/
+
+void TIM3_Config(void)
+{
+
+  /* TIM3 clock enable */
+  RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
+
+  
+  /* Time base configuration */
+  TIM_TimeBaseStructure.TIM_Period = 0;
+  TIM_TimeBaseStructure.TIM_Prescaler = 7199;
+  TIM_TimeBaseStructure.TIM_ClockDivision = 0;
+  TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
+
+  TIM_TimeBaseInit(TIM3, &TIM_TimeBaseStructure);
+
+
+  /* Output Compare Timing Mode configuration: Channel1 */
+  TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_Timing;
+  TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
+  TIM_OCInitStructure.TIM_Pulse = CCR1_TIM3_Val;
+  TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
+	
+  TIM_OC1PreloadConfig(TIM3, TIM_OCPreload_Disable);
+	
+	
+	/* Enable the TIM3 gloabal Interrupt */
+  NVIC_InitStructure.NVIC_IRQChannel = TIM3_IRQn;
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
+  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+  NVIC_Init(&NVIC_InitStructure);
+
+	/* TIM Interrupts enable */
+	TIM_ITConfig(TIM3, TIM_IT_CC1, ENABLE);
+	
+	
+} //end TIM3_Config
+
+
+
+
+
+
+/*----------------------------------------------------------------------------*/
+/**
+  * @brief  UART Configuration.
+  * @param  None
+  * @retval None
+  */
+/*----------------------------------------------------------------------------*/
+
+void UART_Config(void)
+{
+
+	/* Enable UART4 */
+	
 	
 	/* GPIOC Periph clock enable */
   RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOC, ENABLE);
-	GPIO_PinAFConfig(GPIOC, GPIO_PinSource4, GPIO_AF_7);
 	
 	
-	GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_4;
+	/* AF Config */
+	GPIO_PinAFConfig(GPIOC, GPIO_PinSource10, GPIO_AF_5);
+	
+	
+	/* Enable UART4 Tx Pin */
+	GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_10;
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
   GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
   GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
+	
   GPIO_Init(GPIOC, &GPIO_InitStructure);
 	
-	/* USART1 Periph clock enable */
-	RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1,ENABLE);
 	
-	/* Configure USART1 for Rx with Baud Rate of 9600 */
-	USART1_InitStructure.USART_BaudRate = 9600;
-  USART1_InitStructure.USART_WordLength = USART_WordLength_8b;
-  USART1_InitStructure.USART_StopBits = USART_StopBits_1;
-  USART1_InitStructure.USART_Parity = USART_Parity_No;
-  USART1_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
-  USART1_InitStructure.USART_Mode = USART_Mode_Tx;
-  USART_Init(USART1, &USART1_InitStructure);
+	/* UART4 Periph clock enable */
+	RCC_APB2PeriphClockCmd(RCC_APB1Periph_UART4,ENABLE);
 	
-	/* Turn on USART1 */
-	USART_Cmd(USART1,ENABLE);
+	
+	/* Configure UART4 for Tx with Baud Rate of 9600 */
+	UART4_InitStructure.USART_BaudRate = 9600;
+  UART4_InitStructure.USART_WordLength = USART_WordLength_8b;
+  UART4_InitStructure.USART_StopBits = USART_StopBits_1;
+  UART4_InitStructure.USART_Parity = USART_Parity_No;
+  UART4_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
+  UART4_InitStructure.USART_Mode = USART_Mode_Tx;
+  USART_Init(UART4, &UART4_InitStructure);
+	
+	
+	/* Turn on UART4 */
+	USART_Cmd(UART4,ENABLE);
+	
 	
 	/* Initialize Display */
 	DisplayLine ( 0, "                    " );
@@ -363,91 +466,41 @@ int main(void)
 	DisplayLine ( 3, "                    " );
 	
 	
-	//Enter UI forever
+} //end UART_Config
+
+
+
+
+
+
+/*----------------------------------------------------------------------------*/
+/**
+  * @brief  Delay function.
+  * @param  None
+  * @retval None
+  */
+/*----------------------------------------------------------------------------*/
+
+void Delay(__IO uint32_t nTime)
+{ 
+  TimingDelay = nTime;
+
+  while(TimingDelay != 0);
 	
-	UI_hl();
-		
-	
-} //end main
-
-
-
-
-int Rotary()
-{
-		uint8_t CW;
-		uint8_t CCW;
-		uint8_t OUT = 0;
-	
-		CW = GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_7);
-		
-		CCW = GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_8);
-		
-		
-		//Want to only accept data if one is zero and other goes from low to high
-		//Change occurs when value != old value
-		//Old value should be equal to 0, current value should be high ( greater than 0 )
-	
-		if( CW > 0 )
-		{
-			
-			while( CW > 0 )
-			{
-				CW = GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_7);
-				CCW = GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_8);
-	
-				if( CCW > 0 )
-				{
-					OUT = 1;
-				}
-			}
-		}
-		
-		if( CCW > 0 )
-		{
-			
-			while( CCW > 0 )
-			{
-				CW = GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_7);
-				CCW = GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_8);
-	
-				if( CW > 0 )
-				{
-					OUT = 2;
-				}
-					
-				
-			}
-		}
-		
-	return OUT;
-		
-} //end Rotary Function
+} //end Delay
 
 
 
 
 
 
-
-
-void Display(USART_TypeDef* USARTx, uint16_t Data)
-{
-	//Check if USART still busy
-	while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
-	{
-	}
-	
-	//Send data
-	USART_SendData(USARTx, Data);
-	
-} //end Display function
-
-
-
-
-
-
+/*----------------------------------------------------------------------------*/
+/**
+  * @brief  DisplayLine function.
+  * @param  None
+  * @retval None
+  */
+/*----------------------------------------------------------------------------*/
 
 void DisplayLine( int line, char* array )
 {
@@ -493,6 +546,41 @@ void DisplayLine( int line, char* array )
 
 
 
+
+
+
+/*----------------------------------------------------------------------------*/
+/**
+  * @brief  Display function.
+  * @param  None
+  * @retval None
+  */
+/*----------------------------------------------------------------------------*/
+
+void Display(USART_TypeDef* USARTx, uint16_t Data)
+{
+	//Check if USART still busy
+	while(USART_GetFlagStatus(USART1, USART_FLAG_TXE) == RESET)
+	{
+	}
+	
+	//Send data
+	USART_SendData(USARTx, Data);
+	
+} //end Display function
+
+
+
+
+
+
+/*----------------------------------------------------------------------------*/
+/**
+  * @brief  UI HighLevel function.
+  * @param  None
+  * @retval None
+  */
+/*----------------------------------------------------------------------------*/
 
 void UI_hl(void)
 {
@@ -870,6 +958,319 @@ void UI_hl(void)
 } //end UI_hl
 
 
+
+
+
+
+/*----------------------------------------------------------------------------*/
+/**
+  * @brief  RotaryEncoder function.
+  * @param  None
+  * @retval None
+  */
+/*----------------------------------------------------------------------------*/
+
+int Rotary()
+{
+		uint8_t CW;
+		uint8_t CCW;
+		uint8_t OUT = 0;
+	
+		CW = GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_7);
+		
+		CCW = GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_8);
+		
+		
+		//Want to only accept data if one is zero and other goes from low to high
+		//Change occurs when value != old value
+		//Old value should be equal to 0, current value should be high ( greater than 0 )
+	
+		if( CW > 0 )
+		{
+			
+			while( CW > 0 )
+			{
+				CW = GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_7);
+				CCW = GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_8);
+	
+				if( CCW > 0 )
+				{
+					OUT = 1;
+				}
+			}
+		}
+		
+		if( CCW > 0 )
+		{
+			
+			while( CCW > 0 )
+			{
+				CW = GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_7);
+				CCW = GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_8);
+	
+				if( CW > 0 )
+				{
+					OUT = 2;
+				}
+					
+				
+			}
+		}
+		
+	return OUT;
+		
+} //end Rotary Function
+
+
+
+
+
+
+/*----------------------------------------------------------------------------*/
+/**
+  * @brief  Double to Char function.
+  * @param  None
+  * @retval None
+  */
+/*----------------------------------------------------------------------------*/
+
+char* DoubleToChar ( double in )
+{
+	if ( in == -20 )
+		return "       -20.0        ";
+	else if ( in == -19.5 )
+		return "       -19.5        ";
+	else if ( in == -19 )
+		return "       -19.0        ";
+	else if ( in == -18.5 )
+		return "       -18.5        ";
+	else if ( in == -18 )
+		return "       -18.0        ";
+	else if ( in == -17.5 )
+		return "       -17.5        ";
+	else if ( in == -17 )
+		return "       -17.0        ";
+	else if ( in == -16.5 )
+		return "       -16.5        ";
+	else if ( in == -16 )
+		return "       -16.0        ";
+	else if ( in == -15.5 )
+		return "       -15.5        ";
+	else if ( in == -15 )
+		return "       -15.0        ";
+	else if ( in == -14.5 )
+		return "       -14.5        ";
+	else if ( in == -14 )
+		return "       -14.0        ";
+	else if ( in == -13.5 )
+		return "       -13.5        ";
+	else if ( in == -13 )
+		return "       -13.0        ";
+	else if ( in == -12.5 )
+		return "       -12.5        ";
+	else if ( in == -12 )
+		return "       -12.0        ";
+	else if ( in == -11.5 )
+		return "       -11.5        ";
+	else if ( in == -11 )
+		return "       -11.0        ";
+	else if ( in == -10.5 )
+		return "       -10.5        ";
+	else if ( in == -10 )
+		return "       -10.0        ";
+	else if ( in == -9.5 )
+		return "        -9.5        ";
+	else if ( in == -9 )
+		return "        -9.0        ";
+	else if ( in == -8.5 )
+		return "        -8.5        ";
+	else if ( in == -8 )
+		return "        -8.0        ";
+	else if ( in == -7.5 )
+		return "        -7.5        ";
+	else if ( in == -7 )
+		return "        -7.0        ";
+	else if ( in == -6.5 )
+		return "        -6.5        ";
+	else if ( in == -6 )
+		return "        -6.0        ";
+	else if ( in == -5.5 )
+		return "        -5.5        ";
+	else if ( in == -5 )
+		return "        -5.0        ";
+	else if ( in == -4.5 )
+		return "        -4.5        ";
+	else if ( in == -4 )
+		return "        -4.0        ";
+	else if ( in == -3 )
+		return "        -3.0        ";
+	else if ( in == -2.5 )
+		return "        -2.5        ";
+	else if ( in == -2 )
+		return "        -2.0        ";
+	else if ( in == -1.5 )
+		return "        -1.5        ";
+	else if ( in == -1 )
+		return "        -1.0        ";
+	else if ( in == -0.5 )
+		return "        -0.5        ";
+	else if ( in == 0 )
+		return "         0.0        ";
+	else if ( in == 0.5 )
+		return "         0.5        ";
+	else if ( in == 1 )
+		return "         1.0        ";
+	else if ( in == 1.5 )
+		return "         1.5        ";
+	else if ( in == 2 )
+		return "         2.0        ";
+	else if ( in == 2.5 )
+		return "         2.5        ";
+	else if ( in == 3 )
+		return "         3.0        ";
+	else if ( in == 3.5 )
+		return "         3.5        ";
+	else if ( in == 4 )
+		return "         4.0        ";
+	else if ( in == 4.5 )
+		return "         4.5        ";
+	else if ( in == 5 )
+		return "         5.0        ";
+	else if ( in == 5.5 )
+		return "         5.5        ";
+	else if ( in == 6 )
+		return "         6.0        ";
+	else if ( in == 6.5 )
+		return "         6.5        ";
+	else if ( in == 7 )
+		return "         7.0        ";
+	else if ( in == 7.5 )
+		return "         7.5        ";
+	else if ( in == 8 )
+		return "         8.0        ";
+	else if ( in == 8.5 )
+		return "         8.5        ";
+	else if ( in == 9 )
+		return "         9.0        ";
+	else if ( in == 9.5 )
+		return "         9.5        ";
+	else if ( in == 10 )
+		return "        10.0        ";
+	else if ( in == 10.5 )
+		return "        10.5        ";
+	else if ( in == 11 )
+		return "        11.0        ";
+	else if ( in == 11.5 )
+		return "        11.5        ";	
+	else if ( in == 12 )
+		return "        12.0        ";
+	else if ( in == 12.5 )
+		return "        12.5        ";
+	else if ( in == 13 )
+		return "        13.0        ";
+	else if ( in == 13.5 )
+		return "        13.5        ";
+	else if ( in == 14 )
+		return "        14.0        ";
+	else if ( in == 14.5 )
+		return "        14.5        ";
+	else if ( in == 15 )
+		return "        15.0        ";
+	else if ( in == 15.5 )
+		return "        15.5        ";
+	else if ( in == 16 )
+		return "        16.0        ";
+	else if ( in == 16.5 )
+		return "        16.5        ";
+	else if ( in == 17 )
+		return "        17.0        ";
+	else if ( in == 17.5 )
+		return "        17.5        ";
+	else if ( in == 18 )
+		return "        18.0        ";
+	else if ( in == 18.5 )
+		return "        18.5        ";
+	else if ( in == 19 )
+		return "        19.0        ";
+	else if ( in == 19.5 )
+		return "        19.5        ";
+	else if ( in == 20 )
+		return "        20.0        ";
+	else if ( in == 20.5 )
+		return "        20.5        ";
+	else if ( in == 21 )
+		return "        21.0        ";
+	else if ( in == 21.5 )
+		return "        21.5        ";
+	else if ( in == 22 )
+		return "        22.0        ";
+	else if ( in == 22.5 )
+		return "        22.5        ";
+	else if ( in == 23 )
+		return "        23.0        ";
+	else if ( in == 23.5 )
+		return "        23.5        ";
+	else if ( in == 24 )
+		return "        24.0        ";
+	else if ( in == 24.5 )
+		return "        24.5        ";
+	else if ( in == 25 )
+		return "        25.0        ";
+	else if ( in == 25.5 )
+		return "        25.5        ";
+	else if ( in == 26 )
+		return "        26.0        ";
+	else if ( in == 26.5 )
+		return "        26.5        ";
+	else if ( in == 27 )
+		return "        27.0        ";
+	else if ( in == 27.5 )
+		return "        27.5        ";
+	else if ( in == 28 )
+		return "        28.5        ";
+	else if ( in == 29 )
+		return "        29.0        ";
+	else if ( in == 29.5 )
+		return "        29.5        ";
+	else if ( in == 30 )
+		return "        30.0        ";
+	else if ( in == 0.15 )
+		return "        0.15        ";
+	else if ( in == 0.25 )
+		return "        0.25        ";
+	else if ( in == 0.35 )
+		return "        0.35        ";
+	else if ( in == 0.45 )
+		return "        0.45        ";
+	else if ( in == 0.55 )
+		return "        0.55        ";
+	else if ( in == 0.65 )
+		return "        0.65        ";
+	else if ( in == 0.75 )
+		return "        0.75        ";
+	else if ( in == 0.85 )
+		return "        0.85        ";
+	else if ( in == 0.95 )
+		return "        0.95        ";
+	else if ( in == 1.05 )
+		return "        1.05        ";
+	else if ( in == 1.15 )
+		return "        1.15        ";
+	return "                     ";
+}
+
+
+
+
+
+
+/*----------------------------------------------------------------------------*/
+/**
+  * @brief  assert_failed function.
+  * @param  None
+  * @retval None
+  */
+/*----------------------------------------------------------------------------*/
 
 #ifdef  USE_FULL_ASSERT
 

@@ -8,82 +8,10 @@ Project File Date:  10/09/2014
 
 <h2>Output:</h2>
 Build Project 'System' - Target 'STM32F3_Discovery'
-compiling main.c...
 linking...
-Program Size: Code=17912 RO-data=424 RW-data=132 ZI-data=1716  
+Program Size: Code=21452 RO-data=424 RW-data=156 ZI-data=1820  
 FromELF: creating hex file...
 ".\Obj\System.axf" - 0 Error(s), 0 Warning(s).
-ef        GPIO_InitStructure;
-C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\main.c(65): error:  #20: identifier "USART_InitTypeDef" is undefined
-        USART_InitTypeDef                       USART1_InitStructure;
-C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\main.c(70): error:  #20: identifier "USART_TypeDef" is undefined
-        void Display(USART_TypeDef*, uint16_t );
-C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\main.c(70): error:  #20: identifier "uint16_t" is undefined
-        void Display(USART_TypeDef*, uint16_t );
-C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\main.c(317): warning:  #223-D: function "RCC_AHBPeriphClockCmd" declared implicitly
-    RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOE, ENABLE);
-C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\main.c(317): error:  #20: identifier "RCC_AHBPeriph_GPIOE" is undefined
-    RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOE, ENABLE);
-C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\main.c(317): error:  #20: identifier "ENABLE" is undefined
-    RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOE, ENABLE);
-C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\main.c(320): error:  #20: identifier "GPIO_Pin_7" is undefined
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9 | GPIO_Pin_10;
-C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\main.c(320): error:  #20: identifier "GPIO_Pin_8" is undefined
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9 | GPIO_Pin_10;
-C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\main.c(320): error:  #20: identifier "GPIO_Pin_9" is undefined
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9 | GPIO_Pin_10;
-C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\main.c(320): error:  #20: identifier "GPIO_Pin_10" is undefined
-    GPIO_InitStructure.GPIO_Pin = GPIO_Pin_7 | GPIO_Pin_8 | GPIO_Pin_9 | GPIO_Pin_10;
-C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\main.c(321): error:  #20: identifier "GPIO_Mode_IN" is undefined
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_IN;
-C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\main.c(322): error:  #20: identifier "GPIO_OType_PP" is undefined
-    GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\main.c(323): error:  #20: identifier "GPIO_Speed_50MHz" is undefined
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\main.c(324): error:  #20: identifier "GPIO_PuPd_DOWN" is undefined
-    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;
-C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\main.c(325): warning:  #223-D: function "GPIO_Init" declared implicitly
-    GPIO_Init(GPIOE, &GPIO_InitStructure);
-C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\main.c(325): error:  #20: identifier "GPIOE" is undefined
-    GPIO_Init(GPIOE, &GPIO_InitStructure);
-C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\main.c(333): error:  #20: identifier "RCC_AHBPeriph_GPIOC" is undefined
-    RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOC, ENABLE);
-C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\main.c(334): warning:  #223-D: function "GPIO_PinAFConfig" declared implicitly
-        GPIO_PinAFConfig(GPIOC, GPIO_PinSource4, GPIO_AF_7);
-C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\main.c(334): error:  #20: identifier "GPIOC" is undefined
-        GPIO_PinAFConfig(GPIOC, GPIO_PinSource4, GPIO_AF_7);
-C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\main.c(334): error:  #20: identifier "GPIO_PinSource4" is undefined
-        GPIO_PinAFConfig(GPIOC, GPIO_PinSource4, GPIO_AF_7);
-C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\main.c(334): error:  #20: identifier "GPIO_AF_7" is undefined
-        GPIO_PinAFConfig(GPIOC, GPIO_PinSource4, GPIO_AF_7);
-C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\main.c(337): error:  #20: identifier "GPIO_Pin_4" is undefined
-        GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_4;
-C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\main.c(339): error:  #20: identifier "GPIO_Mode_AF" is undefined
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
-C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\main.c(341): error:  #20: identifier "GPIO_PuPd_UP" is undefined
-    GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_UP;
-C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\main.c(345): warning:  #223-D: function "RCC_APB2PeriphClockCmd" declared implicitly
-        RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1,ENABLE);
-C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\main.c(345): error:  #20: identifier "RCC_APB2Periph_USART1" is undefined
-        RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1,ENABLE);
-C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\main.c(349): error:  #20: identifier "USART_WordLength_8b" is undefined
-    USART1_InitStructure.USART_WordLength = USART_WordLength_8b;
-C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\main.c(350): error:  #20: identifier "USART_StopBits_1" is undefined
-    USART1_InitStructure.USART_StopBits = USART_StopBits_1;
-C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\main.c(351): error:  #20: identifier "USART_Parity_No" is undefined
-    USART1_InitStructure.USART_Parity = USART_Parity_No;
-C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\main.c(352): error:  #20: identifier "USART_HardwareFlowControl_None" is undefined
-    USART1_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
-C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\main.c(353): error:  #20: identifier "USART_Mode_Tx" is undefined
-    USART1_InitStructure.USART_Mode = USART_Mode_Tx;
-C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\main.c(354): warning:  #223-D: function "USART_Init" declared implicitly
-    USART_Init(USART1, &USART1_InitStructure);
-C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\main.c(354): error:  #20: identifier "USART1" is undefined
-    USART_Init(USART1, &USART1_InitStructure);
-C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\main.c(357): warning:  #223-D: function "USART_Cmd" declared implicitly
-        USART_Cmd(USART1,ENABLE);
-C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\main.c(378): error:  #20: identifier "uint8_t" is undefined
-                uint8_t CW;
-..\main.c: 6 warnings, 30 errors
-".\Obj\System.axf" - 30 Error(s), 6 Warning(s).
-Target not created
+</pre>
+</body>
+</html>
