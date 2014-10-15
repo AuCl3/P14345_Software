@@ -136,7 +136,7 @@ __IO 	uint32_t 		TimingDelay = 0;
 int main(void)
 {
  
-	INPUT_Config();
++	INPUT_Config();
 	
 	TIM2_Config();
 	TIM3_Config();
@@ -145,6 +145,13 @@ int main(void)
 	DAC_Config();
 	
 	UART_Config();
+	
+	
+	/* TIM2 enable counter */
+  TIM_Cmd(TIM2, ENABLE);
+	
+	/* TIM3 enable counter */
+  TIM_Cmd(TIM3, ENABLE);
 	
 	
 	while(1)
@@ -174,16 +181,7 @@ void ADC_Config( void )
 	
 	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_ADC12, ENABLE);
 	
-	
-	/* Setup SysTick Timer for 1 µsec interrupts  */
-  if (SysTick_Config(SystemCoreClock / 1000000))
-  { 
-    /* Capture error */ 
-    while (1)
-    {}
-  }
-	
-	
+
 	 /* GPIOC Periph clock enable */
   RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
 
@@ -269,6 +267,8 @@ void DAC_Config( void )
   DAC_Init(DAC_Channel_1, &DAC_InitStructure);
         
  
+	/* Enable DAC Channel1 */
+  DAC_Cmd(DAC_Channel_1, ENABLE);
 
 } //end DAC_Config
 
@@ -348,7 +348,7 @@ void TIM2_Config(void)
   NVIC_Init(&NVIC_InitStructure);
 	
 	/* TIM Interrupts enable */
- TIM_ITConfig(TIM2, TIM_IT_CC1, ENABLE);
+	TIM_ITConfig(TIM2, TIM_IT_CC1, ENABLE);
 	
 	
 } //end TIM2_Config

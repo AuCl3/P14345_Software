@@ -46,6 +46,14 @@ __IO uint16_t IC2Value = 0;
 __IO uint16_t DutyCycle = 0;
 __IO uint32_t Frequency = 0;
 RCC_ClocksTypeDef RCC_Clocks;
+
+uint16_t capture = 0;
+extern __IO uint16_t CCR1_TIM2_Val;
+extern __IO uint16_t CCR1_TIM3_Val;
+
+extern	uint16_t 	Data;
+extern 	uint16_t  ADC1ConvertedValue;
+
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
@@ -164,30 +172,49 @@ void SysTick_Handler(void)
   */
 void TIM2_IRQHandler(void)
 {
-  RCC_GetClocksFreq(&RCC_Clocks);
-
-  /* Clear TIM2 Capture compare interrupt pending bit */
-  TIM_ClearITPendingBit(TIM2, TIM_IT_CC2);
-
-  /* Get the Input Capture value */
-  IC2Value = TIM_GetCapture2(TIM2);
-
-  if (IC2Value != 0)
+  if (TIM_GetITStatus(TIM2, TIM_IT_CC1) != RESET)
   {
-    /* Duty cycle computation */
-    DutyCycle = (TIM_GetCapture1(TIM2) * 100) / IC2Value;
+    TIM_ClearITPendingBit(TIM2, TIM_IT_CC1);
+    
+		/* Test EOC flag */
+    while(ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) == RESET);
+    
+    /* Get ADC1 converted data */
+    ADC1ConvertedValue = ADC_GetConversionValue(ADC1);
+		
+		Data = ADC1ConvertedValue;
+		
+		/* Output to DAC */
+		DAC_SetChannel1Data(DAC_Align_12b_R, Data);
+		
+		
 
-    /* Frequency computation 
-       TIM2 counter clock = (RCC_Clocks.HCLK_Frequency)/2 */
-
-    Frequency = RCC_Clocks.HCLK_Frequency / IC2Value;
-  }
-  else
-  {
-    DutyCycle = 0;
-    Frequency = 0;
+    capture = TIM_GetCapture1(TIM2);
+    TIM_SetCompare1(TIM2, capture + CCR1_TIM2_Val);
+		
   }
 }
+
+/**
+  * @brief  This function handles TIM3 global interrupt request.
+  * @param  None
+  * @retval None
+  */
+void TIM3_IRQHandler(void)
+{
+  if (TIM_GetITStatus(TIM3, TIM_IT_CC1) != RESET)
+  {
+    TIM_ClearITPendingBit(TIM3, TIM_IT_CC1);
+    
+ 
+    capture = TIM_GetCapture1(TIM3);
+    TIM_SetCompare1(TIM3, capture + CCR1_TIM3_Val);
+		
+  }
+}
+
+
+
 /**
   * @brief  This function handles PPP interrupt request.
   * @param  None
