@@ -38,7 +38,7 @@
 	TIM_OCInitTypeDef  				TIM_OCInitStructure;
 	NVIC_InitTypeDef 					NVIC_InitStructure;
 
-	USART_InitTypeDef 				UART4_InitStructure;
+	USART_InitTypeDef 				USART1_InitStructure;
 	
 	
 /* Private define ------------------------------------------------------------*/
@@ -136,7 +136,7 @@ __IO 	uint32_t 		TimingDelay = 0;
 int main(void)
 {
  
-+	INPUT_Config();
+	INPUT_Config();
 	
 	TIM2_Config();
 	TIM3_Config();
@@ -147,15 +147,10 @@ int main(void)
 	UART_Config();
 	
 	
-	/* TIM2 enable counter */
-  TIM_Cmd(TIM2, ENABLE);
-	
-	/* TIM3 enable counter */
-  TIM_Cmd(TIM3, ENABLE);
-	
 	
 	while(1)
 	{
+		
 		UI_hl();
 	}
 	
@@ -182,7 +177,7 @@ void ADC_Config( void )
 	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_ADC12, ENABLE);
 	
 
-	 /* GPIOC Periph clock enable */
+	/* GPIOC Periph clock enable */
   RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
 
   /* Configure ADC Channel7 as analog input */
@@ -262,12 +257,10 @@ void DAC_Config( void )
   DAC_InitStructure.DAC_Trigger = DAC_Trigger_None;
   DAC_InitStructure.DAC_WaveGeneration = DAC_WaveGeneration_None;
   DAC_InitStructure.DAC_OutputBuffer = DAC_OutputBuffer_Enable;
-	
   /* DAC Channel1 Init */
   DAC_Init(DAC_Channel_1, &DAC_InitStructure);
         
- 
-	/* Enable DAC Channel1 */
+  /* Enable DAC Channel1 */
   DAC_Cmd(DAC_Channel_1, ENABLE);
 
 } //end DAC_Config
@@ -318,38 +311,8 @@ void INPUT_Config(void)
 void TIM2_Config(void)
 {
 
-  /* TIM2 clock enable */
-  RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
+  
 
-
-  /* Time base configuration */
-  TIM_TimeBaseStructure.TIM_Period = 0;
-  TIM_TimeBaseStructure.TIM_Prescaler = 359;
-  TIM_TimeBaseStructure.TIM_ClockDivision = 0;
-  TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
-
-  TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);
-	
-
-  /* Output Compare Timing Mode configuration: Channel1 */
-  TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_Timing;
-  TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
-  TIM_OCInitStructure.TIM_Pulse = CCR1_TIM2_Val;
-  TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
-
-  TIM_OC1PreloadConfig(TIM2, TIM_OCPreload_Disable);
-	
-	
-	/* Enable the TIM2 global Interrupt */
-  NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;
-  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
-  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-  NVIC_Init(&NVIC_InitStructure);
-	
-	/* TIM Interrupts enable */
-	TIM_ITConfig(TIM2, TIM_IT_CC1, ENABLE);
-	
 	
 } //end TIM2_Config
 
@@ -369,13 +332,21 @@ void TIM2_Config(void)
 void TIM3_Config(void)
 {
 
-  /* TIM3 clock enable */
+	/* TIM3 clock enable */
   RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
+
+  /* Enable the TIM3 gloabal Interrupt */
+  NVIC_InitStructure.NVIC_IRQChannel = TIM3_IRQn;
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
+  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+  NVIC_Init(&NVIC_InitStructure);
+
 
   
   /* Time base configuration */
-  TIM_TimeBaseStructure.TIM_Period = 0;
-  TIM_TimeBaseStructure.TIM_Prescaler = 7199;
+  TIM_TimeBaseStructure.TIM_Period = 1;
+  TIM_TimeBaseStructure.TIM_Prescaler = 179;
   TIM_TimeBaseStructure.TIM_ClockDivision = 0;
   TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
 
@@ -388,19 +359,17 @@ void TIM3_Config(void)
   TIM_OCInitStructure.TIM_Pulse = CCR1_TIM3_Val;
   TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
 	
+	TIM_OC1Init(TIM3, &TIM_OCInitStructure);
+	
   TIM_OC1PreloadConfig(TIM3, TIM_OCPreload_Disable);
 	
-	
-	/* Enable the TIM3 gloabal Interrupt */
-  NVIC_InitStructure.NVIC_IRQChannel = TIM3_IRQn;
-  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
-  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-  NVIC_Init(&NVIC_InitStructure);
+
 
 	/* TIM Interrupts enable */
 	TIM_ITConfig(TIM3, TIM_IT_CC1, ENABLE);
 	
+	/* TIM3 enable counter */
+  TIM_Cmd(TIM3, ENABLE);
 	
 } //end TIM3_Config
 
@@ -411,7 +380,7 @@ void TIM3_Config(void)
 
 /*----------------------------------------------------------------------------*/
 /**
-  * @brief  UART Configuration.
+  * @brief  USART Configuration.
   * @param  None
   * @retval None
   */
@@ -420,19 +389,18 @@ void TIM3_Config(void)
 void UART_Config(void)
 {
 
-	/* Enable UART4 */
+	/* Enable USART1 */
 	
 	
 	/* GPIOC Periph clock enable */
   RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOC, ENABLE);
 	
-	
 	/* AF Config */
-	GPIO_PinAFConfig(GPIOC, GPIO_PinSource10, GPIO_AF_5);
+	GPIO_PinAFConfig(GPIOC, GPIO_PinSource4, GPIO_AF_7);
 	
 	
-	/* Enable UART4 Tx Pin */
-	GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_10;
+	/* Enable USART4 Tx Pin */
+	GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_4;
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
   GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
@@ -441,22 +409,20 @@ void UART_Config(void)
   GPIO_Init(GPIOC, &GPIO_InitStructure);
 	
 	
-	/* UART4 Periph clock enable */
-	RCC_APB2PeriphClockCmd(RCC_APB1Periph_UART4,ENABLE);
+	/* USART1 Periph clock enable */
+	RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1,ENABLE);
 	
+	/* Configure USART1 for Rx with Baud Rate of 9600 */
+	USART1_InitStructure.USART_BaudRate = 9600;
+  USART1_InitStructure.USART_WordLength = USART_WordLength_8b;
+  USART1_InitStructure.USART_StopBits = USART_StopBits_1;
+  USART1_InitStructure.USART_Parity = USART_Parity_No;
+  USART1_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
+  USART1_InitStructure.USART_Mode = USART_Mode_Tx;
+  USART_Init(USART1, &USART1_InitStructure);
 	
-	/* Configure UART4 for Tx with Baud Rate of 9600 */
-	UART4_InitStructure.USART_BaudRate = 9600;
-  UART4_InitStructure.USART_WordLength = USART_WordLength_8b;
-  UART4_InitStructure.USART_StopBits = USART_StopBits_1;
-  UART4_InitStructure.USART_Parity = USART_Parity_No;
-  UART4_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
-  UART4_InitStructure.USART_Mode = USART_Mode_Tx;
-  USART_Init(UART4, &UART4_InitStructure);
-	
-	
-	/* Turn on UART4 */
-	USART_Cmd(UART4,ENABLE);
+	/* Turn on USART1 */
+	USART_Cmd(USART1,ENABLE);
 	
 	
 	/* Initialize Display */
@@ -466,7 +432,7 @@ void UART_Config(void)
 	DisplayLine ( 3, "                    " );
 	
 	
-} //end UART_Config
+} //end USART_Config
 
 
 

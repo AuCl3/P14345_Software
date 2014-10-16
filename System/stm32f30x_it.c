@@ -172,27 +172,15 @@ void SysTick_Handler(void)
   */
 void TIM2_IRQHandler(void)
 {
-  if (TIM_GetITStatus(TIM2, TIM_IT_CC1) != RESET)
-  {
+  while(TIM_GetITStatus(TIM2, TIM_IT_CC1) == RESET)
+  
     TIM_ClearITPendingBit(TIM2, TIM_IT_CC1);
     
-		/* Test EOC flag */
-    while(ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) == RESET);
-    
-    /* Get ADC1 converted data */
-    ADC1ConvertedValue = ADC_GetConversionValue(ADC1);
 		
-		Data = ADC1ConvertedValue;
-		
-		/* Output to DAC */
-		DAC_SetChannel1Data(DAC_Align_12b_R, Data);
-		
-		
-
     capture = TIM_GetCapture1(TIM2);
     TIM_SetCompare1(TIM2, capture + CCR1_TIM2_Val);
 		
-  }
+  
 }
 
 /**
@@ -206,6 +194,19 @@ void TIM3_IRQHandler(void)
   {
     TIM_ClearITPendingBit(TIM3, TIM_IT_CC1);
     
+		
+		/* Test EOC flag */
+    if(ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) != RESET);
+    {
+			/* Get ADC1 converted data */
+			ADC1ConvertedValue = ADC_GetConversionValue(ADC1);
+		
+			Data = ADC1ConvertedValue;
+		
+			/* Output to DAC */
+			DAC_SetChannel1Data(DAC_Align_12b_R, Data);
+		}
+		
  
     capture = TIM_GetCapture1(TIM3);
     TIM_SetCompare1(TIM3, capture + CCR1_TIM3_Val);

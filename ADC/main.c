@@ -144,7 +144,7 @@ void ADC_Config( void )
   //}
 	
 	
-	 /* GPIOC Periph clock enable */
+	/* GPIOC Periph clock enable */
   RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
 
   /* Configure ADC Channel7 as analog input */
