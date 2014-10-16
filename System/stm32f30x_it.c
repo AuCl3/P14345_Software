@@ -53,6 +53,7 @@ extern __IO uint16_t CCR1_TIM3_Val;
 
 extern	uint16_t 	Data;
 extern 	uint16_t  ADC1ConvertedValue;
+extern	uint16_t  ADC1ConvertedVoltage;
 
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
@@ -194,19 +195,25 @@ void TIM3_IRQHandler(void)
   {
     TIM_ClearITPendingBit(TIM3, TIM_IT_CC1);
     
-		
+		 STM_EVAL_LEDToggle(LED6);
 		/* Test EOC flag */
-    if(ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) != RESET);
+    if(ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) != RESET)
     {
 			/* Get ADC1 converted data */
 			ADC1ConvertedValue = ADC_GetConversionValue(ADC1);
-		
+			
+			/* Compute the voltage */
+			ADC1ConvertedVoltage = (ADC1ConvertedValue *3300)/0xFFF;
+			
 			Data = ADC1ConvertedValue;
 		
 			/* Output to DAC */
 			DAC_SetChannel1Data(DAC_Align_12b_R, Data);
 		}
 		
+		
+		
+		 STM_EVAL_LEDToggle(LED8);
  
     capture = TIM_GetCapture1(TIM3);
     TIM_SetCompare1(TIM3, capture + CCR1_TIM3_Val);

@@ -146,7 +146,13 @@ int main(void)
 	
 	UART_Config();
 	
+	/* Initialize Leds mounted on STM32F3-Discovery EVAL board */
+  STM_EVAL_LEDInit(LED6);
+	STM_EVAL_LEDInit(LED8);
 	
+  /* Turn on LED6 and LED8 */
+  STM_EVAL_LEDOn(LED6);
+	STM_EVAL_LEDOff(LED8);
 	
 	while(1)
 	{
@@ -346,7 +352,7 @@ void TIM3_Config(void)
   
   /* Time base configuration */
   TIM_TimeBaseStructure.TIM_Period = 1;
-  TIM_TimeBaseStructure.TIM_Prescaler = 179;
+  TIM_TimeBaseStructure.TIM_Prescaler = 449;
   TIM_TimeBaseStructure.TIM_ClockDivision = 0;
   TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
 
