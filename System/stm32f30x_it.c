@@ -203,7 +203,7 @@ void TIM3_IRQHandler(void)
 			ADC1ConvertedValue = ADC_GetConversionValue(ADC1);
 			
 			/* Compute the voltage */
-			ADC1ConvertedVoltage = (ADC1ConvertedValue *3300)/0xFFF;
+			//ADC1ConvertedVoltage = (ADC1ConvertedValue *3300)/0xFFF;
 			
 			Data = ADC1ConvertedValue;
 		
