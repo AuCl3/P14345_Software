@@ -55,6 +55,13 @@ extern	uint16_t 	Data;
 extern 	uint16_t  ADC1ConvertedValue;
 extern	uint16_t  ADC1ConvertedVoltage;
 
+extern	int 			Compress;
+extern	double 		attack;
+extern	double		threshold;
+extern  uint16_t	TimeStep;
+
+				int 			Counter = 0;
+
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
 
@@ -176,8 +183,20 @@ void TIM2_IRQHandler(void)
   while(TIM_GetITStatus(TIM2, TIM_IT_CC1) == RESET)
   
     TIM_ClearITPendingBit(TIM2, TIM_IT_CC1);
-    
-		
+ /*   
+	if( Compress != 1 )
+	{
+		if( TimeStep < attack && Signal >= threshold )
+		{
+			Counter++;
+		}
+		if( TimeStep > 0 && Signal < threshold )
+		{
+			Counter--;
+		}
+	}
+	else;
+		*/
     capture = TIM_GetCapture1(TIM2);
     TIM_SetCompare1(TIM2, capture + CCR1_TIM2_Val);
 		

@@ -79,6 +79,8 @@
 	int autoEN = 0;
 	int bypassEN = 0;
 	
+	int Compress = 0;
+	
 	
 /* Private variables ---------------------------------------------------------*/
 
@@ -92,6 +94,7 @@ __IO 	uint32_t 		TimingDelay = 0;
 
 			uint16_t 		Data = 0;
 			
+			uint16_t		TimeStep;
 	
 /* Private function prototypes -----------------------------------------------*/
 
@@ -152,7 +155,7 @@ int main(void)
 	
   /* Turn on LED6 and LED8 */
   STM_EVAL_LEDOn(LED6);
-	STM_EVAL_LEDOff(LED8);
+	STM_EVAL_LEDOn(LED8);
 	
 	while(1)
 	{
@@ -316,8 +319,48 @@ void INPUT_Config(void)
 
 void TIM2_Config(void)
 {
+	
+	TimeStep = ( 10 * attack );
+
+	
+  /* TIM2 clock enable */
+  RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
+
+  /* Enable the TIM3 gloabal Interrupt */
+  NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
+  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+  NVIC_Init(&NVIC_InitStructure);
+
 
   
+  /* Time base configuration */
+  TIM_TimeBaseStructure.TIM_Period = 1;
+  TIM_TimeBaseStructure.TIM_Prescaler = 7199;
+  TIM_TimeBaseStructure.TIM_ClockDivision = 0;
+  TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
+
+  TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);
+
+
+  /* Output Compare Timing Mode configuration: Channel1 */
+  TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_Timing;
+  TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
+  TIM_OCInitStructure.TIM_Pulse = CCR1_TIM2_Val;
+  TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
+	
+	TIM_OC1Init(TIM2, &TIM_OCInitStructure);
+	
+  TIM_OC1PreloadConfig(TIM2, TIM_OCPreload_Disable);
+	
+
+
+	/* TIM Interrupts enable */
+	TIM_ITConfig(TIM2, TIM_IT_CC1, ENABLE);
+	
+	/* TIM3 enable counter */
+  //TIM_Cmd(TIM2, ENABLE);
 
 	
 } //end TIM2_Config
@@ -352,7 +395,7 @@ void TIM3_Config(void)
   
   /* Time base configuration */
   TIM_TimeBaseStructure.TIM_Period = 1;
-  TIM_TimeBaseStructure.TIM_Prescaler = 449;
+  TIM_TimeBaseStructure.TIM_Prescaler = 408;
   TIM_TimeBaseStructure.TIM_ClockDivision = 0;
   TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
 
