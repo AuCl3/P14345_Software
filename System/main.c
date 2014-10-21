@@ -886,7 +886,7 @@ void UI_hl(void)
 		//If flag is low and INPUT = HIGH, flag = HIGH
 		if ( rotaryPressFlag == 0 )
 		{
-			if( GPIO_ReadInputDataBit( GPIOE, GPIO_Pin_9 ) > 0 && Rotary() == 0 )
+			if( GPIO_ReadInputDataBit( GPIOE, GPIO_Pin_9 ) > 0 )
 			{
 				rotaryPressFlag = 1;
 				switch ( currentLevel )
@@ -933,7 +933,7 @@ void UI_hl(void)
 		//If flag is low and INPUT = HIGH, flag = HIGH
 		if ( buttonFlag == 0 )
 		{
-			if( GPIO_ReadInputDataBit( GPIOE, GPIO_Pin_10 ) > 0 && Rotary() == 0 )
+			if( GPIO_ReadInputDataBit( GPIOE, GPIO_Pin_10 ) > 0 )
 			{
 				buttonFlag = 1;
 				switch ( currentLevel )

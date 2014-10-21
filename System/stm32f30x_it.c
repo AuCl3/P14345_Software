@@ -29,6 +29,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "math.h"
 
 /** @addtogroup STM32F3_Discovery_Peripheral_Examples
   * @{
@@ -51,16 +52,31 @@ uint16_t capture = 0;
 extern __IO uint16_t CCR1_TIM2_Val;
 extern __IO uint16_t CCR1_TIM3_Val;
 
-extern	uint16_t 	Data;
-extern 	uint16_t  ADC1ConvertedValue;
-extern	uint16_t  ADC1ConvertedVoltage;
+
+
+extern	double		threshold;
+extern	double 		attack;
+extern	double 		release;
+extern	double 		ratio;
 
 extern	int 			Compress;
-extern	double 		attack;
-extern	double		threshold;
-extern  uint16_t	TimeStep;
+extern  uint16_t	attackStep;
+extern  uint16_t	releaseStep;
+
 
 				int 			Counter = 0;
+				
+				
+				double 		SampledSignalVoltage;
+				double 		SSdB;
+				
+				double 		SampledSignal;
+				double 		OutputSignal;
+				double 		GainReduction;
+				double 		OutputVoltage;
+				uint16_t 	OutputData;
+				
+				
 
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
@@ -183,24 +199,44 @@ void TIM2_IRQHandler(void)
   while(TIM_GetITStatus(TIM2, TIM_IT_CC1) == RESET)
   
     TIM_ClearITPendingBit(TIM2, TIM_IT_CC1);
- /*   
+	
+	//Stop timer when done
+	if( attackStep == attack || releaseStep == release )
+	{
+		TIM_Cmd(TIM2, DISABLE);
+	}
+	
+ 
+	//If timer enabled while not in Compress, Timer in Attack mode
 	if( Compress != 1 )
 	{
-		if( TimeStep < attack && Signal >= threshold )
+		if( attackStep < attack && SSdB >= threshold )
 		{
 			Counter++;
 		}
-		if( TimeStep > 0 && Signal < threshold )
+		if( attackStep > 0 && SSdB < threshold )
 		{
 			Counter--;
 		}
 	}
-	else;
-		*/
+	
+	//else the Timer is in Release mode
+	else
+	{
+		if( releaseStep < release && SSdB <= threshold )
+		{
+			Counter++;
+		}
+		if( releaseStep > 0 && SSdB > threshold )
+		{
+			Counter--;
+		}
+	}
+		
+		
     capture = TIM_GetCapture1(TIM2);
     TIM_SetCompare1(TIM2, capture + CCR1_TIM2_Val);
-		
-  
+
 }
 
 /**
@@ -219,15 +255,29 @@ void TIM3_IRQHandler(void)
     if(ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) != RESET)
     {
 			/* Get ADC1 converted data */
-			ADC1ConvertedValue = ADC_GetConversionValue(ADC1);
+			SampledSignal = ADC_GetConversionValue(ADC1);
 			
 			/* Compute the voltage */
-			//ADC1ConvertedVoltage = (ADC1ConvertedValue *3300)/0xFFF;
+			SampledSignalVoltage = (SampledSignal *3300)/0xFFF;
 			
-			Data = ADC1ConvertedValue;
+			/* Convert to dB */
+			SSdB = 20*log( SampledSignalVoltage );
+			
+			/* Compute Output Voltage*/
+			OutputSignal = threshold + (( SSdB - threshold ) / ratio );
 		
-			/* Output to DAC */
-			DAC_SetChannel1Data(DAC_Align_12b_R, Data);
+			GainReduction = OutputSignal - threshold;
+			
+			OutputVoltage = 6.1*22*GainReduction;
+			
+			/* 
+					ADD CODE FOR LINEAR TIMER STEP HERE
+			*/
+		
+			/*Convert and output to DAC */
+			OutputData = (OutputVoltage*0xFFF)/3300;
+			
+			DAC_SetChannel1Data(DAC_Align_12b_R, OutputData);
 		}
 		
 		
