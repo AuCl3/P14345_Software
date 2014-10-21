@@ -47,8 +47,8 @@ __IO uint32_t Frequency = 0;
 /* TIMER values */
 
 uint16_t capture = 0;
-extern __IO uint16_t CCR1_TIM2_Val;
 extern __IO uint16_t CCR1_TIM3_Val;
+extern __IO uint16_t CCR1_TIM2_Val;
 
 
 /* Necessary system global variables */
@@ -276,17 +276,17 @@ void SysTick_Handler(void)
 
 /*----------------------------------------------------------------------------*/
 /**
-  * @brief  This function handles TIM2 global interrupt request.
+  * @brief  This function handles TIM3 global interrupt request.
   * @param  None
   * @retval None
   */
 	/*----------------------------------------------------------------------------*/
 	
-void TIM2_IRQHandler(void)
+void TIM3_IRQHandler(void)
 {
-  if (TIM_GetITStatus(TIM2, TIM_IT_CC1) != RESET)
+  if (TIM_GetITStatus(TIM3, TIM_IT_CC1) != RESET)
   {
-		TIM_ClearITPendingBit(TIM2, TIM_IT_CC1);
+		TIM_ClearITPendingBit(TIM3, TIM_IT_CC1);
 	
 		
 		//update Step values
@@ -298,7 +298,7 @@ void TIM2_IRQHandler(void)
 		//Stop and clear Timer and counters if done
 		if( attackCounter >= attackStep || releaseCounter >= releaseStep )
 		{
-			TIM_Cmd(TIM2, DISABLE);
+			TIM_Cmd(TIM3, DISABLE);
 		
 			attackCounter = 0;
 			releaseCounter = 0;
@@ -319,14 +319,7 @@ void TIM2_IRQHandler(void)
 			
 		}
 		
-		
-		//If counters go to 0, disable Timer
-		if( attackCounter <= 0 || releaseCounter <= 0 )
-		{
-			TIM_Cmd(TIM2, DISABLE);
-		}
-		
-			
+	
 		//If timer enabled while not in Compress, Timer in Attack mode
 		if( AttRel == 0 )
 		{
@@ -353,10 +346,17 @@ void TIM2_IRQHandler(void)
 				releaseCounter--;
 			}
 		}
+		
+		
+		//If counters go to 0, disable Timer
+		if( attackCounter <= 0 || releaseCounter <= 0 )
+		{
+			TIM_Cmd(TIM3, DISABLE);
+		}
 
 		
-		capture = TIM_GetCapture1(TIM2);
-		TIM_SetCompare1(TIM2, capture + CCR1_TIM2_Val);
+		capture = TIM_GetCapture1(TIM3);
+		TIM_SetCompare1(TIM3, capture + CCR1_TIM3_Val);
 
 	}
 } //End Timer2 Interrupt
@@ -368,20 +368,20 @@ void TIM2_IRQHandler(void)
 
 /*----------------------------------------------------------------------------*/
 /**
-  * @brief  This function handles TIM3 global interrupt request.
+  * @brief  This function handles TIM2 global interrupt request.
   * @param  None
   * @retval None
   */
 /*----------------------------------------------------------------------------*/
 
-void TIM3_IRQHandler(void)
+void TIM2_IRQHandler(void)
 {
-  if (TIM_GetITStatus(TIM3, TIM_IT_CC1) != RESET)
+  if (TIM_GetITStatus(TIM2, TIM_IT_CC1) != RESET)
   {
-    TIM_ClearITPendingBit(TIM3, TIM_IT_CC1);
+    TIM_ClearITPendingBit(TIM2, TIM_IT_CC1);
     
 
-		
+		STM_EVAL_LEDToggle(LED6);
 		
 	
 			
@@ -392,23 +392,23 @@ void TIM3_IRQHandler(void)
 			ADC1ConvertedValue = ADC_GetConversionValue(ADC1);
 		}
 			
-			/* Compute the voltage */
-			SampledSignalVoltage = (ADC1ConvertedValue *3300)/0xFFF;
+		/* Compute the voltage */
+		SampledSignalVoltage = (ADC1ConvertedValue *3300)/0xFFF;
 			
-			SampledSignalVoltage = SampledSignalVoltage / 1000;
+		SampledSignalVoltage = SampledSignalVoltage / 1000;
 			
 			
-			/* Convert to dB */
-			SSdB = 20*log10( SampledSignalVoltage );
+		/* Convert to dB */
+		SSdB = 20*log10( SampledSignalVoltage );
 			
-			/* if signal above threshold, and compression not running, enable compression */
-			if( SSdB >= threshold && Compress != 1 )
-			{
-				TIM_Cmd(TIM2, ENABLE );
-				Compress = 1;
-			}
+		/* if signal above threshold, and compression not running, enable compression */
+		if( SSdB >= threshold && Compress != 1 )
+		{
+			TIM_Cmd(TIM3, ENABLE );
+			Compress = 1;
+		}
 		
-		STM_EVAL_LEDToggle(LED8);
+		
 		
 		/* Output 0 if not Compressing */
 		if( Compress == 0 )
@@ -442,10 +442,10 @@ void TIM3_IRQHandler(void)
 		}
 	
 		
-		STM_EVAL_LEDToggle(LED6);
+		STM_EVAL_LEDToggle(LED8);
 		
-    capture = TIM_GetCapture1(TIM3);
-    TIM_SetCompare1(TIM3, capture + CCR1_TIM3_Val);
+    capture = TIM_GetCapture1(TIM2);
+    TIM_SetCompare1(TIM2, capture + CCR1_TIM2_Val);
 		
   }
 } //End Timer3 Interrupt

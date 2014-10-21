@@ -88,8 +88,8 @@
 
 
 /* Timer CC Register values */
-__IO 	uint16_t 		CCR1_TIM2_Val = 1;
 __IO 	uint16_t 		CCR1_TIM3_Val = 1;
+__IO 	uint16_t 		CCR1_TIM2_Val = 1;
 
 
 /* ADC Calibration value */
@@ -106,8 +106,8 @@ __IO 	uint16_t  	TimingDelay = 0;
 	
 	void INPUT_Config(void);
 	
-	void TIM2_Config(void);
 	void TIM3_Config(void);
+	void TIM2_Config(void);
 	
 	void UART_Config(void);
 	
@@ -145,8 +145,8 @@ int main(void)
  
 	INPUT_Config();
 	
-	TIM2_Config();
 	TIM3_Config();
+	TIM2_Config();
 	
 	ADC_Config();
 	DAC_Config();
@@ -162,8 +162,8 @@ int main(void)
 	STM_EVAL_LEDOn(LED8);
 	
 	
-	/* TIM3 enable counter */
-  TIM_Cmd(TIM3, ENABLE);
+	/* TIM2 enable counter */
+  TIM_Cmd(TIM2, ENABLE);
 	
 	
 	while(1)
@@ -194,7 +194,7 @@ void ADC_Config( void )
 	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_ADC12, ENABLE);
 	
 
-	/* GPIOC Periph clock enable */
+	/* GPIOA Periph clock enable */
   RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
 
   /* Configure ADC Channel7 as analog input */
@@ -261,7 +261,7 @@ void DAC_Config( void )
   RCC_APB1PeriphClockCmd(RCC_APB1Periph_DAC, ENABLE);
 
   /* GPIOA clock enable */
-  RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
+  //RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
   
   /* Configure PA.04 (DAC_OUT1) as analog */
   GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_4;
@@ -320,68 +320,6 @@ void INPUT_Config(void)
 
 /*----------------------------------------------------------------------------*/
 /**
-  * @brief  TIM2 Configuration.
-  * @param  None
-  * @retval None
-  */
-/*----------------------------------------------------------------------------*/
-
-void TIM2_Config(void)
-{
-
-	/*
-	*	TIM2 with 10kHz freq
-	*/
-	
-  /* TIM2 clock enable */
-  RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
-
-  /* Enable the TIM3 gloabal Interrupt */
-  NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;
-  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
-  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
-  NVIC_Init(&NVIC_InitStructure);
-
-
-  
-  /* Time base configuration */
-  TIM_TimeBaseStructure.TIM_Period = 1;
-  TIM_TimeBaseStructure.TIM_Prescaler = 3599;
-  TIM_TimeBaseStructure.TIM_ClockDivision = 0;
-  TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
-
-  TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);
-
-
-  /* Output Compare Timing Mode configuration: Channel1 */
-  TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_Timing;
-  TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
-  TIM_OCInitStructure.TIM_Pulse = CCR1_TIM2_Val;
-  TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
-	
-	TIM_OC1Init(TIM2, &TIM_OCInitStructure);
-	
-  TIM_OC1PreloadConfig(TIM2, TIM_OCPreload_Disable);
-	
-
-
-	/* TIM Interrupts enable */
-	TIM_ITConfig(TIM2, TIM_IT_CC1, ENABLE);
-	
-	/* TIM3 enable counter */
-  //TIM_Cmd(TIM2, ENABLE);
-
-	
-} //end TIM2_Config
-
-
-
-
-
-
-/*----------------------------------------------------------------------------*/
-/**
   * @brief  TIM3 Configuration.
   * @param  None
   * @retval None
@@ -392,15 +330,13 @@ void TIM3_Config(void)
 {
 
 	/*
-	*	TIM2 with 88kHz freq, PreScale = 408 + 1, Period = 1 + 1
-	*
-	*	TIM2 with 44kHz freq, PreScale = 817 + 1, Period = 1 + 1
+	*	TIM3 with 10kHz freq
 	*/
 	
-	/* TIM3 clock enable */
+  /* TIM3 clock enable */
   RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
 
-  /* Enable the TIM3 gloabal Interrupt */
+  /* Enable the TIM3 and TIM2 gloabal Interrupts */
   NVIC_InitStructure.NVIC_IRQChannel = TIM3_IRQn;
   NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
   NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
@@ -411,7 +347,7 @@ void TIM3_Config(void)
   
   /* Time base configuration */
   TIM_TimeBaseStructure.TIM_Period = 1;
-  TIM_TimeBaseStructure.TIM_Prescaler = 1999;
+  TIM_TimeBaseStructure.TIM_Prescaler = 3599;
   TIM_TimeBaseStructure.TIM_ClockDivision = 0;
   TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
 
@@ -432,9 +368,74 @@ void TIM3_Config(void)
 
 	/* TIM Interrupts enable */
 	TIM_ITConfig(TIM3, TIM_IT_CC1, ENABLE);
+	
+	/* TIM3 enable counter */
+  //TIM_Cmd(TIM3, ENABLE);
 
 	
 } //end TIM3_Config
+
+
+
+
+
+
+/*----------------------------------------------------------------------------*/
+/**
+  * @brief  TIM2 Configuration.
+  * @param  None
+  * @retval None
+  */
+/*----------------------------------------------------------------------------*/
+
+void TIM2_Config(void)
+{
+
+	/*
+	*	TIM2 with 88kHz freq, PreScale = 408 + 1, Period = 1 + 1
+	*
+	*	TIM2 with 44kHz freq, PreScale = 817 + 1, Period = 1 + 1
+	*/
+	
+	/* TIM2 clock enable */
+  RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
+	
+	
+
+  /* Enable the TIM3 and TIM2 gloabal Interrupts */
+  NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;
+  NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
+  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
+  NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
+  NVIC_Init(&NVIC_InitStructure);
+
+  
+  /* Time base configuration */
+  TIM_TimeBaseStructure.TIM_Period = 1;
+  TIM_TimeBaseStructure.TIM_Prescaler = 1999;
+  TIM_TimeBaseStructure.TIM_ClockDivision = 0;
+  TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
+
+  TIM_TimeBaseInit(TIM2, &TIM_TimeBaseStructure);
+
+
+  /* Output Compare Timing Mode configuration: Channel1 */
+  TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_Timing;
+  TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
+  TIM_OCInitStructure.TIM_Pulse = CCR1_TIM2_Val;
+  TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
+	
+	TIM_OC1Init(TIM2, &TIM_OCInitStructure);
+	
+  TIM_OC1PreloadConfig(TIM2, TIM_OCPreload_Disable);
+	
+
+
+	/* TIM Interrupts enable */
+	TIM_ITConfig(TIM2, TIM_IT_CC1, ENABLE);
+
+	
+} //end TIM2_Config
 
 
 
