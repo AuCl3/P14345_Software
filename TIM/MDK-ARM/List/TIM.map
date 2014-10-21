@@ -41,8 +41,8 @@ Section Cross References
     main.o(.text) refers to main.o(.bss) for TIM_TimeBaseStructure
     stm32f30x_it.o(.text) refers to stm32f30x_tim.o(.text) for TIM_GetITStatus
     stm32f30x_it.o(.text) refers to stm32f3_discovery.o(.text) for STM_EVAL_LEDToggle
-    stm32f30x_it.o(.text) refers to main.o(.data) for Count
     stm32f30x_it.o(.text) refers to stm32f30x_it.o(.data) for capture
+    stm32f30x_it.o(.text) refers to main.o(.data) for CCR1_Val
     system_stm32f30x.o(.text) refers to system_stm32f30x.o(.data) for SystemCoreClock
     __main.o(!!!main) refers to rtentry.o(.ARM.Collect$$rtentry$$00000000) for __rt_entry
     rtentry.o(.ARM.Collect$$rtentry$$00000000) refers (Special) to rtentry2.o(.ARM.Collect$$rtentry$$0000000A) for __rt_entry_li
@@ -386,19 +386,19 @@ Image Symbol Table
     TI2_Config                               0x08001b1f   Thumb Code    66  stm32f30x_tim.o(.text)
     TI1_Config                               0x08001b71   Thumb Code    48  stm32f30x_tim.o(.text)
     .text                                    0x08001fb8   Section        0  main.o(.text)
-    .text                                    0x08002074   Section        0  stm32f30x_it.o(.text)
-    .text                                    0x080020e0   Section        0  system_stm32f30x.o(.text)
-    SetSysClock                              0x080020e1   Thumb Code   186  system_stm32f30x.o(.text)
-    .text                                    0x080022bc   Section        0  heapauxi.o(.text)
-    .text                                    0x080022c2   Section       74  sys_stackheap_outer.o(.text)
-    .text                                    0x0800230c   Section        0  exit.o(.text)
-    .text                                    0x08002318   Section        8  libspace.o(.text)
-    .text                                    0x08002320   Section        0  sys_exit.o(.text)
-    .text                                    0x0800232c   Section        2  use_no_semi.o(.text)
-    .text                                    0x0800232e   Section        0  indicate_semi.o(.text)
-    x$fpl$fpinit                             0x0800232e   Section       10  fpinit.o(x$fpl$fpinit)
-    $v0                                      0x0800232e   Number         0  fpinit.o(x$fpl$fpinit)
-    .constdata                               0x08002338   Section       61  stm32f3_discovery.o(.constdata)
+    .text                                    0x08002068   Section        0  stm32f30x_it.o(.text)
+    .text                                    0x080020c4   Section        0  system_stm32f30x.o(.text)
+    SetSysClock                              0x080020c5   Thumb Code   186  system_stm32f30x.o(.text)
+    .text                                    0x080022a0   Section        0  heapauxi.o(.text)
+    .text                                    0x080022a6   Section       74  sys_stackheap_outer.o(.text)
+    .text                                    0x080022f0   Section        0  exit.o(.text)
+    .text                                    0x080022fc   Section        8  libspace.o(.text)
+    .text                                    0x08002304   Section        0  sys_exit.o(.text)
+    .text                                    0x08002310   Section        2  use_no_semi.o(.text)
+    .text                                    0x08002312   Section        0  indicate_semi.o(.text)
+    x$fpl$fpinit                             0x08002312   Section       10  fpinit.o(x$fpl$fpinit)
+    $v0                                      0x08002312   Number         0  fpinit.o(x$fpl$fpinit)
+    .constdata                               0x0800231c   Section       61  stm32f3_discovery.o(.constdata)
     .data                                    0x20000000   Section       36  stm32f3_discovery.o(.data)
     .data                                    0x20000024   Section       42  stm32f30x_rcc.o(.data)
     APBAHBPrescTable                         0x20000024   Data          16  stm32f30x_rcc.o(.data)
@@ -758,45 +758,45 @@ Image Symbol Table
     TIM_EncoderInterfaceConfig               0x08001f4d   Thumb Code    72  stm32f30x_tim.o(.text)
     TIM_SelectHallSensor                     0x08001f95   Thumb Code    24  stm32f30x_tim.o(.text)
     TIM_RemapConfig                          0x08001fad   Thumb Code     6  stm32f30x_tim.o(.text)
-    TIM_Config                               0x08001fb9   Thumb Code    58  main.o(.text)
-    main                                     0x08001ff3   Thumb Code   102  main.o(.text)
-    NMI_Handler                              0x08002075   Thumb Code     2  stm32f30x_it.o(.text)
-    HardFault_Handler                        0x08002077   Thumb Code     4  stm32f30x_it.o(.text)
-    MemManage_Handler                        0x0800207b   Thumb Code     4  stm32f30x_it.o(.text)
-    BusFault_Handler                         0x0800207f   Thumb Code     4  stm32f30x_it.o(.text)
-    UsageFault_Handler                       0x08002083   Thumb Code     4  stm32f30x_it.o(.text)
-    SVC_Handler                              0x08002087   Thumb Code     2  stm32f30x_it.o(.text)
-    DebugMon_Handler                         0x08002089   Thumb Code     2  stm32f30x_it.o(.text)
-    PendSV_Handler                           0x0800208b   Thumb Code     2  stm32f30x_it.o(.text)
-    SysTick_Handler                          0x0800208d   Thumb Code     2  stm32f30x_it.o(.text)
-    TIM3_IRQHandler                          0x0800208f   Thumb Code    64  stm32f30x_it.o(.text)
-    SystemInit                               0x0800219b   Thumb Code   112  system_stm32f30x.o(.text)
-    SystemCoreClockUpdate                    0x0800220b   Thumb Code   138  system_stm32f30x.o(.text)
-    __use_two_region_memory                  0x080022bd   Thumb Code     2  heapauxi.o(.text)
-    __rt_heap_escrow$2region                 0x080022bf   Thumb Code     2  heapauxi.o(.text)
-    __rt_heap_expand$2region                 0x080022c1   Thumb Code     2  heapauxi.o(.text)
-    __user_setup_stackheap                   0x080022c3   Thumb Code    74  sys_stackheap_outer.o(.text)
-    exit                                     0x0800230d   Thumb Code    12  exit.o(.text)
-    __user_libspace                          0x08002319   Thumb Code     8  libspace.o(.text)
-    __user_perproc_libspace                  0x08002319   Thumb Code     0  libspace.o(.text)
-    __user_perthread_libspace                0x08002319   Thumb Code     0  libspace.o(.text)
-    _sys_exit                                0x08002321   Thumb Code     8  sys_exit.o(.text)
-    __I$use$semihosting                      0x0800232d   Thumb Code     0  use_no_semi.o(.text)
-    __use_no_semihosting_swi                 0x0800232d   Thumb Code     2  use_no_semi.o(.text)
-    __semihosting_library_function           0x0800232f   Thumb Code     0  indicate_semi.o(.text)
-    _fp_init                                 0x0800232f   Thumb Code    10  fpinit.o(x$fpl$fpinit)
-    __fplib_config_fpu_vfp                   0x08002337   Thumb Code     0  fpinit.o(x$fpl$fpinit)
-    __fplib_config_pureend_doubles           0x08002337   Thumb Code     0  fpinit.o(x$fpl$fpinit)
-    GPIO_PIN                                 0x08002338   Data          16  stm32f3_discovery.o(.constdata)
-    GPIO_CLK                                 0x08002348   Data          32  stm32f3_discovery.o(.constdata)
-    BUTTON_PIN                               0x08002368   Data           2  stm32f3_discovery.o(.constdata)
-    BUTTON_CLK                               0x0800236c   Data           4  stm32f3_discovery.o(.constdata)
-    BUTTON_EXTI_LINE                         0x08002370   Data           2  stm32f3_discovery.o(.constdata)
-    BUTTON_PORT_SOURCE                       0x08002372   Data           1  stm32f3_discovery.o(.constdata)
-    BUTTON_PIN_SOURCE                        0x08002373   Data           1  stm32f3_discovery.o(.constdata)
-    BUTTON_IRQn                              0x08002374   Data           1  stm32f3_discovery.o(.constdata)
-    Region$$Table$$Base                      0x08002378   Number         0  anon$$obj.o(Region$$Table)
-    Region$$Table$$Limit                     0x08002398   Number         0  anon$$obj.o(Region$$Table)
+    TIM_Config                               0x08001fb9   Thumb Code    46  main.o(.text)
+    main                                     0x08001fe7   Thumb Code   102  main.o(.text)
+    NMI_Handler                              0x08002069   Thumb Code     2  stm32f30x_it.o(.text)
+    HardFault_Handler                        0x0800206b   Thumb Code     4  stm32f30x_it.o(.text)
+    MemManage_Handler                        0x0800206f   Thumb Code     4  stm32f30x_it.o(.text)
+    BusFault_Handler                         0x08002073   Thumb Code     4  stm32f30x_it.o(.text)
+    UsageFault_Handler                       0x08002077   Thumb Code     4  stm32f30x_it.o(.text)
+    SVC_Handler                              0x0800207b   Thumb Code     2  stm32f30x_it.o(.text)
+    DebugMon_Handler                         0x0800207d   Thumb Code     2  stm32f30x_it.o(.text)
+    PendSV_Handler                           0x0800207f   Thumb Code     2  stm32f30x_it.o(.text)
+    SysTick_Handler                          0x08002081   Thumb Code     2  stm32f30x_it.o(.text)
+    TIM3_IRQHandler                          0x08002083   Thumb Code    54  stm32f30x_it.o(.text)
+    SystemInit                               0x0800217f   Thumb Code   112  system_stm32f30x.o(.text)
+    SystemCoreClockUpdate                    0x080021ef   Thumb Code   138  system_stm32f30x.o(.text)
+    __use_two_region_memory                  0x080022a1   Thumb Code     2  heapauxi.o(.text)
+    __rt_heap_escrow$2region                 0x080022a3   Thumb Code     2  heapauxi.o(.text)
+    __rt_heap_expand$2region                 0x080022a5   Thumb Code     2  heapauxi.o(.text)
+    __user_setup_stackheap                   0x080022a7   Thumb Code    74  sys_stackheap_outer.o(.text)
+    exit                                     0x080022f1   Thumb Code    12  exit.o(.text)
+    __user_libspace                          0x080022fd   Thumb Code     8  libspace.o(.text)
+    __user_perproc_libspace                  0x080022fd   Thumb Code     0  libspace.o(.text)
+    __user_perthread_libspace                0x080022fd   Thumb Code     0  libspace.o(.text)
+    _sys_exit                                0x08002305   Thumb Code     8  sys_exit.o(.text)
+    __I$use$semihosting                      0x08002311   Thumb Code     0  use_no_semi.o(.text)
+    __use_no_semihosting_swi                 0x08002311   Thumb Code     2  use_no_semi.o(.text)
+    __semihosting_library_function           0x08002313   Thumb Code     0  indicate_semi.o(.text)
+    _fp_init                                 0x08002313   Thumb Code    10  fpinit.o(x$fpl$fpinit)
+    __fplib_config_fpu_vfp                   0x0800231b   Thumb Code     0  fpinit.o(x$fpl$fpinit)
+    __fplib_config_pureend_doubles           0x0800231b   Thumb Code     0  fpinit.o(x$fpl$fpinit)
+    GPIO_PIN                                 0x0800231c   Data          16  stm32f3_discovery.o(.constdata)
+    GPIO_CLK                                 0x0800232c   Data          32  stm32f3_discovery.o(.constdata)
+    BUTTON_PIN                               0x0800234c   Data           2  stm32f3_discovery.o(.constdata)
+    BUTTON_CLK                               0x08002350   Data           4  stm32f3_discovery.o(.constdata)
+    BUTTON_EXTI_LINE                         0x08002354   Data           2  stm32f3_discovery.o(.constdata)
+    BUTTON_PORT_SOURCE                       0x08002356   Data           1  stm32f3_discovery.o(.constdata)
+    BUTTON_PIN_SOURCE                        0x08002357   Data           1  stm32f3_discovery.o(.constdata)
+    BUTTON_IRQn                              0x08002358   Data           1  stm32f3_discovery.o(.constdata)
+    Region$$Table$$Base                      0x0800235c   Number         0  anon$$obj.o(Region$$Table)
+    Region$$Table$$Limit                     0x0800237c   Number         0  anon$$obj.o(Region$$Table)
     GPIO_PORT                                0x20000000   Data          32  stm32f3_discovery.o(.data)
     BUTTON_PORT                              0x20000020   Data           4  stm32f3_discovery.o(.data)
     CCR1_Val                                 0x2000004e   Data           2  main.o(.data)
@@ -820,9 +820,9 @@ Memory Map of the image
 
   Image Entry point : 0x08000229
 
-  Load Region LR_1 (Base: 0x08000000, Size: 0x00002408, Max: 0xffffffff, ABSOLUTE)
+  Load Region LR_1 (Base: 0x08000000, Size: 0x000023ec, Max: 0xffffffff, ABSOLUTE)
 
-    Execution Region ER_RO (Base: 0x08000000, Size: 0x00002398, Max: 0xffffffff, ABSOLUTE)
+    Execution Region ER_RO (Base: 0x08000000, Size: 0x0000237c, Max: 0xffffffff, ABSOLUTE)
 
     Base Addr    Size         Type   Attr      Idx    E Section Name        Object
 
@@ -880,20 +880,20 @@ Memory Map of the image
     0x080008e0   0x00000808   Code   RO          531    .text               stm32f30x_rcc.o
     0x080010e8   0x00000154   Code   RO          602    .text               stm32f30x_syscfg.o
     0x0800123c   0x00000d7c   Code   RO          622    .text               stm32f30x_tim.o
-    0x08001fb8   0x000000bc   Code   RO          688    .text               main.o
-    0x08002074   0x0000006c   Code   RO          737    .text               stm32f30x_it.o
-    0x080020e0   0x000001dc   Code   RO          761    .text               system_stm32f30x.o
-    0x080022bc   0x00000006   Code   RO          787    .text               c_w.l(heapauxi.o)
-    0x080022c2   0x0000004a   Code   RO          807    .text               c_w.l(sys_stackheap_outer.o)
-    0x0800230c   0x0000000c   Code   RO          809    .text               c_w.l(exit.o)
-    0x08002318   0x00000008   Code   RO          817    .text               c_w.l(libspace.o)
-    0x08002320   0x0000000c   Code   RO          876    .text               c_w.l(sys_exit.o)
-    0x0800232c   0x00000002   Code   RO          887    .text               c_w.l(use_no_semi.o)
-    0x0800232e   0x00000000   Code   RO          889    .text               c_w.l(indicate_semi.o)
-    0x0800232e   0x0000000a   Code   RO          874    x$fpl$fpinit        fz_wm.l(fpinit.o)
-    0x08002338   0x0000003d   Data   RO           13    .constdata          stm32f3_discovery.o
-    0x08002375   0x00000003   PAD
-    0x08002378   0x00000020   Data   RO          941    Region$$Table       anon$$obj.o
+    0x08001fb8   0x000000b0   Code   RO          688    .text               main.o
+    0x08002068   0x0000005c   Code   RO          737    .text               stm32f30x_it.o
+    0x080020c4   0x000001dc   Code   RO          761    .text               system_stm32f30x.o
+    0x080022a0   0x00000006   Code   RO          787    .text               c_w.l(heapauxi.o)
+    0x080022a6   0x0000004a   Code   RO          807    .text               c_w.l(sys_stackheap_outer.o)
+    0x080022f0   0x0000000c   Code   RO          809    .text               c_w.l(exit.o)
+    0x080022fc   0x00000008   Code   RO          817    .text               c_w.l(libspace.o)
+    0x08002304   0x0000000c   Code   RO          876    .text               c_w.l(sys_exit.o)
+    0x08002310   0x00000002   Code   RO          887    .text               c_w.l(use_no_semi.o)
+    0x08002312   0x00000000   Code   RO          889    .text               c_w.l(indicate_semi.o)
+    0x08002312   0x0000000a   Code   RO          874    x$fpl$fpinit        fz_wm.l(fpinit.o)
+    0x0800231c   0x0000003d   Data   RO           13    .constdata          stm32f3_discovery.o
+    0x08002359   0x00000003   PAD
+    0x0800235c   0x00000020   Data   RO          941    Region$$Table       anon$$obj.o
 
 
     Execution Region ER_RW (Base: 0x20000000, Size: 0x00000070, Max: 0xffffffff, ABSOLUTE)
@@ -924,11 +924,11 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   Object Name
 
-       188         28          0         12         32     194238   main.o
+       176         28          0         12         32     194222   main.o
         64         26        392          0       1536        964   startup_stm32f30x.o
        612          6          0          0          0       5607   stm32f30x_exti.o
        500         22          0          0          0       8749   stm32f30x_gpio.o
-       108         18          0          2          0       1664   stm32f30x_it.o
+        92         12          0          2          0       1656   stm32f30x_it.o
        220         20          0          0          0       3909   stm32f30x_misc.o
       2056         68          0         42          0      25069   stm32f30x_rcc.o
        340         12          0          0          0       3235   stm32f30x_syscfg.o
@@ -937,7 +937,7 @@ Image component sizes
        476         40          0         20          0       1775   system_stm32f30x.o
 
     ----------------------------------------------------------------------
-      8340        350        488        112       1568     531508   Object Totals
+      8312        344        488        112       1568     531484   Object Totals
          0          0         32          0          0          0   (incl. Generated)
          0          0          3          0          0          0   (incl. Padding)
 
@@ -988,15 +988,15 @@ Image component sizes
 
       Code (inc. data)   RO Data    RW Data    ZI Data      Debug   
 
-      8624        366        488        112       1664     529840   Grand Totals
-      8624        366        488        112       1664     529840   ELF Image Totals
-      8624        366        488        112          0          0   ROM Totals
+      8596        360        488        112       1664     529816   Grand Totals
+      8596        360        488        112       1664     529816   ELF Image Totals
+      8596        360        488        112          0          0   ROM Totals
 
 ==============================================================================
 
-    Total RO  Size (Code + RO Data)                 9112 (   8.90kB)
+    Total RO  Size (Code + RO Data)                 9084 (   8.87kB)
     Total RW  Size (RW Data + ZI Data)              1776 (   1.73kB)
-    Total ROM Size (Code + RO Data + RW Data)       9224 (   9.01kB)
+    Total ROM Size (Code + RO Data + RW Data)       9196 (   8.98kB)
 
 ==============================================================================
 

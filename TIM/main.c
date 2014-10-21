@@ -68,7 +68,7 @@ int main(void)
 
   /* Time base configuration */
   TIM_TimeBaseStructure.TIM_Period = 1;
-  TIM_TimeBaseStructure.TIM_Prescaler = 359;
+  TIM_TimeBaseStructure.TIM_Prescaler = 3599;
   TIM_TimeBaseStructure.TIM_ClockDivision = 0;
   TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
 
@@ -128,11 +128,10 @@ void TIM_Config(void)
   NVIC_Init(&NVIC_InitStructure);
 
   /* Initialize Leds mounted on STM32F3-Discovery EVAL board */
-  STM_EVAL_LEDInit(LED3);
-	STM_EVAL_LEDInit(LED10);
-  /* Turn on LED3, LED4, LED5 and LED6 */
-  STM_EVAL_LEDOn(LED3);
-	STM_EVAL_LEDOff(LED10);
+  STM_EVAL_LEDInit(LED6);
+	
+  /* Turn on LED6 */
+  STM_EVAL_LEDOn(LED6);
 	
 } //end TIM_Config
 

@@ -167,9 +167,9 @@ void TIM3_IRQHandler(void)
   {
     TIM_ClearITPendingBit(TIM3, TIM_IT_CC1);
     
-    /* LED3 toggling with frequency = 73.24 Hz */
-    STM_EVAL_LEDToggle(LED3);
-		Count++;
+    /* LED3 toggling with frequency = 1000 Hz */
+    STM_EVAL_LEDToggle(LED6);
+
     capture = TIM_GetCapture1(TIM3);
     TIM_SetCompare1(TIM3, capture + CCR1_Val);
 		

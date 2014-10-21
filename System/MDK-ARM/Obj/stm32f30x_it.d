@@ -33,3 +33,4 @@
 .\obj\stm32f30x_it.o: ..\..\..\..\Libraries\STM32F30x_StdPeriph_Driver\inc\stm32f30x_misc.h
 .\obj\stm32f30x_it.o: ..\..\..\..\Utilities\STM32F3_Discovery\stm32f3_discovery.h
 .\obj\stm32f30x_it.o: ..\stm32f30x_it.h
+.\obj\stm32f30x_it.o: C:\Program Files\Keil\ARM\ARMCC\bin\..\include\math.h

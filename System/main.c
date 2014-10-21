@@ -12,7 +12,8 @@
 
 /* Includes ------------------------------------------------------------------*/
 
-#include "main.h"
+
+	#include "main.h"
 
 
 
@@ -71,30 +72,32 @@
 	
 /* Global Variables ----------------------------------------------------------*/
 
-	double threshold = 0;
-	double attack = 15;
-	double ratio = 10;
-	double release = 0.6;
-	double mug = 0;
-	int autoEN = 0;
-	int bypassEN = 0;
+			double 			threshold = -10;
+			double 			attack = 15;
+			double 			ratio = 5;
+			double 			release = 0.6;
+			double 			mug = 0;
+			
+			int 				autoEN = 0;
+			int 				bypassEN = 0;
 	
-	int Compress = 0;
-	
+			int 				Compress = 0;
+			int					AttRel = 0;
 	
 /* Private variables ---------------------------------------------------------*/
 
+
+/* Timer CC Register values */
 __IO 	uint16_t 		CCR1_TIM2_Val = 1;
 __IO 	uint16_t 		CCR1_TIM3_Val = 1;
-			
-__IO 	uint16_t  	ADC1ConvertedValue = 0;
-__IO 	uint16_t  	ADC1ConvertedVoltage = 0;
+
+
+/* ADC Calibration value */
 __IO 	uint16_t  	calibration_value = 0;
-__IO 	uint32_t 		TimingDelay = 0;
+__IO 	uint16_t  	TimingDelay = 0;
 
 			uint16_t 		Data = 0;
 			
-			uint16_t		TimeStep;
 	
 /* Private function prototypes -----------------------------------------------*/
 
@@ -115,6 +118,7 @@ __IO 	uint32_t 		TimingDelay = 0;
 	int Rotary( void );
 	
 	char* DoubleToChar ( double );
+	
 	
 /* Private functions ---------------------------------------------------------*/
 
@@ -157,9 +161,13 @@ int main(void)
   STM_EVAL_LEDOn(LED6);
 	STM_EVAL_LEDOn(LED8);
 	
+	
+	/* TIM3 enable counter */
+  TIM_Cmd(TIM3, ENABLE);
+	
+	
 	while(1)
 	{
-		
 		UI_hl();
 	}
 	
@@ -258,7 +266,8 @@ void DAC_Config( void )
   /* Configure PA.04 (DAC_OUT1) as analog */
   GPIO_InitStructure.GPIO_Pin =  GPIO_Pin_4;
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AN;
-  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+  GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_DOWN;
   GPIO_Init(GPIOA, &GPIO_InitStructure);
 	
 	/* DAC channel1 Configuration */
@@ -319,9 +328,10 @@ void INPUT_Config(void)
 
 void TIM2_Config(void)
 {
-	
-	TimeStep = ( 10 * attack );
 
+	/*
+	*	TIM2 with 10kHz freq
+	*/
 	
   /* TIM2 clock enable */
   RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM2, ENABLE);
@@ -337,7 +347,7 @@ void TIM2_Config(void)
   
   /* Time base configuration */
   TIM_TimeBaseStructure.TIM_Period = 1;
-  TIM_TimeBaseStructure.TIM_Prescaler = 7199;
+  TIM_TimeBaseStructure.TIM_Prescaler = 3599;
   TIM_TimeBaseStructure.TIM_ClockDivision = 0;
   TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
 
@@ -381,6 +391,12 @@ void TIM2_Config(void)
 void TIM3_Config(void)
 {
 
+	/*
+	*	TIM2 with 88kHz freq, PreScale = 408 + 1, Period = 1 + 1
+	*
+	*	TIM2 with 44kHz freq, PreScale = 817 + 1, Period = 1 + 1
+	*/
+	
 	/* TIM3 clock enable */
   RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM3, ENABLE);
 
@@ -395,7 +411,7 @@ void TIM3_Config(void)
   
   /* Time base configuration */
   TIM_TimeBaseStructure.TIM_Period = 1;
-  TIM_TimeBaseStructure.TIM_Prescaler = 408;
+  TIM_TimeBaseStructure.TIM_Prescaler = 1999;
   TIM_TimeBaseStructure.TIM_ClockDivision = 0;
   TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
 
@@ -416,9 +432,7 @@ void TIM3_Config(void)
 
 	/* TIM Interrupts enable */
 	TIM_ITConfig(TIM3, TIM_IT_CC1, ENABLE);
-	
-	/* TIM3 enable counter */
-  TIM_Cmd(TIM3, ENABLE);
+
 	
 } //end TIM3_Config
 
