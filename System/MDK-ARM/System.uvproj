@@ -555,6 +555,11 @@
               <FileType>1</FileType>
               <FilePath>..\system_stm32f30x.c</FilePath>
             </File>
+            <File>
+              <FileName>log2.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\log2.s</FilePath>
+            </File>
           </Files>
         </Group>
       </Groups>

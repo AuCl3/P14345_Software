@@ -1,0 +1,279 @@
+
+
+
+ARM Macro Assembler    Page 1 
+
+
+    1 00000000         
+    2 00000000         ; log2:   32 bit base 2 logarithm function for ARM Corte
+                       x-M3      KEIL  
+    3 00000000         ; ------------------------------------------------------
+                       --------------------
+    4 00000000         ; (c) 2010 Ivan Mellen                                  
+                                 April 2010 
+    5 00000000         ; ------------------------------------------------------
+                       --------------------
+    6 00000000         ; Free Personal, Non-Commercial Use License. 
+    7 00000000         ; The Software is licensed to you for your personal, NON
+                       -COMMERCIAL USE.
+    8 00000000         ; If you have questions about this license, need other s
+                       izes or would like
+    9 00000000         ; a different license please email : imellen(at)embedded
+                       signals(dot)com
+   10 00000000         
+   11 00000000         
+   12 00000000         ; This file contains only one function:
+   13 00000000         ; int log2(unsigned int x);   
+   14 00000000         
+   15 00000000         ; input 16q16 unsigned   1/65536 to 65535+65535/65536  
+   16 00000000         ; output 5q27 signed   -15.99999 to 15.99999
+   17 00000000         ; log2(0x80800000)=0x780b81b7   e.g. log2(32896)= 15.005
+                       618505179882049560546875
+   18 00000000         ; log2(0x0000abcd)= -77230085   e.g. log2(0.671096801757
+                       81)= -0.57540897279978
+   19 00000000         
+   20 00000000         ; max error: +- 4E-7 = +-0.4 ppm   (calculated - correct
+                       )/correct
+   21 00000000         ; 1+11 cycles + call overhead
+   22 00000000         
+   23 00000000         ; Base B logarithm : logB(x) = k* log2(x)
+   24 00000000         ;  where k = 1/ log2(B)  ; for log10: k=0.301029995;    
+                         for ln: k=0.693147180
+   25 00000000         
+   26 00000000         
+   27 00000000                 THUMB
+   28 00000000                 AREA             FFTLIB2_CORTEXM3, CODE, READONL
+Y
+   29 00000000                 EXPORT           log2
+   30 00000000                 ALIGN            8
+   31 00000000         
+   32 00000000         log2
+   33 00000000         
+   34 00000000 F20F 0C28       adr              r12, LUTlog2 ;value not changed
+                                                            , reused in batch p
+                                                            rocessing
+   35 00000004         
+   36 00000004 FAB0 F180       clz              r1, r0      ;core, 11 cycles
+   37 00000008 4088            lsls             r0, r1      ;Logical Shift Left
+                                                            
+   38 0000000A F3C0 33C8       ubfx             r3, r0, #0x0F, #0x09 ;Unsigned 
+                                                            bit extract
+   39 0000000E F3C0 6006       ubfx             r0, r0, #0x18, #0x07 ;Unsigned 
+                                                            bit extract
+   40 00000012 F85C 2020       ldr.w            r2, [r12, r0, lsl #0x2] ;Load R
+                                                            egister with word
+   41 00000016 EA4F 00E2       mov.w            r0, r2, asr #0x03 ;Move
+
+
+
+ARM Macro Assembler    Page 2 
+
+
+   42 0000001A F3C2 020B       ubfx             r2, r2, #0x00, #0x0C ;Unsigned 
+                                                            bit extract
+   43 0000001E FB02 F203       mul              r2, r3      ;Multiply
+   44 00000022 EB12 0050       adds.w           r0, r2, r0, lsr #0x01 ;Add
+   45 00000026 EBB0 60C1       subs.w           r0, r0, r1, lsl #0x1B ;Sub
+   46 0000002A         
+   47 0000002A 4770            bx               lr          ;only r0-r3, r12 mo
+                                                            dified
+   48 0000002C         
+   49 0000002C         
+   50 0000002C                 ALIGN            2
+   51 0000002C         
+   52 0000002C         LUTlog2
+   53 0000002C         
+   54 0000002C 80002B7F 
+              81701B68 
+              82DD1B52 
+              84475B3C 
+              85AEDB26 
+              8713AB11 
+              8875CAFC 
+              89D53AE7         DCD              0x80002b7f,0x81701b68,0x82dd1b5
+2,0x84475b3c,0x85aedb26,0x8713ab11,0x8875cafc,0x89d53ae7
+   55 0000004C 8B321AD3 
+              8C8C6ABF 
+              8DE43AAB 
+              8F399A97 
+              908C7A84 
+              91DCEA71 
+              932B0A5E 
+              9476CA4C         DCD              0x8b321ad3,0x8c8c6abf,0x8de43aa
+b,0x8f399a97,0x908c7a84,0x91dcea71,0x932b0a5e,0x9476ca4c
+   56 0000006C 95C03A39 
+              97076A27 
+              984C4A16 
+              998EFA04 
+              9ACF79F3 
+              9C0DD9E2 
+              9D4A09D1 
+              9E8429C0         DCD              0x95c03a39,0x97076a27,0x984c4a1
+6,0x998efa04,0x9acf79f3,0x9c0dd9e2,0x9d4a09d1,0x9e8429c0
+   57 0000008C 9FBC39B0 
+              A0F239A0 
+              A2262990 
+              A3582980 
+              A4882971 
+              A5B64961 
+              A6E26952 
+              A80CA943         DCD              0x9fbc39b0,0xa0f239a0,0xa226299
+0,0xa3582980,0xa4882971,0xa5b64961,0xa6e26952,0xa80ca943
+   58 000000AC A9350934 
+              AA5B9926 
+              AB805917 
+              ACA33909 
+              ADC458FB 
+              AEE3C8ED 
+              B00168DF 
+              B11D58D2         DCD              0xa9350934,0xaa5b9926,0xab80591
+7,0xaca33909,0xadc458fb,0xaee3c8ed,0xb00168df,0xb11d58d2
+
+
+
+ARM Macro Assembler    Page 3 
+
+
+   59 000000CC B23788C5 
+              B35028B7 
+              B46708AA 
+              B57C489D 
+              B68FF890 
+              B7A1F884 
+              B8B27877 
+              B9C1686B         DCD              0xb23788c5,0xb35028b7,0xb46708a
+a,0xb57c489d,0xb68ff890,0xb7a1f884,0xb8b27877,0xb9c1686b
+   60 000000EC BACEB85F 
+              BBDA9853 
+              BCE4E847 
+              BDEDC83B 
+              BEF5282F 
+              BFFB0824 
+              C0FF8818 
+              C202880D         DCD              0xbaceb85f,0xbbda9853,0xbce4e84
+7,0xbdedc83b,0xbef5282f,0xbffb0824,0xc0ff8818,0xc202880d
+   61 0000010C C3042802 
+              C40467F7 
+              C50337EC 
+              C600B7E1 
+              C6FCD7D6 
+              C7F797CC 
+              C8F117C1 
+              C9E947B7         DCD              0xc3042802,0xc40467f7,0xc50337e
+c,0xc600b7e1,0xc6fcd7d6,0xc7f797cc,0xc8f117c1,0xc9e947b7
+   62 0000012C CAE017AD 
+              CBD5B7A2 
+              CCCA0798 
+              CDBD178E 
+              CEAED785 
+              CF9F777B 
+              D08ED771 
+              D17CF768         DCD              0xcae017ad,0xcbd5b7a2,0xccca079
+8,0xcdbd178e,0xceaed785,0xcf9f777b,0xd08ed771,0xd17cf768
+   63 0000014C D269F75E 
+              D355B755 
+              D440574C 
+              D529D742 
+              D6121739 
+              D6F94730 
+              D7DF5727 
+              D8C4371F         DCD              0xd269f75e,0xd355b755,0xd440574
+c,0xd529d742,0xd6121739,0xd6f94730,0xd7df5727,0xd8c4371f
+   64 0000016C D9A81716 
+              DA8AD70D 
+              DB6C6705 
+              DC4D06FC 
+              DD2C86F4 
+              DE0B06EB 
+              DEE876E3 
+              DFC4D6DB         DCD              0xd9a81716,0xda8ad70d,0xdb6c670
+5,0xdc4d06fc,0xdd2c86f4,0xde0b06eb,0xdee876e3,0xdfc4d6db
+   65 0000018C E0A036D3 
+              E17A96CB 
+              E253E6C3 
+              E32C46BB 
+              E403A6B3 
+
+
+
+ARM Macro Assembler    Page 4 
+
+
+              E4DA16AB 
+              E5AF76A4 
+              E683F69C         DCD              0xe0a036d3,0xe17a96cb,0xe253e6c
+3,0xe32c46bb,0xe403a6b3,0xe4da16ab,0xe5af76a4,0xe683f69c
+   66 000001AC E7576695 
+              E82A068D 
+              E8FBA686 
+              E9CC667E 
+              EA9C3677 
+              EB6B1670 
+              EC390669 
+              ED062662         DCD              0xe7576695,0xe82a068d,0xe8fba68
+6,0xe9cc667e,0xea9c3677,0xeb6b1670,0xec390669,0xed062662
+   67 000001CC EDD2565B 
+              EE9DA654 
+              EF68264D 
+              F031C646 
+              F0FA863F 
+              F1C26638 
+              F2896632 
+              F34FA62B         DCD              0xedd2565b,0xee9da654,0xef68264
+d,0xf031c646,0xf0fa863f,0xf1c26638,0xf2896632,0xf34fa62b
+   68 000001EC F4150625 
+              F4D9961E 
+              F59D5618 
+              F6605611 
+              F722760B 
+              F7E3C605 
+              F8A465FE 
+              F96425F8         DCD              0xf4150625,0xf4d9961e,0xf59d561
+8,0xf6605611,0xf722760b,0xf7e3c605,0xf8a465fe,0xf96425f8
+   69 0000020C FA2325F2 
+              FAE165EC 
+              FB9ED5E6 
+              FC5B95E0 
+              FD1785DA 
+              FDD2C5D4 
+              FE8D45CE 
+              FF4705C8         DCD              0xfa2325f2,0xfae165ec,0xfb9ed5e
+6,0xfc5b95e0,0xfd1785da,0xfdd2c5d4,0xfe8d45ce,0xff4705c8
+   70 0000022C         
+   71 0000022C                 END
+Command Line: --debug --xref --cpu=Cortex-M4.fp --apcs=interwork --depend=.\obj
+\log2.d -o.\obj\log2.o -I"C:\Program Files\Keil\ARM\RV31\INC" -I"C:\Program Fil
+es\Keil\ARM\CMSIS\Include" -I"C:\Program Files\Keil\ARM\Inc\ST\STM32F30x" --pre
+define="__EVAL SETA 1" --list=.\list\log2.lst ..\log2.s
+
+
+
+ARM Macro Assembler    Page 1 Alphabetic symbol ordering
+Relocatable symbols
+
+FFTLIB2_CORTEXM3 00000000
+
+Symbol: FFTLIB2_CORTEXM3
+   Definitions
+      At line 28 in file ..\log2.s
+   Uses
+      None
+Comment: FFTLIB2_CORTEXM3 unused
+LUTlog2 0000002C
+
+Symbol: LUTlog2
+   Definitions
+      At line 52 in file ..\log2.s
+   Uses
+      At line 34 in file ..\log2.s
+Comment: LUTlog2 used once
+log2 00000000
+
+Symbol: log2
+   Definitions
+      At line 32 in file ..\log2.s
+   Uses
+      At line 29 in file ..\log2.s
+Comment: log2 used once
+3 symbols
+335 symbols in table

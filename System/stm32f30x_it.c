@@ -15,7 +15,8 @@
 
 	#include "main.h"
 	#include "math.h"
-
+	
+	
 
 
 
@@ -66,25 +67,30 @@ extern	int				AttRel;
 				
 				uint16_t	attackStep = 0;
 				uint16_t	releaseStep = 0;
-				int 			attackCounter = 0;
-				int				releaseCounter = 0;
+				int 			attackCounter = 1;
+				int				releaseCounter = 1;
 				
 				
 /* Timer3 Variables */
 
 __IO 	uint16_t  	ADC1ConvertedValue = 0;
 
-				double 		SampledSignal;
+				double		SampledSignal = 0;
 				double 		SampledSignalVoltage;
-				double 		SSdB;
+				int				SSint;
+				int  			base2SSdB;
+				double		SSdB = 0;
 				double 		OutputSignal;
 				double 		GainReduction;
 				double 		OutputVoltage;
 				uint16_t 	OutputData;
 				
+				uint32_t x = 0x80800000;
+				int y = 0;
 
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
+
 
 /******************************************************************************/
 /*            Cortex-M4 Processor Exceptions Handlers                         */
@@ -296,32 +302,32 @@ void TIM3_IRQHandler(void)
 	
 		
 		//Stop and clear Timer and counters if done
-		if( attackCounter >= attackStep || releaseCounter >= releaseStep )
+		if( attackCounter - 1 >= attackStep || releaseCounter - 1 >= releaseStep )
 		{
+			
 			TIM_Cmd(TIM3, DISABLE);
-		
-			attackCounter = 0;
-			releaseCounter = 0;
-		
 			
 			//If attack Timer done, Timer is now Release Timer
-			if( attackCounter >= attackStep )
+			if( attackCounter - 1 >= attackStep )
 			{
 				AttRel = 1;
 			}
 			
 			//disable compression if Release Timer done, Timer now Attack Timer
-			if( releaseCounter >= releaseStep )
+			if( releaseCounter - 1 >= releaseStep )
 			{
 				Compress = 0;
 				AttRel = 0;
 			}
 			
+			attackCounter = 1;
+			releaseCounter = 1;
+			
 		}
 		
 	
 		//If timer enabled while not in Compress, Timer in Attack mode
-		if( AttRel == 0 )
+		else if( AttRel == 0 )
 		{
 			if( SSdB >= threshold )
 			{
@@ -349,7 +355,12 @@ void TIM3_IRQHandler(void)
 		
 		
 		//If counters go to 0, disable Timer
-		if( attackCounter <= 0 || releaseCounter <= 0 )
+		if( attackCounter < 1 && AttRel == 0 )
+		{
+			TIM_Cmd(TIM3, DISABLE);
+		}
+		
+		if( releaseCounter < 1 && AttRel >= 0 )
 		{
 			TIM_Cmd(TIM3, DISABLE);
 		}
@@ -389,24 +400,37 @@ void TIM2_IRQHandler(void)
 		if(ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) != RESET)
 		{
 			/* Get ADC1 converted data */
-			ADC1ConvertedValue = ADC_GetConversionValue(ADC1);
+			SampledSignal = ADC_GetConversionValue(ADC1);
 		}
 			
 		/* Compute the voltage */
-		SampledSignalVoltage = (ADC1ConvertedValue *3300)/0xFFF;
-			
+		SampledSignalVoltage = (SampledSignal * 3000 )/0xFFF;
+		
 		SampledSignalVoltage = SampledSignalVoltage / 1000;
 			
+		SSint = SampledSignalVoltage;
+		
+		/* Convert voltage to Base2 */
+
 			
 		/* Convert to dB */
-		SSdB = 20*log10( SampledSignalVoltage );
+		//SSdB = log( SampledSignalVoltage );
+		
+
+		base2SSdB = log2( SSint );
 			
 		/* if signal above threshold, and compression not running, enable compression */
-		if( SSdB >= threshold && Compress != 1 )
+		/*if( SSdB >= threshold && Compress != 1 )
 		{
 			TIM_Cmd(TIM3, ENABLE );
 			Compress = 1;
-		}
+		}*/
+		
+		 /*if signal below threshold, and compression running, enable Release Timer */
+		/*if( SSdB <= threshold && Compress > 0 )
+		{
+			TIM_Cmd(TIM3, ENABLE );
+		}*/
 		
 		
 		
@@ -421,11 +445,11 @@ void TIM2_IRQHandler(void)
 		if( Compress > 0 )
 		{
 			/* Compute Output Voltage*/
-			OutputSignal = threshold + (( SSdB - threshold ) / ratio );
+			//OutputSignal = threshold + (( SSdB - threshold ) / ratio );
 		
-			GainReduction = OutputSignal - threshold;
+			//GainReduction = OutputSignal - threshold;
 			
-			OutputVoltage = (6.1*22*GainReduction ) / 1000;
+			//OutputVoltage = (6.1*22*GainReduction ) / 1000;
 			
 			/* 
 						ADD CODE FOR LINEAR TIMER STEP HERE
@@ -433,12 +457,12 @@ void TIM2_IRQHandler(void)
 		
 			/*Convert and output to DAC */
 			
-			OutputData = OutputVoltage*1000;
+			//OutputData = OutputVoltage*1000;
 			
 			
-			OutputData = (OutputData*0xFFF)/3300;
+			//OutputData = (OutputData*0xFFF)/3000;
 			
-			DAC_SetChannel1Data(DAC_Align_12b_R, OutputData);
+			//DAC_SetChannel1Data(DAC_Align_12b_R, ADC1ConvertedValue);
 		}
 	
 		

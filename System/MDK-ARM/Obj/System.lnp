@@ -26,6 +26,7 @@
 ".\obj\main.o"
 ".\obj\stm32f30x_it.o"
 ".\obj\system_stm32f30x.o"
+".\obj\log2.o"
 --ro-base 0x08000000 --entry 0x08000000 --rw-base 0x20000000 --entry Reset_Handler --first __Vectors --strict --summary_stderr --info summarysizes --map --xref --callgraph --symbols
 --info sizes --info totals --info unused --info veneers
 --list ".\List\System.map" -o .\Obj\System.axf

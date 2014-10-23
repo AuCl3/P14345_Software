@@ -122,6 +122,8 @@ __IO 	uint16_t  	TimingDelay = 0;
 	
 /* Private functions ---------------------------------------------------------*/
 
+//extern	log2( );
+
 /*----------------------------------------------------------------------------*/
 
 
@@ -274,7 +276,7 @@ void DAC_Config( void )
   DAC_DeInit(); 
   DAC_InitStructure.DAC_Trigger = DAC_Trigger_None;
   DAC_InitStructure.DAC_WaveGeneration = DAC_WaveGeneration_None;
-  DAC_InitStructure.DAC_OutputBuffer = DAC_OutputBuffer_Enable;
+  DAC_InitStructure.DAC_OutputBuffer = DAC_OutputBuffer_Disable;
   /* DAC Channel1 Init */
   DAC_Init(DAC_Channel_1, &DAC_InitStructure);
         
@@ -405,14 +407,14 @@ void TIM2_Config(void)
   /* Enable the TIM3 and TIM2 gloabal Interrupts */
   NVIC_InitStructure.NVIC_IRQChannel = TIM2_IRQn;
   NVIC_InitStructure.NVIC_IRQChannelPreemptionPriority = 0;
-  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 1;
+  NVIC_InitStructure.NVIC_IRQChannelSubPriority = 2;
   NVIC_InitStructure.NVIC_IRQChannelCmd = ENABLE;
   NVIC_Init(&NVIC_InitStructure);
 
   
   /* Time base configuration */
   TIM_TimeBaseStructure.TIM_Period = 1;
-  TIM_TimeBaseStructure.TIM_Prescaler = 1999;
+  TIM_TimeBaseStructure.TIM_Prescaler = 7199;
   TIM_TimeBaseStructure.TIM_ClockDivision = 0;
   TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
 
