@@ -79,6 +79,7 @@ __IO 	uint16_t  	ADC1ConvertedValue = 0;
 				double 		SampledSignalVoltage;
 				uint32_t	SSint;
 				double		decimalVal;
+				int 			i;
 				int  			base2SSdB;
 				double		SSdB = 0;
 				double 		OutputSignal;
@@ -411,6 +412,8 @@ void TIM2_IRQHandler(void)
 			
 		SSint = SampledSignalVoltage;
 		
+		
+		
 		/* Convert voltage to 16q16 int */
 		
 		if( SampledSignalVoltage < 1 )
@@ -443,13 +446,35 @@ void TIM2_IRQHandler(void)
 		
 		//Solve decimal val
 		
+		for( i = 32768 ; i < 0 ; i = ( i / 2 ) )
+		{
+			
+			decimalVal = decimalVal*2;
+			
+			if( decimalVal > 1 )
+			{
+				
+				SSint = SSint + i;
+				decimalVal = decimalVal - 1 ;
+			}
+			
+			if( decimalVal == 1 )
+			{
+				break;
+			}
+			
+		}
 		
 			
 		/* Convert to dB */
-		SSdB = 20*log10( SampledSignalVoltage );
+		SSdB = 20*log10( SSint );
 		//SSdB		= 0;
 
 		//base2SSdB = log2( SSint );
+		
+		//Decode SSdB
+		
+		
 			
 		/* if signal above threshold, and compression not running, enable compression */
 		if( SSdB >= threshold && Compress != 1 )
