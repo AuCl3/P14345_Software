@@ -77,7 +77,8 @@ __IO 	uint16_t  	ADC1ConvertedValue = 0;
 
 				double		SampledSignal = 0;
 				double 		SampledSignalVoltage;
-				int				SSint;
+				uint32_t	SSint;
+				double		decimalVal;
 				int  			base2SSdB;
 				double		SSdB = 0;
 				double 		OutputSignal;
@@ -410,8 +411,39 @@ void TIM2_IRQHandler(void)
 			
 		SSint = SampledSignalVoltage;
 		
-		/* Convert voltage to Base2 */
+		/* Convert voltage to 16q16 int */
+		
+		if( SampledSignalVoltage < 1 )
+		{
+			SSint = 0 ;
+			
+			
+		}
+		
+		if( SampledSignalVoltage >= 1 && SampledSignalVoltage < 2 )
+		{
+			SSint = 0 + 0x00010000;
+			
+			decimalVal = SampledSignalVoltage - 1;
+		}
 
+		if( SampledSignalVoltage >= 2 && SampledSignalVoltage < 3 )
+		{
+			SSint = 0 + 0x00020000;
+			
+			decimalVal = SampledSignalVoltage - 2;
+		}
+		
+		if( SampledSignalVoltage >= 3 )
+		{
+			SSint = 0 + 0x00030000;
+			
+			decimalVal = SampledSignalVoltage - 3;
+		}
+		
+		//Solve decimal val
+		
+		
 			
 		/* Convert to dB */
 		SSdB = 20*log10( SampledSignalVoltage );
