@@ -414,23 +414,23 @@ void TIM2_IRQHandler(void)
 
 			
 		/* Convert to dB */
-		//SSdB = log( SampledSignalVoltage );
-		
+		SSdB = 20*log10( SampledSignalVoltage );
+		//SSdB		= 0;
 
-		base2SSdB = log2( SSint );
+		//base2SSdB = log2( SSint );
 			
 		/* if signal above threshold, and compression not running, enable compression */
-		/*if( SSdB >= threshold && Compress != 1 )
+		if( SSdB >= threshold && Compress != 1 )
 		{
 			TIM_Cmd(TIM3, ENABLE );
 			Compress = 1;
-		}*/
+		}
 		
 		 /*if signal below threshold, and compression running, enable Release Timer */
-		/*if( SSdB <= threshold && Compress > 0 )
+		if( SSdB <= threshold && Compress > 0 )
 		{
 			TIM_Cmd(TIM3, ENABLE );
-		}*/
+		}
 		
 		
 		
@@ -445,11 +445,11 @@ void TIM2_IRQHandler(void)
 		if( Compress > 0 )
 		{
 			/* Compute Output Voltage*/
-			//OutputSignal = threshold + (( SSdB - threshold ) / ratio );
+			OutputSignal = threshold + (( SSdB - threshold ) / ratio );
 		
-			//GainReduction = OutputSignal - threshold;
+			GainReduction = OutputSignal - threshold;
 			
-			//OutputVoltage = (6.1*22*GainReduction ) / 1000;
+			OutputVoltage = (6.1*22*GainReduction ) / 1000;
 			
 			/* 
 						ADD CODE FOR LINEAR TIMER STEP HERE
@@ -457,12 +457,12 @@ void TIM2_IRQHandler(void)
 		
 			/*Convert and output to DAC */
 			
-			//OutputData = OutputVoltage*1000;
+			OutputData = OutputVoltage*1000;
 			
 			
-			//OutputData = (OutputData*0xFFF)/3000;
+			OutputData = (OutputData*0xFFF)/3000;
 			
-			//DAC_SetChannel1Data(DAC_Align_12b_R, ADC1ConvertedValue);
+			DAC_SetChannel1Data(DAC_Align_12b_R, OutputData);
 		}
 	
 		
