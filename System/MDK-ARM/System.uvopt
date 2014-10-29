@@ -746,10 +746,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>6</ColumnNumber>
+      <ColumnNumber>4</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>445</TopLine>
-      <CurrentLine>453</CurrentLine>
+      <TopLine>304</TopLine>
+      <CurrentLine>469</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\stm32f30x_it.c</PathWithFileName>
       <FilenameWithoutPath>stm32f30x_it.c</FilenameWithoutPath>
