@@ -78,6 +78,7 @@ __IO 	uint16_t  	ADC1ConvertedValue = 0;
 				double		SampledSignal = 0;
 				double 		SampledSignalVoltage;
 				uint32_t	SSint;
+				uint32_t	SSint2;
 				double		decimalVal;
 				int 			i;
 				int  			base2SSdB;
@@ -362,6 +363,7 @@ void TIM3_IRQHandler(void)
 		if( attackCounter < 1 && AttRel == 0 )
 		{
 			TIM_Cmd(TIM3, DISABLE);
+			Compress = 0;
 		}
 		
 		if( releaseCounter < 1 && AttRel >= 0 )
@@ -408,20 +410,24 @@ void TIM2_IRQHandler(void)
 		}
 			
 		/* Compute the voltage */
+		
+		/*
 		SampledSignalVoltage = (SampledSignal * 3000 )/0xFFF;
 		
 		SampledSignalVoltage = SampledSignalVoltage / 1000;
 			
 		SSint = SampledSignalVoltage;
+		*/
 		
-		
+		SSint2 = SampledSignal * 48;
 		
 		/* Convert voltage to 16q16 int */
 		
+		/*
 		if( SampledSignalVoltage < 1 )
 		{
 			SSint = 0 ;
-			
+			decimalVal = SampledSignalVoltage;
 			
 		}
 		
@@ -447,8 +453,9 @@ void TIM2_IRQHandler(void)
 		}
 		
 		//Solve decimal val
+		i = 32768;
 		
-		for( i = 32768 ; i <= 1 ; i = ( i / 2 ) )
+		while( i >= 1 )
 		{
 			
 			decimalVal = decimalVal*2;
@@ -460,25 +467,32 @@ void TIM2_IRQHandler(void)
 				decimalVal = decimalVal - 1 ;
 			}
 			
-			if( decimalVal == 1 )
+			if( decimalVal == 1 || decimalVal == 0 )
 			{
 				break;
 			}
 			
+			i = i / 2;
 		}
-		
+		*/
 			
 		/* Convert to dB */
-		SSdB1 = 20*log10( SampledSignalVoltage );
-		//SSdB		= 0;
-
-		base2SSdB = log2( SSint );
 		
-		//Decode SSdB
+		//SSdB1 = 20*log10( SampledSignalVoltage );
 		
-		SSdB2 = ( base2SSdB / 0x08000000 );
 		
-		SSdB = SSdB1;
+		base2SSdB = log2( SSint2 );
+		
+		//Decode SSdB2
+		
+		SSdB2 =   base2SSdB;
+		SSdB =  SSdB2 / 22293082	;			// SSdB * 20 * log10(2) / 2^27
+		
+		
+		
+		//SSdB = SSdB1;
+		//SSdB = SSdB2;
+		//SSdB = -10;
 		
 		/* if signal above threshold, and compression not running, enable compression */
 		if( SSdB >= threshold && Compress != 1 )
@@ -510,7 +524,7 @@ void TIM2_IRQHandler(void)
 		
 			GainReduction = OutputSignal - threshold;
 			
-			OutputVoltage = (6.1*22*GainReduction ) / 1000;
+			OutputData = 183.183 * GainReduction;
 			
 			/* 
 						ADD CODE FOR LINEAR TIMER STEP HERE
@@ -518,10 +532,10 @@ void TIM2_IRQHandler(void)
 		
 			/*Convert and output to DAC */
 			
-			OutputData = OutputVoltage*1000;
+			///OutputData = OutputVoltage;
 			
 			
-			OutputData = (OutputData*0xFFF)/3000;
+			//OutputData = (OutputData*0xFFF)/3000;
 			
 			DAC_SetChannel1Data(DAC_Align_12b_R, OutputData);
 		}

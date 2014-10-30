@@ -414,7 +414,7 @@ void TIM2_Config(void)
   
   /* Time base configuration */
   TIM_TimeBaseStructure.TIM_Period = 1;
-  TIM_TimeBaseStructure.TIM_Prescaler = 7199;
+  TIM_TimeBaseStructure.TIM_Prescaler = 1799;
   TIM_TimeBaseStructure.TIM_ClockDivision = 0;
   TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
 
@@ -980,6 +980,8 @@ void UI_hl(void)
 			if( GPIO_ReadInputDataBit( GPIOE, GPIO_Pin_10 ) == 0 )
 			{
 				buttonFlag = 0;
+				
+				
 			}
 		}
 		
