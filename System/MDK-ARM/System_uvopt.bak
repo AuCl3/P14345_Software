@@ -319,7 +319,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>168</TopLine>
+      <TopLine>163</TopLine>
       <CurrentLine>179</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\CMSIS\Device\ST\STM32F30x\Source\Templates\arm\startup_stm32f30x.s</PathWithFileName>
@@ -725,10 +725,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>42</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>614</TopLine>
-      <CurrentLine>635</CurrentLine>
+      <TopLine>391</TopLine>
+      <CurrentLine>417</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
@@ -743,8 +743,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>487</TopLine>
-      <CurrentLine>504</CurrentLine>
+      <TopLine>395</TopLine>
+      <CurrentLine>325</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\stm32f30x_it.c</PathWithFileName>
       <FilenameWithoutPath>stm32f30x_it.c</FilenameWithoutPath>
