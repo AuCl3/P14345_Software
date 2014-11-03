@@ -1069,230 +1069,226 @@ int Rotary()
 /*----------------------------------------------------------------------------*/
 
 char* DoubleToChar ( double in )
-{									// 20*log(x)=y
-	if ( in == 0.1 )
+{
+	if ( in == -20 )
 		return "       -20.0        ";
-	else if ( in == 0.1059 )
+	else if ( in == -19.5 )
 		return "       -19.5        ";
-	else if ( in == 0.1122 )
+	else if ( in == -19 )
 		return "       -19.0        ";
-	else if ( in == 0.1189 )
+	else if ( in == -18.5 )
 		return "       -18.5        ";
-	else if ( in == 0.1259 )
+	else if ( in == -18 )
 		return "       -18.0        ";
-	else if ( in == 0.1334 )
+	else if ( in == -17.5 )
 		return "       -17.5        ";
-	else if ( in == 0.1413 )
+	else if ( in == -17 )
 		return "       -17.0        ";
-	else if ( in == 0.1496 )
+	else if ( in == -16.5 )
 		return "       -16.5        ";
-	else if ( in == 0.1585 )
+	else if ( in == -16 )
 		return "       -16.0        ";
-	else if ( in == 0.1679 )
+	else if ( in == -15.5 )
 		return "       -15.5        ";
-	else if ( in == 0.1778 )
+	else if ( in == -15 )
 		return "       -15.0        ";
-	else if ( in == 0.1884 )
+	else if ( in == -14.5 )
 		return "       -14.5        ";
-	else if ( in == 0.1995 )
+	else if ( in == -14 )
 		return "       -14.0        ";
-	else if ( in == 0.2113 )
+	else if ( in == -13.5 )
 		return "       -13.5        ";
-	else if ( in == 0.2239 )
+	else if ( in == -13 )
 		return "       -13.0        ";
-	else if ( in == 0.2371 )
+	else if ( in == -12.5 )
 		return "       -12.5        ";
-	else if ( in == 0.2512 )
+	else if ( in == -12 )
 		return "       -12.0        ";
-	else if ( in == 0.2661 )
+	else if ( in == -11.5 )
 		return "       -11.5        ";
-	else if ( in == 0.2818 )
+	else if ( in == -11 )
 		return "       -11.0        ";
-	else if ( in == 0.2985 )
+	else if ( in == -10.5 )
 		return "       -10.5        ";
-	else if ( in == 0.3162 )
+	else if ( in == -10 )
 		return "       -10.0        ";
-	else if ( in == 0.3350 )
+	else if ( in == -9.5 )
 		return "        -9.5        ";
-	else if ( in == 0.3548 )
+	else if ( in == -9 )
 		return "        -9.0        ";
-	else if ( in == 0.3758 )
+	else if ( in == -8.5 )
 		return "        -8.5        ";
-	else if ( in == 0.3981 )
+	else if ( in == -8 )
 		return "        -8.0        ";
-	else if ( in == 0.4217 )
+	else if ( in == -7.5 )
 		return "        -7.5        ";
-	else if ( in == 0.4467 )
+	else if ( in == -7 )
 		return "        -7.0        ";
-	else if ( in == 0.4732 )
+	else if ( in == -6.5 )
 		return "        -6.5        ";
-	else if ( in == 0.5012 )
+	else if ( in == -6 )
 		return "        -6.0        ";
-	else if ( in == 0.5309 )
+	else if ( in == -5.5 )
 		return "        -5.5        ";
-	else if ( in == 0.5623 )
+	else if ( in == -5 )
 		return "        -5.0        ";
-	else if ( in == 0.5957 )
+	else if ( in == -4.5 )
 		return "        -4.5        ";
-	else if ( in == 0.6310 )
+	else if ( in == -4 )
 		return "        -4.0        ";
-	else if ( in == 0.6683 )
-		return "        -3.5        ";
-	else if ( in == 0.7079 )
+	else if ( in == -3 )
 		return "        -3.0        ";
-	else if ( in == 0.7499 )
+	else if ( in == -2.5 )
 		return "        -2.5        ";
-	else if ( in == 0.7943 )
+	else if ( in == -2 )
 		return "        -2.0        ";
-	else if ( in == 0.8414 )
+	else if ( in == -1.5 )
 		return "        -1.5        ";
-	else if ( in == 0.8913 )
+	else if ( in == -1 )
 		return "        -1.0        ";
-	else if ( in == 0.9441 )
+	else if ( in == -0.5 )
 		return "        -0.5        ";
-	else if ( in == 1.000 )
+	else if ( in == 0 )
 		return "         0.0        ";
-	else if ( in == 1.059 )
+	else if ( in == 0.5 )
 		return "         0.5        ";
-	else if ( in == 1.122 )
+	else if ( in == 1 )
 		return "         1.0        ";
-	else if ( in == 1.189 )
+	else if ( in == 1.5 )
 		return "         1.5        ";
-	else if ( in == 1.129 )
+	else if ( in == 2 )
 		return "         2.0        ";
-	else if ( in == 1.334 )
+	else if ( in == 2.5 )
 		return "         2.5        ";
-	else if ( in == 1.413 )
+	else if ( in == 3 )
 		return "         3.0        ";
-	else if ( in == 1.496 )
+	else if ( in == 3.5 )
 		return "         3.5        ";
-	else if ( in == 1.585 )
+	else if ( in == 4 )
 		return "         4.0        ";
-	else if ( in == 1.679 )
+	else if ( in == 4.5 )
 		return "         4.5        ";
-	else if ( in == 1.778 )
+	else if ( in == 5 )
 		return "         5.0        ";
-	else if ( in == 1.884 )
+	else if ( in == 5.5 )
 		return "         5.5        ";
-	else if ( in == 1.995 )
+	else if ( in == 6 )
 		return "         6.0        ";
-	else if ( in == 2.113 )
+	else if ( in == 6.5 )
 		return "         6.5        ";
-	else if ( in == 2.239 )
+	else if ( in == 7 )
 		return "         7.0        ";
-	else if ( in == 2.271 )
+	else if ( in == 7.5 )
 		return "         7.5        ";
-	else if ( in == 2.512 )
+	else if ( in == 8 )
 		return "         8.0        ";
-	else if ( in == 2.661 )
+	else if ( in == 8.5 )
 		return "         8.5        ";
-	else if ( in == 2.818 )
+	else if ( in == 9 )
 		return "         9.0        ";
-	else if ( in == 2.985 )
+	else if ( in == 9.5 )
 		return "         9.5        ";
-	else if ( in == 3.162 )
+	else if ( in == 10 )
 		return "        10.0        ";
-	else if ( in == 3.350 )
+	else if ( in == 10.5 )
 		return "        10.5        ";
-	else if ( in == 3.548 )
+	else if ( in == 11 )
 		return "        11.0        ";
-	else if ( in == 3.758 )
+	else if ( in == 11.5 )
 		return "        11.5        ";	
-	else if ( in == 3.981 )
+	else if ( in == 12 )
 		return "        12.0        ";
-	else if ( in == 4.217 )
+	else if ( in == 12.5 )
 		return "        12.5        ";
-	else if ( in == 4.467 )
+	else if ( in == 13 )
 		return "        13.0        ";
-	else if ( in == 4.712 )
+	else if ( in == 13.5 )
 		return "        13.5        ";
-	else if ( in == 5.012 )
+	else if ( in == 14 )
 		return "        14.0        ";
-	else if ( in == 5.309 )
+	else if ( in == 14.5 )
 		return "        14.5        ";
-	else if ( in == 5.623 )
+	else if ( in == 15 )
 		return "        15.0        ";
-	else if ( in == 5.597 )
+	else if ( in == 15.5 )
 		return "        15.5        ";
-	else if ( in == 6.310 )
+	else if ( in == 16 )
 		return "        16.0        ";
-	else if ( in == 6.683 )
+	else if ( in == 16.5 )
 		return "        16.5        ";
-	else if ( in == 7.097 )
+	else if ( in == 17 )
 		return "        17.0        ";
-	else if ( in == 7.499 )
+	else if ( in == 17.5 )
 		return "        17.5        ";
-	else if ( in == 7.943 )
+	else if ( in == 18 )
 		return "        18.0        ";
-	else if ( in == 8.414 )
+	else if ( in == 18.5 )
 		return "        18.5        ";
-	else if ( in == 8.913 )
+	else if ( in == 19 )
 		return "        19.0        ";
-	else if ( in == 9.441 )
+	else if ( in == 19.5 )
 		return "        19.5        ";
-	else if ( in == 10.00 )
+	else if ( in == 20 )
 		return "        20.0        ";
-	else if ( in == 10.59 )
+	else if ( in == 20.5 )
 		return "        20.5        ";
-	else if ( in == 1.22 )
+	else if ( in == 21 )
 		return "        21.0        ";
-	else if ( in == 11.89 )
+	else if ( in == 21.5 )
 		return "        21.5        ";
-	else if ( in == 12.59 )
+	else if ( in == 22 )
 		return "        22.0        ";
-	else if ( in == 13.34 )
+	else if ( in == 22.5 )
 		return "        22.5        ";
-	else if ( in == 14.13 )
+	else if ( in == 23 )
 		return "        23.0        ";
-	else if ( in == 14.96 )
+	else if ( in == 23.5 )
 		return "        23.5        ";
-	else if ( in == 15.85 )
+	else if ( in == 24 )
 		return "        24.0        ";
-	else if ( in == 16.79 )
+	else if ( in == 24.5 )
 		return "        24.5        ";
-	else if ( in == 17.78 )
+	else if ( in == 25 )
 		return "        25.0        ";
-	else if ( in == 18.84 )
+	else if ( in == 25.5 )
 		return "        25.5        ";
-	else if ( in == 19.95 )
+	else if ( in == 26 )
 		return "        26.0        ";
-	else if ( in == 21.13 )
+	else if ( in == 26.5 )
 		return "        26.5        ";
-	else if ( in == 22.39 )
+	else if ( in == 27 )
 		return "        27.0        ";
-	else if ( in == 23.71 )
+	else if ( in == 27.5 )
 		return "        27.5        ";
-	else if ( in == 25.12 )
-		return "        28.0        ";
-	else if ( in == 26.61 )
+	else if ( in == 28 )
 		return "        28.5        ";
-	else if ( in == 28.18 )
+	else if ( in == 29 )
 		return "        29.0        ";
-	else if ( in == 29.85 )
+	else if ( in == 29.5 )
 		return "        29.5        ";
-	else if ( in == 31.62 )
+	else if ( in == 30 )
 		return "        30.0        ";
-	else if ( in == 1.017 )
+	else if ( in == 0.15 )
 		return "        0.15        ";
-	else if ( in == 1.029 )
+	else if ( in == 0.25 )
 		return "        0.25        ";
-	else if ( in == 1.041 )
+	else if ( in == 0.35 )
 		return "        0.35        ";
-	else if ( in == 1.053 )
+	else if ( in == 0.45 )
 		return "        0.45        ";
-	else if ( in == 1.065 )
+	else if ( in == 0.55 )
 		return "        0.55        ";
-	else if ( in == 1.078 )
+	else if ( in == 0.65 )
 		return "        0.65        ";
-	else if ( in == 1.090 )
+	else if ( in == 0.75 )
 		return "        0.75        ";
-	else if ( in == 1.103 )
+	else if ( in == 0.85 )
 		return "        0.85        ";
-	else if ( in == 1.116 )
+	else if ( in == 0.95 )
 		return "        0.95        ";
-	else if ( in == 1.129 )
+	else if ( in == 1.05 )
 		return "        1.05        ";
-	else if ( in == 1.142 )
+	else if ( in == 1.15 )
 		return "        1.15        ";
 	return "                     ";
 }
