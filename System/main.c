@@ -1136,6 +1136,8 @@ char* DoubleToChar ( double in )
 		return "        -4.5        ";
 	else if ( in == -4 )
 		return "        -4.0        ";
+	else if ( in == -3.5 )
+		return "        -3.5        ";
 	else if ( in == -3 )
 		return "        -3.0        ";
 	else if ( in == -2.5 )
@@ -1261,6 +1263,8 @@ char* DoubleToChar ( double in )
 	else if ( in == 27.5 )
 		return "        27.5        ";
 	else if ( in == 28 )
+		return "        28.0        ";
+	else if ( in == 28.5 )
 		return "        28.5        ";
 	else if ( in == 29 )
 		return "        29.0        ";
