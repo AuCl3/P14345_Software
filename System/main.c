@@ -7,6 +7,24 @@
   * @brief   Program body
   ******************************************************************************
   */ 
+	
+	/*--I/O Config--------------------------------------------------------------*/
+	/*
+	*
+	*		PA0 = ADC1
+	*		PA4 = DAC1
+	*		PC4 = USART1
+	*
+	*		PE7	 = Rotary Encoder, Clockwise
+	*		PE8	 = Rotary Encoder, CounterClockwise
+	*		PE9  = Rotary Encoder, Button
+	*		PE10 = Back Button
+	*
+	*/
+	/*--------------------------------------------------------------------------*/
+
+
+
 
 /*----------------------------------------------------------------------------*/
 
@@ -172,6 +190,7 @@ int main(void)
 	while(1)
 	{
 		UI_hl();
+		
 	}
 	
 } //end main
@@ -415,7 +434,7 @@ void TIM2_Config(void)
   
   /* Time base configuration */
   TIM_TimeBaseStructure.TIM_Period = 1;
-  TIM_TimeBaseStructure.TIM_Prescaler = 1799;
+  TIM_TimeBaseStructure.TIM_Prescaler = 3599;
   TIM_TimeBaseStructure.TIM_ClockDivision = 0;
   TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
 

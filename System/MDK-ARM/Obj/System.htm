@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Obj\System.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Obj\System.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 76]: Last Updated: Thu Oct 30 13:47:35 2014
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5.03 [Build 76]: Last Updated: Tue Nov 04 09:32:12 2014
 <BR><P>
 <H3>Maximum Stack Usage =        120 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -1330,7 +1330,7 @@ Global Symbols
 <LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UI_hl
 </UL>
 
-<P><STRONG><a name="[8d]"></a>DoubleToChar</STRONG> (Thumb, 5416 bytes, Stack size 16 bytes, main.o(.text))
+<P><STRONG><a name="[8d]"></a>DoubleToChar</STRONG> (Thumb, 5460 bytes, Stack size 16 bytes, main.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = DoubleToChar &rArr; __aeabi_cdcmpeq
 </UL>
 <BR>[Calls]<UL><LI><a href="#[8e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cdcmpeq
@@ -1346,7 +1346,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[90]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;UI_hl
 </UL>
 
-<P><STRONG><a name="[90]"></a>UI_hl</STRONG> (Thumb, 2606 bytes, Stack size 0 bytes, main.o(.text))
+<P><STRONG><a name="[90]"></a>UI_hl</STRONG> (Thumb, 2664 bytes, Stack size 0 bytes, main.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = UI_hl &rArr; DoubleToChar &rArr; __aeabi_cdcmpeq
 </UL>
 <BR>[Calls]<UL><LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;GPIO_ReadInputDataBit
@@ -1419,7 +1419,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[5d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[ab]"></a>TIM3_Config</STRONG> (Thumb, 102 bytes, Stack size 8 bytes, main.o(.text))
+<P><STRONG><a name="[ab]"></a>TIM3_Config</STRONG> (Thumb, 226 bytes, Stack size 8 bytes, main.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 24<LI>Call Chain = TIM3_Config &rArr; NVIC_Init
 </UL>
 <BR>[Calls]<UL><LI><a href="#[6a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;NVIC_Init
@@ -1441,7 +1441,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[5d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
-<P><STRONG><a name="[5d]"></a>main</STRONG> (Thumb, 188 bytes, Stack size 0 bytes, main.o(.text))
+<P><STRONG><a name="[5d]"></a>main</STRONG> (Thumb, 64 bytes, Stack size 0 bytes, main.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 120<LI>Call Chain = main &rArr; UART_Config &rArr; USART_Init &rArr; RCC_GetClocksFreq
 </UL>
 <BR>[Calls]<UL><LI><a href="#[ad]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;STM_EVAL_LEDOn
@@ -1487,7 +1487,7 @@ Global Symbols
 <P><STRONG><a name="[b]"></a>SysTick_Handler</STRONG> (Thumb, 2 bytes, Stack size 0 bytes, stm32f30x_it.o(.text))
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f30x.o(RESET)
 </UL>
-<P><STRONG><a name="[29]"></a>TIM3_IRQHandler</STRONG> (Thumb, 466 bytes, Stack size 16 bytes, stm32f30x_it.o(.text))
+<P><STRONG><a name="[29]"></a>TIM3_IRQHandler</STRONG> (Thumb, 496 bytes, Stack size 16 bytes, stm32f30x_it.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 48<LI>Call Chain = TIM3_IRQHandler &rArr; __aeabi_dmul
 </UL>
 <BR>[Calls]<UL><LI><a href="#[b3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_cdrcmple
@@ -1502,7 +1502,7 @@ Global Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> startup_stm32f30x.o(RESET)
 </UL>
-<P><STRONG><a name="[28]"></a>TIM2_IRQHandler</STRONG> (Thumb, 514 bytes, Stack size 24 bytes, stm32f30x_it.o(.text))
+<P><STRONG><a name="[28]"></a>TIM2_IRQHandler</STRONG> (Thumb, 752 bytes, Stack size 24 bytes, stm32f30x_it.o(.text))
 <BR><BR>[Stack]<UL><LI>Max Depth = 56 + Unknown Stack Size
 <LI>Call Chain = TIM2_IRQHandler &rArr; __aeabi_dmul
 </UL>

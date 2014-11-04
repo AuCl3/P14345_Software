@@ -166,7 +166,40 @@
           <Name>UL2CM3(-O207 -O207 -S0 -C0 -FO7  -FN1 -FC800 -FD20000000 -FF0STM32F3xx_256 -FL040000 -FS08000000</Name>
         </SetRegEntry>
       </TargetDriverDllRegistry>
-      <Breakpoint/>
+      <Breakpoint>
+        <Bp>
+          <Number>0</Number>
+          <Type>0</Type>
+          <LineNumber>365</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134239550</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>&lt;6&gt;..\stm32f30x_it.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\System\../stm32f30x_it.c\365</Expression>
+        </Bp>
+        <Bp>
+          <Number>1</Number>
+          <Type>0</Type>
+          <LineNumber>375</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>134239590</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>1</BreakIfRCount>
+          <Filename>&lt;6&gt;..\stm32f30x_it.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression>\\System\../stm32f30x_it.c\375</Expression>
+        </Bp>
+      </Breakpoint>
       <WatchWindow1>
         <Ww>
           <count>0</count>
@@ -176,62 +209,62 @@
         <Ww>
           <count>1</count>
           <WinNumber>1</WinNumber>
-          <ItemText>SampledSignalVoltage</ItemText>
+          <ItemText>\\System\../stm32f30x_it.c\SSdB</ItemText>
         </Ww>
         <Ww>
           <count>2</count>
           <WinNumber>1</WinNumber>
-          <ItemText>\\System\../stm32f30x_it.c\SSdB</ItemText>
+          <ItemText>OutputData</ItemText>
         </Ww>
         <Ww>
           <count>3</count>
           <WinNumber>1</WinNumber>
-          <ItemText>OutputVoltage</ItemText>
+          <ItemText>OutputSignal</ItemText>
         </Ww>
         <Ww>
           <count>4</count>
           <WinNumber>1</WinNumber>
-          <ItemText>OutputData</ItemText>
+          <ItemText>GainReduction</ItemText>
         </Ww>
         <Ww>
           <count>5</count>
           <WinNumber>1</WinNumber>
-          <ItemText>OutputSignal</ItemText>
+          <ItemText>\\System\../stm32f30x_it.c\GainReduction</ItemText>
         </Ww>
         <Ww>
           <count>6</count>
           <WinNumber>1</WinNumber>
-          <ItemText>GainReduction</ItemText>
+          <ItemText>threshold</ItemText>
         </Ww>
         <Ww>
           <count>7</count>
           <WinNumber>1</WinNumber>
-          <ItemText>\\System\../stm32f30x_it.c\GainReduction</ItemText>
+          <ItemText>ratio</ItemText>
         </Ww>
         <Ww>
           <count>8</count>
           <WinNumber>1</WinNumber>
-          <ItemText>SampledSignalVoltage</ItemText>
+          <ItemText>Compress</ItemText>
         </Ww>
         <Ww>
           <count>9</count>
           <WinNumber>1</WinNumber>
-          <ItemText>threshold</ItemText>
+          <ItemText>SSint</ItemText>
         </Ww>
         <Ww>
           <count>10</count>
           <WinNumber>1</WinNumber>
-          <ItemText>ratio</ItemText>
+          <ItemText>base2SSdB</ItemText>
         </Ww>
         <Ww>
           <count>11</count>
           <WinNumber>1</WinNumber>
-          <ItemText>Compress</ItemText>
+          <ItemText>SSdB1</ItemText>
         </Ww>
         <Ww>
           <count>12</count>
           <WinNumber>1</WinNumber>
-          <ItemText>AttRel</ItemText>
+          <ItemText>\\System\../stm32f30x_it.c\SSdB2</ItemText>
         </Ww>
         <Ww>
           <count>13</count>
@@ -241,27 +274,27 @@
         <Ww>
           <count>14</count>
           <WinNumber>1</WinNumber>
-          <ItemText>base2SSdB</ItemText>
+          <ItemText>SSint2</ItemText>
         </Ww>
         <Ww>
           <count>15</count>
           <WinNumber>1</WinNumber>
-          <ItemText>SSdB1</ItemText>
+          <ItemText>Att</ItemText>
         </Ww>
         <Ww>
           <count>16</count>
           <WinNumber>1</WinNumber>
-          <ItemText>\\System\../stm32f30x_it.c\SSdB2</ItemText>
+          <ItemText>Rel</ItemText>
         </Ww>
         <Ww>
           <count>17</count>
           <WinNumber>1</WinNumber>
-          <ItemText>SSint</ItemText>
+          <ItemText>releaseCounter</ItemText>
         </Ww>
         <Ww>
           <count>18</count>
           <WinNumber>1</WinNumber>
-          <ItemText>SSint2</ItemText>
+          <ItemText>AttackCounter</ItemText>
         </Ww>
       </WatchWindow1>
       <MemoryWindow1>
@@ -319,8 +352,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>163</TopLine>
+      <CurrentLine>179</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\..\..\Libraries\CMSIS\Device\ST\STM32F30x\Source\Templates\arm\startup_stm32f30x.s</PathWithFileName>
       <FilenameWithoutPath>startup_stm32f30x.s</FilenameWithoutPath>
@@ -727,8 +760,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>998</TopLine>
-      <CurrentLine>1015</CurrentLine>
+      <TopLine>132</TopLine>
+      <CurrentLine>149</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
@@ -743,8 +776,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>395</TopLine>
-      <CurrentLine>325</CurrentLine>
+      <TopLine>397</TopLine>
+      <CurrentLine>298</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\stm32f30x_it.c</PathWithFileName>
       <FilenameWithoutPath>stm32f30x_it.c</FilenameWithoutPath>

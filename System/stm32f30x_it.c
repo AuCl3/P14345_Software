@@ -312,13 +312,13 @@ void TIM3_IRQHandler(void)
 			
 			TIM_Cmd(TIM3, DISABLE);
 			
-			//If attack Timer done, Timer is now Release Timer
+			//If attack Timer done, Full Compression Enabled
 			if( attackCounter - 1 >= attackStep )
 			{
 				Att = 0;
 			}
 			
-			//disable compression if Release Timer done, Timer now Attack Timer
+			//disable compression if Release Timer done, Copression disabled
 			if( releaseCounter - 1 >= releaseStep )
 			{
 				Compress = 0;
@@ -332,7 +332,7 @@ void TIM3_IRQHandler(void)
 		
 	
 		//If timer enabled while not in Compress, Timer in Attack mode
-		else if( Att == 0 )
+		if( Att == 1 )
 		{
 			if( SSdB >= threshold )
 			{
@@ -346,7 +346,7 @@ void TIM3_IRQHandler(void)
 
 		
 		//else the Timer is in Release mode
-		else
+		if( Rel == 1 )
 		{
 			if( SSdB <= threshold )
 			{
@@ -365,12 +365,17 @@ void TIM3_IRQHandler(void)
 			TIM_Cmd(TIM3, DISABLE);
 			Compress = 0;
 			Att = 0;
+			
+			attackCounter = 1;
+			
 		}
 		
 		if( releaseCounter < 1 && Rel == 1 )
 		{
 			TIM_Cmd(TIM3, DISABLE);
 			Rel = 0;
+			
+			releaseCounter = 1;
 		}
 
 		
@@ -483,21 +488,25 @@ void TIM2_IRQHandler(void)
 		//SSdB1 = 20*log10( SampledSignalVoltage );
 		
 		
-		base2SSdB = log2( SSint2 );
+			base2SSdB = log2( SSint2 );
+		
 		
 		//Decode SSdB2
 		
 		SSdB2 =   base2SSdB;
 		SSdB =  SSdB2 / 22293082	;			// SSdB * 20 * log10(2) / 2^27
 		
-		
+		if( SSint2 == 0 )
+		{
+			SSdB = -90;
+		}
 		
 		//SSdB = SSdB1;
 		//SSdB = SSdB2;
 		//SSdB = -10;
 		
 		/* if signal above threshold, and compression not running, enable compression */
-		if( SSdB >= threshold && Compress != 1 )
+		if( SSdB >= threshold && Compress == 0 )
 		{
 			TIM_Cmd(TIM3, ENABLE );
 			Compress = 1;
@@ -505,7 +514,7 @@ void TIM2_IRQHandler(void)
 		}
 		
 		 /*if signal below threshold, and compression running, enable Release Timer */
-		if( SSdB <= threshold && Compress > 0 )
+		if( SSdB <= threshold && Compress > 0 && Rel == 0 )
 		{
 			TIM_Cmd(TIM3, ENABLE );
 			Rel = 1 ;
@@ -538,15 +547,17 @@ void TIM2_IRQHandler(void)
 			{
 				
 				OutputData = OutputData * attackCounter / attackStep ;
-				
+																	
+				//							2V			* 51						/ 150
 				
 			}
 			
 			if( Rel == 1 )
 			{
 				
-				OutputData = OutputData * ( releaseStep - releaseCounter ) / releaseStep ;
+				OutputData = OutputData * releaseCounter / releaseStep ;
 				
+				//					2V					*	2000					/ 6000
 				
 			}
 			
