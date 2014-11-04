@@ -362,7 +362,7 @@
               <MiscControls></MiscControls>
               <Define>USE_STDPERIPH_DRIVER,STM32F30X,</Define>
               <Undefine></Undefine>
-              <IncludePath>..\;..\..\..\..\Libraries\CMSIS\Device\ST\STM32F30x\Include;..\..\..\..\Libraries\STM32_USB-FS-Device_Driver\inc;..\..\..\..\Utilities\STM32F3_Discovery</IncludePath>
+              <IncludePath>..\;..\..\..\..\Libraries\CMSIS\Device\ST\STM32F30x\Include;..\..\..\..\Libraries\STM32F30x_StdPeriph_Driver\inc;..\..\..\..\Utilities\STM32F3_Discovery</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -554,6 +554,11 @@
               <FileName>system_stm32f30x.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\system_stm32f30x.c</FilePath>
+            </File>
+            <File>
+              <FileName>log2.s</FileName>
+              <FileType>2</FileType>
+              <FilePath>..\log2.s</FilePath>
             </File>
           </Files>
         </Group>

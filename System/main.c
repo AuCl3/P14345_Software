@@ -82,8 +82,9 @@
 			int 				bypassEN = 0;
 	
 			int 				Compress = 0;
-			int					AttRel = 0;
-	
+			int					Att = 0;
+			int					Rel = 0;
+			
 /* Private variables ---------------------------------------------------------*/
 
 

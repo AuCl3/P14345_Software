@@ -60,13 +60,13 @@ extern	double 		release;
 extern	double 		ratio;
 
 extern	int 			Compress;
-extern	int				AttRel;
-
+extern	int				Att;
+extern	int				Rel;
 
 /* Timer2 Variables */
 				
-				uint16_t	attackStep = 0;
-				uint16_t	releaseStep = 0;
+				uint16_t	attackStep = 1;
+				uint16_t	releaseStep = 1;
 				int 			attackCounter = 1;
 				int				releaseCounter = 1;
 				
@@ -315,14 +315,14 @@ void TIM3_IRQHandler(void)
 			//If attack Timer done, Timer is now Release Timer
 			if( attackCounter - 1 >= attackStep )
 			{
-				AttRel = 1;
+				Att = 0;
 			}
 			
 			//disable compression if Release Timer done, Timer now Attack Timer
 			if( releaseCounter - 1 >= releaseStep )
 			{
 				Compress = 0;
-				AttRel = 0;
+				Rel = 0;
 			}
 			
 			attackCounter = 1;
@@ -332,7 +332,7 @@ void TIM3_IRQHandler(void)
 		
 	
 		//If timer enabled while not in Compress, Timer in Attack mode
-		else if( AttRel == 0 )
+		else if( Att == 0 )
 		{
 			if( SSdB >= threshold )
 			{
@@ -360,15 +360,17 @@ void TIM3_IRQHandler(void)
 		
 		
 		//If counters go to 0, disable Timer
-		if( attackCounter < 1 && AttRel == 0 )
+		if( attackCounter < 1 && Att == 1 )
 		{
 			TIM_Cmd(TIM3, DISABLE);
 			Compress = 0;
+			Att = 0;
 		}
 		
-		if( releaseCounter < 1 && AttRel >= 0 )
+		if( releaseCounter < 1 && Rel == 1 )
 		{
 			TIM_Cmd(TIM3, DISABLE);
+			Rel = 0;
 		}
 
 		
@@ -499,12 +501,14 @@ void TIM2_IRQHandler(void)
 		{
 			TIM_Cmd(TIM3, ENABLE );
 			Compress = 1;
+			Att = 1;
 		}
 		
 		 /*if signal below threshold, and compression running, enable Release Timer */
 		if( SSdB <= threshold && Compress > 0 )
 		{
 			TIM_Cmd(TIM3, ENABLE );
+			Rel = 1 ;
 		}
 		
 		
@@ -530,6 +534,23 @@ void TIM2_IRQHandler(void)
 						ADD CODE FOR LINEAR TIMER STEP HERE
 			*/
 		
+			if( Att == 1 )
+			{
+				
+				OutputData = OutputData * attackCounter / attackStep ;
+				
+				
+			}
+			
+			if( Rel == 1 )
+			{
+				
+				OutputData = OutputData * ( releaseStep - releaseCounter ) / releaseStep ;
+				
+				
+			}
+			
+			
 			/*Convert and output to DAC */
 			
 			///OutputData = OutputVoltage;
