@@ -498,15 +498,20 @@ void TIM3_IRQHandler(void)
 				Att = 0;
 				Rel = 1;
 			
-				releaseCounter = attackCounter * ( releaseStep / attackStep );
+				releaseCounter = attackCounter * releaseStep;
+				releaseCounter = releaseCounter / attackStep;
+				attackCounter = 1;
 		}
 		
 		if( Rel == 1 && SSdB > threshold )
 		{
-				Att = 1;
 				Rel = 0;
+				Att = 1;
+				
 			
-				attackCounter = releaseCounter * ( attackStep / releaseStep );
+				attackCounter = releaseCounter * attackStep;
+				attackCounter = attackCounter / releaseStep;
+				releaseCounter = 1;
 		}
 		
 		/*	2. Increment/Decrement Counters --------------------------------------*/
@@ -520,7 +525,7 @@ void TIM3_IRQHandler(void)
 
 		
 		//Release mode
-		else
+		if( Rel == 1 )
 		{
 			releaseCounter++;
 		}
@@ -531,7 +536,7 @@ void TIM3_IRQHandler(void)
 		
 	
 		//Attack mode
-		if( attackCounter - 1 >= attackStep )
+		if( Att == 1 && attackCounter - 1 >= attackStep )
 		{
 			TIM_Cmd(TIM3, DISABLE);
 			
@@ -541,7 +546,7 @@ void TIM3_IRQHandler(void)
 		}
 		
 		//Release mode
-		if( releaseCounter - 1 >= releaseStep )
+		if( Rel == 1 && releaseCounter - 1 >= releaseStep )
 		{
 			TIM_Cmd(TIM3, DISABLE);
 			
@@ -555,7 +560,7 @@ void TIM3_IRQHandler(void)
 		
 		
 		//Attack mode
-		if( attackCounter < 1 && Att == 1 )
+		if( Att == 1 && attackCounter < 1 && Att == 1 )
 		{
 			TIM_Cmd(TIM3, DISABLE);
 			
@@ -566,7 +571,7 @@ void TIM3_IRQHandler(void)
 		}
 		
 		//Release mode
-		if( releaseCounter < 1 && Rel == 1 )
+		if( Rel == 1 && releaseCounter < 1 && Rel == 1 )
 		{
 			TIM_Cmd(TIM3, DISABLE);
 			

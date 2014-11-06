@@ -92,8 +92,8 @@
 	
 /* Global Variables ----------------------------------------------------------*/
 
-			double 			threshold = -10;		// -10 	dB
-			double 			ratio = 5;					// 5:1
+			double 			threshold = 0;		// -10 	dB
+			double 			ratio = 2;					// 5:1
 			double 			attack = 15;				//  15	ms
 			double 			release = 0.6;			// 0.6	s
 			double 			mug = 0;						//	 0
