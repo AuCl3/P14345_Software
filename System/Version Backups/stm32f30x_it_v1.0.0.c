@@ -2,8 +2,8 @@
   ******************************************************************************
   * @file    System / stm32f30x_it.c
   * @author  P14345
-  * @version V1.1.0
-  * @date    11/6/14
+  * @version V1.0.0
+  * @date    10/9/14
   * @brief   Program body
   ******************************************************************************
   */ 
@@ -17,6 +17,9 @@
 	#include "math.h"
 	
 	
+
+
+
 /** @addtogroup STM32F3_Discovery_SD_Projects
   * @{
   */
@@ -35,18 +38,6 @@
 /* Private variables ---------------------------------------------------------*/
 
 
-/* Necessary system global variables */
-
-extern	double		threshold;
-extern	double 		attack;
-extern	double 		release;
-extern	double 		ratio;
-
-extern	int 			Compress;
-extern	int				Att;
-extern	int				Rel;
-
-
 /* RCC Clock Variables */
 
 __IO uint16_t IC2Value = 0;
@@ -61,6 +52,17 @@ extern __IO uint16_t CCR1_TIM3_Val;
 extern __IO uint16_t CCR1_TIM2_Val;
 
 
+/* Necessary system global variables */
+
+extern	double		threshold;
+extern	double 		attack;
+extern	double 		release;
+extern	double 		ratio;
+
+extern	int 			Compress;
+extern	int				Att;
+extern	int				Rel;
+
 /* Timer2 Variables */
 				
 				uint16_t	attackStep = 1;
@@ -71,17 +73,25 @@ extern __IO uint16_t CCR1_TIM2_Val;
 				
 /* Timer3 Variables */
 
-				double		SampledSignal = 0;
-				
-				uint32_t	SS16q16int = 0;
-				int  			base2SSdB = 0;
-				double		SSdBbase2 = 0;
-				double		SSdB = 0;
-				
-				double 		OutputSignal = 0;
-				double 		GainReduction = 0;
-				uint16_t 	OutputData = 0;
+__IO 	uint16_t  	ADC1ConvertedValue = 0;
 
+				double		SampledSignal = 0;
+				double 		SampledSignalVoltage;
+				uint32_t	SSint;
+				uint32_t	SSint2;
+				double		decimalVal;
+				int 			i;
+				int  			base2SSdB;
+				double		SSdB = 0;
+				double		SSdB1 = 0;
+				double		SSdB2 = 0;
+				double 		OutputSignal;
+				double 		GainReduction;
+				double 		OutputVoltage;
+				uint16_t 	OutputData;
+				
+				uint32_t x = 0x80800000;
+				int y = 0;
 
 /* Private function prototypes -----------------------------------------------*/
 /* Private functions ---------------------------------------------------------*/
@@ -277,89 +287,225 @@ void SysTick_Handler(void)
 
 /*----------------------------------------------------------------------------*/
 /**
+  * @brief  This function handles TIM3 global interrupt request.
+  * @param  None
+  * @retval None
+  */
+	/*----------------------------------------------------------------------------*/
+	
+void TIM3_IRQHandler(void)
+{
+  if (TIM_GetITStatus(TIM3, TIM_IT_CC1) != RESET)
+  {
+		TIM_ClearITPendingBit(TIM3, TIM_IT_CC1);
+	
+		
+		//update Step values
+	
+		attackStep = attack * 10;
+		releaseStep = release * 10000;
+	
+		
+		//Stop and clear Timer and counters if done
+		if( attackCounter - 1 >= attackStep || releaseCounter - 1 >= releaseStep )
+		{
+			
+			TIM_Cmd(TIM3, DISABLE);
+			
+			//If attack Timer done, Full Compression Enabled
+			if( attackCounter - 1 >= attackStep )
+			{
+				Att = 0;
+			}
+			
+			//disable compression if Release Timer done, Copression disabled
+			if( releaseCounter - 1 >= releaseStep )
+			{
+				Compress = 0;
+				Rel = 0;
+			}
+			
+			attackCounter = 1;
+			releaseCounter = 1;
+			
+		}
+		
+	
+		//If timer enabled while not in Compress, Timer in Attack mode
+		if( Att == 1 )
+		{
+			if( SSdB >= threshold )
+			{
+				attackCounter++;
+			}
+			if( SSdB < threshold && attackCounter > 0 )
+			{
+				attackCounter--;
+			}
+		}
+
+		
+		//else the Timer is in Release mode
+		if( Rel == 1 )
+		{
+			if( SSdB <= threshold )
+			{
+				releaseCounter++;
+			}
+			if( SSdB > threshold && releaseCounter > 0 )
+			{
+				releaseCounter--;
+			}
+		}
+		
+		
+		//If counters go to 0, disable Timer
+		if( attackCounter < 1 && Att == 1 )
+		{
+			TIM_Cmd(TIM3, DISABLE);
+			Compress = 0;
+			Att = 0;
+			
+			attackCounter = 1;
+			
+		}
+		
+		if( releaseCounter < 1 && Rel == 1 )
+		{
+			TIM_Cmd(TIM3, DISABLE);
+			Rel = 0;
+			
+			releaseCounter = 1;
+		}
+
+		
+		capture = TIM_GetCapture1(TIM3);
+		TIM_SetCompare1(TIM3, capture + CCR1_TIM3_Val);
+
+	}
+} //End Timer2 Interrupt
+
+
+
+
+
+
+/*----------------------------------------------------------------------------*/
+/**
   * @brief  This function handles TIM2 global interrupt request.
   * @param  None
   * @retval None
-	*
-	*	Current Tasks:
-	*
-	*		1. 	Read ADC
-	*		2.	Convert ADC1 value to dB
-	*		3.	Enable Attack/Release 
-	*		4.	Compute VCA Voltage
-	*		5.	Output VCA Voltage to DAC1
-	*
   */
 /*----------------------------------------------------------------------------*/
 
 void TIM2_IRQHandler(void)
 {
-	
   if (TIM_GetITStatus(TIM2, TIM_IT_CC1) != RESET)
   {
     TIM_ClearITPendingBit(TIM2, TIM_IT_CC1);
     
-		
-		//LED for Timing Analysis
+
 		STM_EVAL_LEDToggle(LED6);
 		
-		
-		
-		/*------------------------------------------------------------------------*/
-		/*		INTERRUPT CODE START HERE																						*/
-		/*------------------------------------------------------------------------*/
-		
-		
-		
-		/*	1. Read ADC ----------------------------------------------------------*/
-		
-		
-		//Read ADC if ADC not busy
+	
+			
+		/* Read ADC Every Time */
 		if(ADC_GetFlagStatus(ADC1, ADC_FLAG_EOC) != RESET)
 		{
+			/* Get ADC1 converted data */
 			SampledSignal = ADC_GetConversionValue(ADC1);
 		}
 			
+		/* Compute the voltage */
+		
+		/*
+		SampledSignalVoltage = (SampledSignal * 3000 )/0xFFF;
+		
+		SampledSignalVoltage = SampledSignalVoltage / 1000;
+			
+		SSint = SampledSignalVoltage;
+		*/
+		
+		SSint2 = SampledSignal * 48;
+		
+		/* Convert voltage to 16q16 int */
+		
+		/*
+		if( SampledSignalVoltage < 1 )
+		{
+			SSint = 0 ;
+			decimalVal = SampledSignalVoltage;
+			
+		}
+		
+		if( SampledSignalVoltage >= 1 && SampledSignalVoltage < 2 )
+		{
+			SSint = 0 + 0x00010000;
+			
+			decimalVal = SampledSignalVoltage - 1;
+		}
+
+		if( SampledSignalVoltage >= 2 && SampledSignalVoltage < 3 )
+		{
+			SSint = 0 + 0x00020000;
+			
+			decimalVal = SampledSignalVoltage - 2;
+		}
+		
+		if( SampledSignalVoltage >= 3 )
+		{
+			SSint = 0 + 0x00030000;
+			
+			decimalVal = SampledSignalVoltage - 3;
+		}
+		
+		//Solve decimal val
+		i = 32768;
+		
+		while( i >= 1 )
+		{
+			
+			decimalVal = decimalVal*2;
+			
+			if( decimalVal > 1 )
+			{
+				
+				SSint = SSint + i;
+				decimalVal = decimalVal - 1 ;
+			}
+			
+			if( decimalVal == 1 || decimalVal == 0 )
+			{
+				break;
+			}
+			
+			i = i / 2;
+		}
+		*/
+			
+		/* Convert to dB */
+		
+		//SSdB1 = 20*log10( SampledSignalVoltage );
 		
 		
-		/*	2. Convert ADC1 Value to dB ------------------------------------------*/
+			base2SSdB = log2( SSint2 );
 		
 		
-		//Convert SampledSignal into 16q16 int (16 bit value, 16 bit decimal)
-		SS16q16int = SampledSignal * 48;
+		//Decode SSdB2
 		
-					//Note, 48 = ( 3 * 0x10000 ) / ( 0xFFF + 1 )
+		SSdB2 =   base2SSdB;
+		SSdB =  SSdB2 / 22293082	;			// SSdB * 20 * log10(2) / 2^27
 		
-		
-		
-		//Convert SS into a dB value
-		if( SS16q16int == 0 )
+		if( SSint2 == 0 )
 		{
 			SSdB = -90;
 		}
-		else
-		{
-			
-			//Take log2
-			base2SSdB = log2( SS16q16int );
 		
+		//SSdB = SSdB1;
+		//SSdB = SSdB2;
+		//SSdB = -10;
 		
-			//Decode SSdBbase2
-		
-			SSdBbase2 =   base2SSdB;						// First, convert int to double
-			SSdB =  SSdBbase2 / 22293082	;			
-			
-					// Note, 1 / 22293082 = [ ( 20 * log10(2) ) / 2^27 ]
-		
-		}
-		
-		
-		
-		/*	3. Enable Attack or Release ------------------------------------------*/
-		
-		
-		//if signal above threshold, and compression not running,
-		// enable Attack Time and Compression
+		/* if signal above threshold, and compression not running, enable compression */
 		if( SSdB >= threshold && Compress == 0 )
 		{
 			TIM_Cmd(TIM3, ENABLE );
@@ -367,9 +513,8 @@ void TIM2_IRQHandler(void)
 			Att = 1;
 		}
 		
-		//if signal below threshold, compression running, and Attack disabled, 
-		// enable Release Timer
-		else if( SSdB <= threshold && Compress == 1 && Att == 0 )
+		 /*if signal below threshold, and compression running, enable Release Timer */
+		if( SSdB <= threshold && Compress > 0 && Rel == 0 )
 		{
 			TIM_Cmd(TIM3, ENABLE );
 			Rel = 1 ;
@@ -377,21 +522,16 @@ void TIM2_IRQHandler(void)
 		
 		
 		
-		/*	4. Compute VCA Voltage -----------------------------------------------*/
-		
-		
-		//If not compressing, output = 0
+		/* Output 0 if not Compressing */
 		if( Compress == 0 )
 		{
-			//Output 0x000 to DAC
 			DAC_SetChannel1Data(DAC_Align_12b_R, 0x000);
 		}
 		
 		
-		//if compressing, determine VCA voltage
-		if( Compress == 1 )
+		/* Determine output if Compressing */
+		if( Compress > 0 )
 		{
-			
 			/* Compute Output Voltage*/
 			OutputSignal = threshold + (( SSdB - threshold ) / ratio );
 		
@@ -399,13 +539,13 @@ void TIM2_IRQHandler(void)
 			
 			OutputData = 183.183 * GainReduction;
 			
-					//Note, 183.183 = 0.0061 * 22 * ( 0xFFF / 3 )
-			
-		
+			/* 
+						ADD CODE FOR LINEAR TIMER STEP HERE
+			*/
 		
 			if( Att == 1 )
 			{
- 				
+				
 				OutputData = OutputData * attackCounter / attackStep ;
 																	
 				//							2V			* 51						/ 150
@@ -415,176 +555,31 @@ void TIM2_IRQHandler(void)
 			if( Rel == 1 )
 			{
 				
-				OutputData = OutputData * ( releaseStep - releaseCounter ) / releaseStep ;
+				OutputData = OutputData * releaseCounter / releaseStep ;
 				
 				//					2V					*	2000					/ 6000
 				
 			}
 			
 			
+			/*Convert and output to DAC */
 			
-			/*	5. Output VCA Voltage to DAC1 --------------------------------------*/
+			///OutputData = OutputVoltage;
 			
 			
-			//Output to DAC
+			//OutputData = (OutputData*0xFFF)/3000;
+			
 			DAC_SetChannel1Data(DAC_Align_12b_R, OutputData);
-			
 		}
 	
 		
-		/*------------------------------------------------------------------------*/
-		/*		INTERRUPT CODE END HERE																							*/
-		/*------------------------------------------------------------------------*/
-		
-		
-		//LED for Timing Analysis
 		STM_EVAL_LEDToggle(LED8);
 		
     capture = TIM_GetCapture1(TIM2);
     TIM_SetCompare1(TIM2, capture + CCR1_TIM2_Val);
 		
   }
-} //End Timer2 Interrupt Service Routine
-
-
-
-
-
-
-/*----------------------------------------------------------------------------*/
-/**
-  * @brief  This function handles TIM3 global interrupt request.
-  * @param  None
-  * @retval None
-  *
-	*	Current Tasks:
-	*
-	*		1.	Check/Update TIMER mode (Attack or Release)
-	*		2. 	Increment/Decrement CounterValue
-	*		3.	Disable TIMER3 if done counting up to Attack/Release Value
-	*		4.	Disable TIMER3 if counterValue goes to 0
-	*
-  */
-/*----------------------------------------------------------------------------*/
-	
-void TIM3_IRQHandler(void)
-{
-	
-  if (TIM_GetITStatus(TIM3, TIM_IT_CC1) != RESET)
-  {
-		TIM_ClearITPendingBit(TIM3, TIM_IT_CC1);
-	
-		
-		/*------------------------------------------------------------------------*/
-		/*		INTERRUPT CODE START HERE																						*/
-		/*------------------------------------------------------------------------*/
-	
-		
-		/*	1. Check/Update TIMER mode (Attack or Release)------------------------*/
-		
-		
-		//update Step values, before comparing them with counter values
-		
-		//attackStep range:		1 	 to 	300
-		//releaseStep rage:		1000 to 	12000
-	
-		attackStep = attack 	* 10;						// 0.1ms * 10 		= 1
-		releaseStep = release * 10000;				// 0.1s  * 10000 	= 1000
-		
-		
-		
-		if( Att == 1 && SSdB < threshold )
-		{
-				Att = 0;
-				Rel = 1;
-			
-				releaseCounter = attackCounter * ( releaseStep / attackStep );
-		}
-		
-		if( Rel == 1 && SSdB > threshold )
-		{
-				Att = 1;
-				Rel = 0;
-			
-				attackCounter = releaseCounter * ( attackStep / releaseStep );
-		}
-		
-		/*	2. Increment/Decrement Counters --------------------------------------*/
-		
-		
-		//Attack mode
-		if( Att == 1 )
-		{
-			attackCounter++;
-		}
-
-		
-		//Release mode
-		else
-		{
-			releaseCounter++;
-		}
-		
-		
-		
-		/*	3.	Disable TIMER3 if done counting up to Attack/Release Value -------*/
-		
-	
-		//Attack mode
-		if( attackCounter - 1 >= attackStep )
-		{
-			TIM_Cmd(TIM3, DISABLE);
-			
-			Att = 0;
-			attackCounter = 1;
-			
-		}
-		
-		//Release mode
-		if( releaseCounter - 1 >= releaseStep )
-		{
-			TIM_Cmd(TIM3, DISABLE);
-			
-			Compress = 0;
-			Rel = 0;
-			releaseCounter = 1;
-		}
-
-		
-		/*	4.	Disable TIMER3 if counterValue goes to 0	------------------------*/
-		
-		
-		//Attack mode
-		if( attackCounter < 1 && Att == 1 )
-		{
-			TIM_Cmd(TIM3, DISABLE);
-			
-			Compress = 0;
-			Att = 0;
-			attackCounter = 1;
-			
-		}
-		
-		//Release mode
-		if( releaseCounter < 1 && Rel == 1 )
-		{
-			TIM_Cmd(TIM3, DISABLE);
-			
-			Rel = 0;
-			releaseCounter = 1;
-		}
-
-		
-		/*------------------------------------------------------------------------*/
-		/*		INTERRUPT CODE END HERE																							*/
-		/*------------------------------------------------------------------------*/
-		
-		
-		capture = TIM_GetCapture1(TIM3);
-		TIM_SetCompare1(TIM3, capture + CCR1_TIM3_Val);
-
-	}
-} //End Timer3 Interrupt Service Routine
+} //End Timer3 Interrupt
 
 
 
