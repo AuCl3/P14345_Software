@@ -137,6 +137,7 @@ __IO 	uint16_t  	TimingDelay = 0;
 	
 	void UI_hl( void );
 	int Rotary( void );
+	void Metering( double, double, double );
 	
 	char* DoubleToChar ( double );
 	
@@ -760,36 +761,41 @@ void UI_hl(void)
 								break;
 							threshold += thresholdStep;
 							DisplayLine ( 2, DoubleToChar( threshold ) );
+							Metering ( thresholdMin, thresholdMax, threshold );
 							break;
 						case 1:
 							if ( mug == mugMax )
 								break;
 							mug += mugStep;
 							DisplayLine ( 2, DoubleToChar( mug ) );
+							Metering ( mugMin, mugMax, mug );
 							break;
 						case 2:
 							if ( attack == attackMax)
 								break;
 							attack += attackStep;
 							DisplayLine ( 2, DoubleToChar( attack ) );
+							Metering ( attackMin, attackMax, attack );
 							break;
 						case 3:
 							if ( release == releaseMax )
 								break;
 							release += releaseStep;
 							DisplayLine ( 2, DoubleToChar( release ) );
+							Metering ( releaseMin, releaseMax, release );
 							break;
 						case 4:
 							if ( ratio == ratioMax )
 								break;
 							ratio += ratioStep;
 							DisplayLine ( 2, DoubleToChar( ratio ) );
+							Metering ( ratioMin, ratioMax, ratio );
 							break;
 						default:
 							break;
 					}
 				case 4:
-					// No level 4, yet
+					// No level 4
 					break;
 				default:
 					break;
@@ -881,36 +887,41 @@ void UI_hl(void)
 								break;
 							threshold -= thresholdStep;
 							DisplayLine ( 2, DoubleToChar( threshold ) );
+							Metering ( thresholdMin, thresholdMax, threshold );
 							break;
 						case 1:
 							if ( mug == mugMin)
 								break;
 							mug -= mugStep;
 							DisplayLine ( 2, DoubleToChar( mug ) );
+							Metering ( mugMin, mugMax, mug );
 							break;
 						case 2:
 							if ( attack == attackMin )
 								break;
 							attack -= attackStep;
 							DisplayLine ( 2, DoubleToChar( attack ) );
+							Metering ( attackMin, attackMax, attack );
 							break;
 						case 3:
 							if ( release == releaseMin )
 								break;
 							release -= releaseStep;
 							DisplayLine ( 2, DoubleToChar( release ) );
+							Metering ( releaseMin, releaseMax, release );
 							break;
 						case 4:
 							if ( ratio == ratioMin )
 								break;
 							ratio -= ratioStep;
 							DisplayLine ( 2, DoubleToChar( ratio ) );
+							Metering ( ratioMin, ratioMax, ratio );
 							break;
 						default:
 							break;
 					}
 				case 4:
-					// No level 4, yet
+					// No level 4
 					break;
 				default:
 					break;
@@ -1320,8 +1331,55 @@ char* DoubleToChar ( double in )
 }
 
 
-
-
+void Metering ( double minimum, double maximum, double current )
+{
+	double normalized = current - minimum;
+	double step = ( maximum - minimum ) / 20;
+	int value = ( int ) ( normalized / step );
+	
+	if( value == 20 )								// Should never reach this case
+		DisplayLine( 3, "--------------------" );
+	else if( value == 0 )
+		DisplayLine( 3, " -------------------" );
+	else if( value == 1 )
+		DisplayLine( 3, "- ------------------" );
+	else if( value == 2 )
+		DisplayLine( 3, "-- -----------------" );
+	else if( value == 3 )
+		DisplayLine( 3, "--- ----------------" );
+	else if( value == 4 )
+		DisplayLine( 3, "---- ---------------" );
+	else if( value == 5 )
+		DisplayLine( 3, "----- --------------" );
+	else if( value == 6 )
+		DisplayLine( 3, "------ -------------" );
+	else if( value == 7 )
+		DisplayLine( 3, "------- ------------" );
+	else if( value == 8 )
+		DisplayLine( 3, "-------- -----------" );
+	else if( value == 9 )
+		DisplayLine( 3, "--------- ----------" );
+	else if( value == 10 )
+		DisplayLine( 3, "---------- ---------" );
+	else if( value == 11 )
+		DisplayLine( 3, "----------- --------" );
+	else if( value == 12 )
+		DisplayLine( 3, "------------ -------" );
+	else if( value == 13 )
+		DisplayLine( 3, "------------- ------" );
+	else if( value == 14 )
+		DisplayLine( 3, "-------------- -----" );
+	else if( value == 15 )
+		DisplayLine( 3, "--------------- ----" );
+	else if( value == 16 )
+		DisplayLine( 3, "---------------- ---" );
+	else if( value == 17 )
+		DisplayLine( 3, "----------------- --" );
+	else if( value == 18 )
+		DisplayLine( 3, "------------------ -" );
+	else if( value == 19 )
+		DisplayLine( 3, "------------------- " );
+}
 
 
 /*----------------------------------------------------------------------------*/
