@@ -730,10 +730,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>12</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
       <TopLine>1020</TopLine>
-      <CurrentLine>1037</CurrentLine>
+      <CurrentLine>1029</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>

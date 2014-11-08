@@ -480,6 +480,7 @@ void TIM3_IRQHandler(void)
 		/*------------------------------------------------------------------------*/
 	
 		
+		
 		/*	1. Check/Update TIMER mode (Attack or Release)------------------------*/
 		
 		
@@ -492,7 +493,7 @@ void TIM3_IRQHandler(void)
 		releaseStep = release * 10000;				// 0.1s  * 10000 	= 1000
 		
 		
-		
+		//if in Attack mode and SSdB less than threshold, switch to Release mode
 		if( Att == 1 && SSdB < threshold )
 		{
 				Att = 0;
@@ -503,6 +504,7 @@ void TIM3_IRQHandler(void)
 				attackCounter = 1;
 		}
 		
+		//if in Release mode and SSdB greater than threshold, switch to Attack mode
 		if( Rel == 1 && SSdB > threshold )
 		{
 				Rel = 0;
@@ -513,6 +515,8 @@ void TIM3_IRQHandler(void)
 				attackCounter = attackCounter / releaseStep;
 				releaseCounter = 1;
 		}
+		
+		
 		
 		/*	2. Increment/Decrement Counters --------------------------------------*/
 		
@@ -555,6 +559,7 @@ void TIM3_IRQHandler(void)
 			releaseCounter = 1;
 		}
 
+		
 		
 		/*	4.	Disable TIMER3 if counterValue goes to 0	------------------------*/
 		
