@@ -281,11 +281,19 @@ void SysTick_Handler(void)
   * @param  None
   * @retval None
 	*
+	*	Frequency of interrupt: 10,000Hz
+	*
+	*
+	*	ENABLE/DISABLE conditions:
+	*
+	*		1. Always ENABLED
+	*
+	*
 	*	Current Tasks:
 	*
 	*		1. 	Read ADC
 	*		2.	Convert ADC1 value to dB
-	*		3.	Enable Attack/Release 
+	*		3.	Enable Attack/Release
 	*		4.	Compute VCA Voltage
 	*		5.	Output VCA Voltage to DAC1
 	*
@@ -415,7 +423,7 @@ void TIM2_IRQHandler(void)
 			if( Rel == 1 )
 			{
 				
-				OutputData = OutputData * ( releaseStep - releaseCounter ) / releaseStep ;
+				OutputData = OutputData * releaseCounter / releaseStep ;
 				
 				//					2V					*	2000					/ 6000
 				
@@ -456,13 +464,24 @@ void TIM2_IRQHandler(void)
   * @brief  This function handles TIM3 global interrupt request.
   * @param  None
   * @retval None
+	*
+	*	Frequency of interrupt: 10,000Hz
+	*
+	*
+	*	ENABLE/DISABLE Coditions:
   *
+	*			1.	ENABLE if Signal > Threshold and Compression is disabled*
+	*			2.	ENABLE if Signal < Threshold and Compression is enabled*
+	*			3.	DISABLE if Attack or Release is done counting
+	*
+	*			*Note, ENABLE code is embedded within TIM2 ISR (scroll up)
+	*
+	*
 	*	Current Tasks:
 	*
 	*		1.	Check/Update TIMER mode (Attack or Release)
-	*		2. 	Increment/Decrement CounterValue
-	*		3.	Disable TIMER3 if done counting up to Attack/Release Value
-	*		4.	Disable TIMER3 if counterValue goes to 0
+	*		2. 	Increment/Decrement CounterValue by 1
+	*		3.	Disable TIMER3 if done counting up/down to Attack/Release Value
 	*
   */
 /*----------------------------------------------------------------------------*/
@@ -486,8 +505,8 @@ void TIM3_IRQHandler(void)
 		
 		//update Step values, before comparing them with counter values
 		
-		//attackStep range:		1 	 to 	300
-		//releaseStep rage:		1000 to 	12000
+		//attackStep range:		1 	 to 	300				0.1ms		to	30.0ms
+		//releaseStep rage:		1000 to 	12000			0.1s		to	 1.2s
 	
 		attackStep = attack 	* 10;						// 0.1ms * 10 		= 1
 		releaseStep = release * 10000;				// 0.1s  * 10000 	= 1000
@@ -513,7 +532,7 @@ void TIM3_IRQHandler(void)
 			
 				attackCounter = releaseCounter * attackStep;
 				attackCounter = attackCounter / releaseStep;
-				releaseCounter = 1;
+				releaseCounter = releaseStep;
 		}
 		
 		
@@ -531,12 +550,12 @@ void TIM3_IRQHandler(void)
 		//Release mode
 		if( Rel == 1 )
 		{
-			releaseCounter++;
+			releaseCounter--;
 		}
 		
 		
 		
-		/*	3.	Disable TIMER3 if done counting up to Attack/Release Value -------*/
+		/*	3.	Disable TIMER3 if done counting up/down to Attack/Release Value -------*/
 		
 	
 		//Attack mode
@@ -550,39 +569,15 @@ void TIM3_IRQHandler(void)
 		}
 		
 		//Release mode
-		if( Rel == 1 && releaseCounter - 1 >= releaseStep )
+		if( Rel == 1 && releaseCounter < 1 )
 		{
 			TIM_Cmd(TIM3, DISABLE);
 			
 			Compress = 0;
 			Rel = 0;
-			releaseCounter = 1;
+			releaseCounter = releaseStep;
 		}
 
-		
-		
-		/*	4.	Disable TIMER3 if counterValue goes to 0	------------------------*/
-		
-		
-		//Attack mode
-		if( Att == 1 && attackCounter < 1 && Att == 1 )
-		{
-			TIM_Cmd(TIM3, DISABLE);
-			
-			Compress = 0;
-			Att = 0;
-			attackCounter = 1;
-			
-		}
-		
-		//Release mode
-		if( Rel == 1 && releaseCounter < 1 && Rel == 1 )
-		{
-			TIM_Cmd(TIM3, DISABLE);
-			
-			Rel = 0;
-			releaseCounter = 1;
-		}
 
 		
 		/*------------------------------------------------------------------------*/
