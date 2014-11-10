@@ -3,10 +3,59 @@
 <pre>
 <h1>µVision Build Log</h1>
 <h2>Project:</h2>
-C:\Users\Jeff Auclair\Documents\Au\Keil\Project\SD_Projects\System\MDK-ARM\System.uvproj
-Project File Date:  11/04/2014
+C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\MDK-ARM\System.uvproj
+Project File Date:  11/09/2014
 
 <h2>Output:</h2>
+Build Project 'System' - Target 'STM32F3_Discovery'
+compiling main.c...
+C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\main.c(87): warning:  #177-D: variable "releaseMin" was declared but never referenced
+        static const double releaseMin = 0.1;                           //  0.1s        =        100ms
+C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\main.c(88): warning:  #177-D: variable "releaseMax" was declared but never referenced
+        static const double releaseMax = 1.2;                           //      1.2s    = 1200ms
+..\main.c: 2 warnings, 0 errors
+linking...
+Program Size: Code=27204 RO-data=488 RW-data=288 ZI-data=1760  
+FromELF: creating hex file...
+".\Obj\System.axf" - 0 Error(s), 2 Warning(s).
 </pre>
 </body>
 </html>
+Documents\\Keil_STM32\\Project\\SD_Projects\\System\\MDK-ARM\\Obj\\System.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+32f30x_it.c(353): warning:  #223-D: function "log2" declared implicitly
+                        base2SSdB = log2( SS16q16int );
+..\stm32f30x_it.c: 1 warning, 0 errors
+compiling system_stm32f30x.c...
+assembling log2.s...
+C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\log2.s(30): warning: A1479W: Requested alignment 8 is greater than area alignment 4, which has been increased
+linking...
+Program Size: Code=27188 RO-data=488 RW-data=272 ZI-data=1760  
+FromELF: creating hex file...
+".\Obj\System.axf" - 0 Error(s), 2 Warning(s).
+Load "C:\\Users\\jda3800\\Documents\\Keil_STM32\\Project\\SD_Projects\\System\\MDK-ARM\\Obj\\System.axf" 
+Erase Done.
+Programming Done.
+Verify OK.
+
+                if( Att == 1 && SSdB < threshold )
+C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\stm32f30x_it.c(590): warning:  #12-D: parsing restarts here after previous syntax error
+                capture = TIM_GetCapture1(TIM3);
+C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\stm32f30x_it.c(591): error:  #79: expected a type specifier
+                TIM_SetCompare1(TIM3, capture + CCR1_TIM3_Val);
+C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\stm32f30x_it.c(591): error:  #757: variable "capture" is not a type name
+                TIM_SetCompare1(TIM3, capture + CCR1_TIM3_Val);
+C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\stm32f30x_it.c(591): error:  #18: expected a ")"
+                TIM_SetCompare1(TIM3, capture + CCR1_TIM3_Val);
+C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\stm32f30x_it.c(591): warning:  #77-D: this declaration has no storage class or type specifier
+                TIM_SetCompare1(TIM3, capture + CCR1_TIM3_Val);
+C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\stm32f30x_it.c(591): error:  #147: declaration is incompatible with "void TIM_SetCompare1(TIM_TypeDef *, uint32_t)" (declared at line 1217 of "..\..\..\..\Libraries\STM32F30x_StdPeriph_Driver\inc\stm32f30x_tim.h")
+                TIM_SetCompare1(TIM3, capture + CCR1_TIM3_Val);
+C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\stm32f30x_it.c(593): error:  #169: expected a declaration
+        }
+C:\Users\jda3800\Documents\Keil_STM32\Project\SD_Projects\System\stm32f30x_it.c(627): warning: At end of source:  #12-D: parsing restarts here after previous syntax error
+..\stm32f30x_it.c: 5 warnings, 10 errors
+".\Obj\System.axf" - 10 Error(s), 5 Warning(s).
+Target not created

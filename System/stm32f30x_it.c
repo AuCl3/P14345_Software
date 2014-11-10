@@ -79,6 +79,7 @@ extern __IO uint16_t CCR1_TIM2_Val;
 				double		SSdB = 0;
 				
 				double 		OutputSignal = 0;
+				double		OutputDataRel = 0; 
 				double 		GainReduction = 0;
 				uint16_t 	OutputData = 0;
 
@@ -400,16 +401,18 @@ void TIM2_IRQHandler(void)
 		if( Compress == 1 )
 		{
 			
-			/* Compute Output Voltage*/
-			OutputSignal = threshold + (( SSdB - threshold ) / ratio );
-		
-			GainReduction = OutputSignal - threshold;
+			if( Rel == 0 )
+			{
+				/* Compute Output Voltage*/
+				OutputSignal = threshold + (( SSdB - threshold ) / ratio );
 			
-			OutputData = 183.183 * GainReduction;
-			
-					//Note, 183.183 = 0.0061 * 22 * ( 0xFFF / 3 )
-			
-		
+				GainReduction = OutputSignal - threshold;
+				
+				OutputData = 183.183 * GainReduction;
+				
+						//Note, 183.183 = 0.0061 * 22 * ( 0xFFF / 3 )
+				
+			}
 		
 			if( Att == 1 )
 			{
@@ -423,20 +426,24 @@ void TIM2_IRQHandler(void)
 			if( Rel == 1 )
 			{
 				
-				OutputData = OutputData * releaseCounter / releaseStep ;
+				
+				
+				OutputDataRel = OutputData * releaseCounter / releaseStep ;
 				
 				//					2V					*	2000					/ 6000
-				
+				DAC_SetChannel1Data(DAC_Align_12b_R, OutputDataRel );
 			}
 			
 			
 			
 			/*	5. Output VCA Voltage to DAC1 --------------------------------------*/
 			
-			
-			//Output to DAC
-			DAC_SetChannel1Data(DAC_Align_12b_R, OutputData);
-			
+			if( Rel == 0 )
+			{
+				//Output to DAC
+				DAC_SetChannel1Data(DAC_Align_12b_R, OutputData);
+				
+			}
 		}
 	
 		

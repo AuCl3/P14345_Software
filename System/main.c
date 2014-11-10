@@ -92,10 +92,13 @@
 	
 /* Global Variables ----------------------------------------------------------*/
 
-			double 			threshold = 0;		// -10 	dB
+			double 			threshold = 6;		// -10 	dB
+			double		release2 = 1.2;
+			static const double release2Min = 0.1;
+			static const double release2Max = 1.2;
 			double 			ratio = 2;					// 5:1
-			double 			attack = 15;				//  15	ms
-			double 			release = 0.6;			// 0.6	s
+			double 			attack = 30;				//  15	ms
+			double 			release = 1.2;			// 0.6	s
 			double 			mug = 0;						//	 0
 			
 			int 				autoEN = 0;
@@ -104,6 +107,8 @@
 			int 				Compress = 0;
 			int					Att = 0;
 			int					Rel = 0;
+			
+			double in = 0;
 			
 /* Private variables ---------------------------------------------------------*/
 
@@ -778,11 +783,11 @@ void UI_hl(void)
 							Metering ( attackMin, attackMax, attack );
 							break;
 						case 3:
-							if ( release == releaseMax )
+							if ( release == release2Max )
 								break;
-							release += releaseStep;
-							DisplayLine ( 2, DoubleToChar( release ) );
-							Metering ( releaseMin, releaseMax, release );
+							release2 += releaseStep;
+							DisplayLine ( 2, DoubleToChar( release2 ) );
+							Metering ( release2Min, release2Max, release2 );
 							break;
 						case 4:
 							if ( ratio == ratioMax )
@@ -904,11 +909,14 @@ void UI_hl(void)
 							Metering ( attackMin, attackMax, attack );
 							break;
 						case 3:
-							if ( release == releaseMin )
+							if ( release2 <= release2Min )
+							{
+								release2 = release2Min;
 								break;
-							release -= releaseStep;
-							DisplayLine ( 2, DoubleToChar( release ) );
-							Metering ( releaseMin, releaseMax, release );
+							}
+							release2 -= releaseStep;
+							DisplayLine ( 2, DoubleToChar( release2 ) );
+							Metering ( release2Min, release2Max, release2 );
 							break;
 						case 4:
 							if ( ratio == ratioMin )
@@ -1002,6 +1010,7 @@ void UI_hl(void)
 					case 3:
 						currentLevel-- ;
 						DisplayLine ( 2, "                    " );
+						DisplayLine ( 3, "                    " );
 						break;
 				}	
 			}
@@ -1327,7 +1336,7 @@ char* DoubleToChar ( double in )
 		return "        1.05        ";
 	else if ( in == 1.15 )
 		return "        1.15        ";
-	return "                     ";
+	return "        error       ";
 }
 
 
