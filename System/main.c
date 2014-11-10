@@ -84,8 +84,10 @@
 	
 	static const double attackMin = 0.1;				//  0.1ms
 	static const double attackMax = 30;					// 30.0ms
+	
 	static const double releaseMin = 0.1;				//  0.1s	=	 100ms
 	static const double releaseMax = 1.2;				//	1.2s	= 1200ms
+	
 	static const double mugMin = -5;
 	static const double mugMax = 12;
 	
@@ -93,20 +95,17 @@
 /* Global Variables ----------------------------------------------------------*/
 
 			double 			threshold = 6;		// -10 	dB
-			double		release2 = 1.2;
-			static const double release2Min = 0.1;
-			static const double release2Max = 1.2;
 			double 			ratio = 2;					// 5:1
 			double 			attack = 30;				//  15	ms
 			double 			release = 1.2;			// 0.6	s
 			double 			mug = 0;						//	 0
 			
-			int 				autoEN = 0;
-			int 				bypassEN = 0;
+			int 			autoEN = 0;
+			int 			bypassEN = 0;
 	
-			int 				Compress = 0;
-			int					Att = 0;
-			int					Rel = 0;
+			int 			Compress = 0;
+			int				Att = 0;
+			int				Rel = 0;
 			
 			double in = 0;
 			
@@ -776,18 +775,18 @@ void UI_hl(void)
 							Metering ( mugMin, mugMax, mug );
 							break;
 						case 2:
-							if ( attack == attackMax)
+							if ( attack == attackMax )
 								break;
 							attack += attackStep;
 							DisplayLine ( 2, DoubleToChar( attack ) );
 							Metering ( attackMin, attackMax, attack );
 							break;
 						case 3:
-							if ( release == release2Max )
+							if ( release == releaseMax )
 								break;
-							release2 += releaseStep;
-							DisplayLine ( 2, DoubleToChar( release2 ) );
-							Metering ( release2Min, release2Max, release2 );
+							release += releaseStep;
+							DisplayLine ( 2, DoubleToChar( release ) );
+							Metering ( releaseMin, releaseMax, release );
 							break;
 						case 4:
 							if ( ratio == ratioMax )
@@ -795,8 +794,6 @@ void UI_hl(void)
 							ratio += ratioStep;
 							DisplayLine ( 2, DoubleToChar( ratio ) );
 							Metering ( ratioMin, ratioMax, ratio );
-							break;
-						default:
 							break;
 					}
 				case 4:
@@ -895,7 +892,7 @@ void UI_hl(void)
 							Metering ( thresholdMin, thresholdMax, threshold );
 							break;
 						case 1:
-							if ( mug == mugMin)
+							if ( mug == mugMin )
 								break;
 							mug -= mugStep;
 							DisplayLine ( 2, DoubleToChar( mug ) );
@@ -909,14 +906,14 @@ void UI_hl(void)
 							Metering ( attackMin, attackMax, attack );
 							break;
 						case 3:
-							if ( release2 <= release2Min )
+							if ( release <= releaseMin )
 							{
-								release2 = release2Min;
+								release = releaseMin;
 								break;
 							}
-							release2 -= releaseStep;
-							DisplayLine ( 2, DoubleToChar( release2 ) );
-							Metering ( release2Min, release2Max, release2 );
+							release -= releaseStep;
+							DisplayLine ( 2, DoubleToChar( release ) );
+							Metering ( releaseMin, releaseMax, release );
 							break;
 						case 4:
 							if ( ratio == ratioMin )
@@ -924,8 +921,6 @@ void UI_hl(void)
 							ratio -= ratioStep;
 							DisplayLine ( 2, DoubleToChar( ratio ) );
 							Metering ( ratioMin, ratioMax, ratio );
-							break;
-						default:
 							break;
 					}
 				case 4:
@@ -967,7 +962,32 @@ void UI_hl(void)
 						break;
 					case 2:
 						if ( level1CurrentSelection == 0 )
+						{
 							currentLevel ++;
+							switch ( level2CurrentSelection )
+							{
+							case 0:
+								DisplayLine ( 2, DoubleToChar( threshold ) );
+								Metering ( thresholdMin, thresholdMax, threshold );
+								break;
+							case 1:
+								DisplayLine ( 2, DoubleToChar( mug ) );
+								Metering ( mugMin, mugMax, mug );
+								break;
+							case 2:
+								DisplayLine ( 2, DoubleToChar( attack ) );
+								Metering ( attackMin, attackMax, attack );
+								break;
+							case 3:
+								DisplayLine ( 2, DoubleToChar( release ) );
+								Metering ( releaseMin, releaseMax, release );
+								break;
+							case 4:
+								DisplayLine ( 2, DoubleToChar( ratio ) );
+								Metering ( ratioMin, ratioMax, ratio );
+								break;
+							}
+						}
 						break;
 					case 3:
 						// Do Nothing
@@ -1194,10 +1214,52 @@ char* DoubleToChar ( double in )
 		return "        -0.5        ";
 	else if ( in == 0 )
 		return "         0.0        ";
+	else if ( in == 0.1 )
+		return "         0.1        ";
+	else if ( in == 0.15 )
+		return "         0.15       ";
+	else if ( in == 0.2 )
+		return "         0.2        ";
+	else if ( in == 0.25 )
+		return "         0.25       ";
+	else if ( in == 0.3 )
+		return "         0.3        ";
+	else if ( in == 0.35 )
+		return "         0.35       ";
+	else if ( in == 0.4 )
+		return "         0.4        ";
+	else if ( in == 0.45 )
+		return "         0.45       ";
 	else if ( in == 0.5 )
 		return "         0.5        ";
+	else if ( in == 0.55 )
+		return "         0.55       ";
+	else if ( in == 0.6 )
+		return "         0.6        ";
+	else if ( in == 0.65 )
+		return "         0.65       ";
+	else if ( in == 0.7 )
+		return "         0.7        ";
+	else if ( in == 0.75 )
+		return "         0.75       ";
+	else if ( in == 0.8 )
+		return "         0.8        ";
+	else if ( in == 0.85 )
+		return "         0.85       ";
+	else if ( in == 0.9 )
+		return "         0.9        ";
+	else if ( in == 0.95 )
+		return "         0.95       ";
 	else if ( in == 1 )
 		return "         1.0        ";
+	else if ( in == 1.05 )
+		return "         1.05       ";
+	else if ( in == 1.1 )
+		return "         1.1        ";
+	else if ( in == 1.15 )
+		return "         1.15       ";
+	else if ( in == 1.2 )
+		return "         1.2        ";
 	else if ( in == 1.5 )
 		return "         1.5        ";
 	else if ( in == 2 )
@@ -1314,29 +1376,6 @@ char* DoubleToChar ( double in )
 		return "        29.5        ";
 	else if ( in == 30 )
 		return "        30.0        ";
-	else if ( in == 0.15 )
-		return "        0.15        ";
-	else if ( in == 0.25 )
-		return "        0.25        ";
-	else if ( in == 0.35 )
-		return "        0.35        ";
-	else if ( in == 0.45 )
-		return "        0.45        ";
-	else if ( in == 0.55 )
-		return "        0.55        ";
-	else if ( in == 0.65 )
-		return "        0.65        ";
-	else if ( in == 0.75 )
-		return "        0.75        ";
-	else if ( in == 0.85 )
-		return "        0.85        ";
-	else if ( in == 0.95 )
-		return "        0.95        ";
-	else if ( in == 1.05 )
-		return "        1.05        ";
-	else if ( in == 1.15 )
-		return "        1.15        ";
-	return "        error       ";
 }
 
 
@@ -1346,7 +1385,7 @@ void Metering ( double minimum, double maximum, double current )
 	double step = ( maximum - minimum ) / 20;
 	int value = ( int ) ( normalized / step );
 	
-	if( value == 20 )								// Should never reach this case
+	if( value == 20 )
 		DisplayLine( 3, "--------------------" );
 	else if( value == 0 )
 		DisplayLine( 3, " -------------------" );
