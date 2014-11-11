@@ -196,7 +196,7 @@
         <Ww>
           <count>5</count>
           <WinNumber>1</WinNumber>
-          <ItemText>OutputSignal</ItemText>
+          <ItemText>VCAdB</ItemText>
         </Ww>
         <Ww>
           <count>6</count>
@@ -294,6 +294,11 @@
           <count>4</count>
           <WinNumber>2</WinNumber>
           <ItemText>release2</ItemText>
+        </Ww>
+        <Ww>
+          <count>5</count>
+          <WinNumber>2</WinNumber>
+          <ItemText>bypassEN</ItemText>
         </Ww>
       </WatchWindow2>
       <MemoryWindow1>
@@ -759,8 +764,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>161</TopLine>
-      <CurrentLine>175</CurrentLine>
+      <TopLine>77</TopLine>
+      <CurrentLine>1122</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
@@ -773,10 +778,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>45</ColumnNumber>
+      <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>584</TopLine>
-      <CurrentLine>411</CurrentLine>
+      <TopLine>354</TopLine>
+      <CurrentLine>397</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\stm32f30x_it.c</PathWithFileName>
       <FilenameWithoutPath>stm32f30x_it.c</FilenameWithoutPath>

@@ -94,8 +94,8 @@
 	
 /* Global Variables ----------------------------------------------------------*/
 
-			double 			threshold = 6;		// -10 	dB
-			double 			ratio = 2;					// 5:1
+			double 			threshold = -20;		// -10 	dB
+			double 			ratio = 1;					// 5:1
 			double 			attack = 30;				//  15	ms
 			double 			release = 1.2;			// 0.6	s
 			double 			mug = 0;						//	 0
@@ -684,15 +684,24 @@ void UI_hl(void)
 					{
 						case 0:
 							level1CurrentSelection = 1;
-							DisplayLine ( 0, "      Automode      " );
+							if ( bypassEN == 0 )
+								DisplayLine ( 0, "      Automode      " );
+							else
+								DisplayLine ( 0, "      Automode     *" );
 							break;
 						case 1:
 							level1CurrentSelection = 2;
-							DisplayLine ( 0, "       Bypass       " );
+							if ( bypassEN == 0 )
+								DisplayLine ( 0, "       Bypass       " );
+							else
+								DisplayLine ( 0, "       Bypass      *" );
 							break;
 						case 2:
 							level1CurrentSelection = 0;
-							DisplayLine ( 0, "       Manual       " );
+							if ( bypassEN == 0 )
+								DisplayLine ( 0, "       Manual       " );
+							else
+								DisplayLine ( 0, "       Manual      *" );
 							break;
 					}
 					break;
@@ -745,11 +754,13 @@ void UI_hl(void)
 							{
 								bypassEN = 0;
 								DisplayLine ( 1, "      Disabled      " );
+								DisplayLine ( 0, "       Bypass       " );
 							}
 							else
 							{
 								bypassEN = 1;
 								DisplayLine ( 1, "      Enabled       " );
+								DisplayLine ( 0, "       Bypass      *" );
 							}
 							break;							
 					}
@@ -815,16 +826,24 @@ void UI_hl(void)
 					{
 						case 0:
 							level1CurrentSelection = 2;
-							DisplayLine ( 0, "       Bypass       " );
+							if ( bypassEN == 0 )
+								DisplayLine ( 0, "       Bypass       " );
+							else
+								DisplayLine ( 0, "       Bypass      *" );
 							break;
 						case 1:
 							level1CurrentSelection = 0;
-							DisplayLine ( 0, "       Manual       " );
+							if ( bypassEN == 0 )
+								DisplayLine ( 0, "       Manual       " );
+							else
+								DisplayLine ( 0, "       Manual      *" );
 							break;
 						case 2:
 							level1CurrentSelection = 1;
-							DisplayLine (0, "      Automode      " );
-							
+							if ( bypassEN == 0 )
+								DisplayLine (0, "      Automode      " );
+							else
+								DisplayLine (0, "      Automode     *" );
 							break;
 					}
 					break;
@@ -872,11 +891,13 @@ void UI_hl(void)
 							{
 								bypassEN = 0;
 								DisplayLine ( 1, "      Disabled      " );
+								DisplayLine ( 0, "       Bypass       " );
 							}
 							else
 							{
 								bypassEN = 1;
 								DisplayLine ( 1, "      Enabled       " );
+								DisplayLine ( 0, "       Bypass      *" );
 							}	
 							break;
 					}
@@ -949,14 +970,42 @@ void UI_hl(void)
 						switch ( level1CurrentSelection )
 						{
 							case 0:
-								DisplayLine ( 1, "     Threshold      " );
-								level2CurrentSelection = 0;
+								switch ( level2CurrentSelection )
+								{
+								case 0:
+									DisplayLine ( 1, "      Threshold     " );
+									break;
+								case 1:
+									DisplayLine ( 1, "     MakeUp Gain    " );
+									break;
+								case 2:
+									DisplayLine ( 1, "       Attack       " );
+									break;
+								case 3:
+									DisplayLine ( 1, "      Release       " );
+									break;
+								case 4:
+									DisplayLine ( 1, "       Ratio        " );
+									break;
+							}
 								break;
 							case 1:
-								DisplayLine ( 1, "      Disabled      " );
+								if ( autoEN == 1 )
+									DisplayLine ( 1, "      Enabled       " );
+								else
+									DisplayLine ( 1, "      Disabled      " );
 								break;
 							case 2:
-								DisplayLine ( 1, "      Disabled      " );
+								if ( bypassEN == 1 )
+								{
+									DisplayLine ( 1, "      Enabled       " );
+									DisplayLine ( 0, "       Bypass      *" );
+								}
+								else
+								{
+									DisplayLine ( 1, "      Disabled      " );
+									DisplayLine ( 0, "       Bypass       " );
+								}
 								break;
 						}
 						break;
@@ -1022,10 +1071,6 @@ void UI_hl(void)
 					case 2:
 						currentLevel-- ;
 						DisplayLine ( 1, "                    " );
-						if ( autoEN == 1 )
-							autoEN = 0;
-						if ( bypassEN == 1 )
-							bypassEN = 0;
 						break;
 					case 3:
 						currentLevel-- ;
@@ -1376,6 +1421,8 @@ char* DoubleToChar ( double in )
 		return "        29.5        ";
 	else if ( in == 30 )
 		return "        30.0        ";
+	else
+		return "error               ";
 }
 
 

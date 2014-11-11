@@ -78,7 +78,7 @@ extern __IO uint16_t CCR1_TIM2_Val;
 				double		SSdBbase2 = 0;
 				double		SSdB = 0;
 				
-				double 		OutputSignal = 0;
+				double 		VCAdB = 0;
 				double		OutputDataRel = 0; 
 				double 		GainReduction = 0;
 				uint16_t 	OutputData = 0;
@@ -389,10 +389,11 @@ void TIM2_IRQHandler(void)
 		/*	4. Compute VCA Voltage -----------------------------------------------*/
 		
 		
-		//If not compressing, output = 0
+		//if not compressing, output = 0
 		if( Compress == 0 )
 		{
 			//Output 0x000 to DAC
+
 			DAC_SetChannel1Data(DAC_Align_12b_R, 0x000);
 		}
 		
@@ -403,10 +404,11 @@ void TIM2_IRQHandler(void)
 			
 			if( Rel == 0 )
 			{
-				/* Compute Output Voltage*/
-				OutputSignal = threshold + (( SSdB - threshold ) / ratio );
+				//Compute VCA dB
+				VCAdB = threshold + (( SSdB - threshold ) / ratio );
 			
-				GainReduction = OutputSignal - threshold;
+				GainReduction = SSdB - VCAdB
+				;
 				
 				OutputData = 183.183 * GainReduction;
 				
@@ -440,9 +442,16 @@ void TIM2_IRQHandler(void)
 			
 			if( Rel == 0 )
 			{
-				//Output to DAC
-				DAC_SetChannel1Data(DAC_Align_12b_R, OutputData);
-				
+				if( OutputData >= 0xFFF )
+				{
+					//Output to DAC
+					DAC_SetChannel1Data(DAC_Align_12b_R, 0xFFF);
+				}
+				else
+				{
+					//Output to DAC
+					DAC_SetChannel1Data(DAC_Align_12b_R, OutputData);
+				}
 			}
 		}
 	
