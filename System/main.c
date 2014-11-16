@@ -115,7 +115,7 @@
 /* Timer CC Register values */
 __IO 	uint16_t 		CCR1_TIM2_Val = 1;
 __IO 	uint16_t 		CCR1_TIM3_Val = 1;
-
+__IO 	uint16_t 		CCR1_TIM4_Val = 300;
 
 /* ADC Calibration value */
 __IO 	uint16_t  	calibration_value = 0;
@@ -133,6 +133,7 @@ __IO 	uint16_t  	TimingDelay = 0;
 	
 	void TIM2_Config(void);
 	void TIM3_Config(void);
+	void TIM4_Config(void);
 	
 	void UART_Config(void);
 	
@@ -175,6 +176,7 @@ int main(void)
 	
 	TIM2_Config();
 	TIM3_Config();
+	TIM4_Config();
 	
 	ADC_Config();
 	DAC_Config();
@@ -473,6 +475,79 @@ void TIM3_Config(void)
 
 /*----------------------------------------------------------------------------*/
 /**
+  * @brief  TIM4 Configuration.
+  * @param  None
+  * @retval None
+  */
+/*----------------------------------------------------------------------------*/
+
+void TIM4_Config(void)
+{
+
+	/*
+	*	TIM4 with 20kHz freq
+	*/
+	
+	/* TIM4 clock enable */
+	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE);
+
+  /* Time base configuration */
+	TIM_TimeBaseStructure.TIM_Period = 499;
+  TIM_TimeBaseStructure.TIM_Prescaler = 3599;
+  TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
+  TIM_TimeBaseStructure.TIM_ClockDivision = 0;
+	
+  TIM_TimeBaseInit(TIM4, &TIM_TimeBaseStructure);
+	
+	
+	
+	
+	/* Enable TIM4 PWM Pin */
+	RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOD, ENABLE);
+
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_12;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_AF;
+	GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+	GPIO_InitStructure.GPIO_PuPd = GPIO_PuPd_NOPULL;
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
+	
+  GPIO_Init(GPIOD, &GPIO_InitStructure);
+	
+	/* AF Config */
+	GPIO_PinAFConfig(GPIOD, GPIO_PinSource12, GPIO_AF_2);
+	
+	
+	/* Output PWM Mode configuration: Channel1 */
+	
+  TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
+  TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
+  TIM_OCInitStructure.TIM_Pulse = CCR1_TIM4_Val;
+  TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
+	
+	// These settings must be applied on the timer 1.
+    TIM_OCInitStructure.TIM_OutputNState = TIM_OutputNState_Disable;
+    TIM_OCInitStructure.TIM_OCNPolarity = TIM_OCNPolarity_High;
+    TIM_OCInitStructure.TIM_OCNIdleState = TIM_OCIdleState_Set;
+	
+	TIM_OC1Init(TIM4, &TIM_OCInitStructure);
+	
+  TIM_OC1PreloadConfig(TIM4, TIM_OCPreload_Enable);
+
+	TIM_ARRPreloadConfig(TIM4, DISABLE);
+  TIM_CtrlPWMOutputs(TIM4, ENABLE);
+  
+	TIM_Cmd(TIM4, ENABLE);
+	
+	
+} //end TIM4_Config
+
+
+
+
+
+
+/*----------------------------------------------------------------------------*/
+/**
   * @brief  USART Configuration.
   * @param  None
   * @retval None
@@ -504,6 +579,7 @@ void UART_Config(void)
 	
 	/* USART1 Periph clock enable */
 	RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1,ENABLE);
+	
 	
 	/* Configure USART1 for Rx with Baud Rate of 9600 */
 	USART1_InitStructure.USART_BaudRate = 9600;
