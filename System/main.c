@@ -68,6 +68,11 @@
 	
 	
 /* Private macro -------------------------------------------------------------*/
+/* Necessary system global variables -----------------------------------------*/
+
+	extern uint16_t OutputData;
+	
+	
 /* Private constants ---------------------------------------------------------*/
 
 	static const double thresholdStep = 0.5;
@@ -142,7 +147,7 @@ __IO 	uint16_t  	TimingDelay = 0;
 	
 	void UI_hl( void );
 	int Rotary( void );
-	void Metering( double, double, double );
+	void Metering( void );
 	
 	char* DoubleToChar ( double );
 	
@@ -852,35 +857,30 @@ void UI_hl(void)
 								break;
 							threshold += thresholdStep;
 							DisplayLine ( 2, DoubleToChar( threshold ) );
-							Metering ( thresholdMin, thresholdMax, threshold );
 							break;
 						case 1:
 							if ( mug == mugMax )
 								break;
 							mug += mugStep;
 							DisplayLine ( 2, DoubleToChar( mug ) );
-							Metering ( mugMin, mugMax, mug );
 							break;
 						case 2:
 							if ( attack == attackMax )
 								break;
 							attack += attackStep;
 							DisplayLine ( 2, DoubleToChar( attack ) );
-							Metering ( attackMin, attackMax, attack );
 							break;
 						case 3:
 							if ( release == releaseMax )
 								break;
 							release += releaseStep;
 							DisplayLine ( 2, DoubleToChar( release ) );
-							Metering ( releaseMin, releaseMax, release );
 							break;
 						case 4:
 							if ( ratio == ratioMax )
 								break;
 							ratio += ratioStep;
 							DisplayLine ( 2, DoubleToChar( ratio ) );
-							Metering ( ratioMin, ratioMax, ratio );
 							break;
 					}
 				case 4:
@@ -986,21 +986,18 @@ void UI_hl(void)
 								break;
 							threshold -= thresholdStep;
 							DisplayLine ( 2, DoubleToChar( threshold ) );
-							Metering ( thresholdMin, thresholdMax, threshold );
 							break;
 						case 1:
 							if ( mug == mugMin )
 								break;
 							mug -= mugStep;
 							DisplayLine ( 2, DoubleToChar( mug ) );
-							Metering ( mugMin, mugMax, mug );
 							break;
 						case 2:
 							if ( attack == attackMin )
 								break;
 							attack -= attackStep;
 							DisplayLine ( 2, DoubleToChar( attack ) );
-							Metering ( attackMin, attackMax, attack );
 							break;
 						case 3:
 							if ( release <= releaseMin )
@@ -1010,14 +1007,12 @@ void UI_hl(void)
 							}
 							release -= releaseStep;
 							DisplayLine ( 2, DoubleToChar( release ) );
-							Metering ( releaseMin, releaseMax, release );
 							break;
 						case 4:
 							if ( ratio == ratioMin )
 								break;
 							ratio -= ratioStep;
 							DisplayLine ( 2, DoubleToChar( ratio ) );
-							Metering ( ratioMin, ratioMax, ratio );
 							break;
 					}
 				case 4:
@@ -1093,23 +1088,18 @@ void UI_hl(void)
 							{
 							case 0:
 								DisplayLine ( 2, DoubleToChar( threshold ) );
-								Metering ( thresholdMin, thresholdMax, threshold );
 								break;
 							case 1:
 								DisplayLine ( 2, DoubleToChar( mug ) );
-								Metering ( mugMin, mugMax, mug );
 								break;
 							case 2:
 								DisplayLine ( 2, DoubleToChar( attack ) );
-								Metering ( attackMin, attackMax, attack );
 								break;
 							case 3:
 								DisplayLine ( 2, DoubleToChar( release ) );
-								Metering ( releaseMin, releaseMax, release );
 								break;
 							case 4:
 								DisplayLine ( 2, DoubleToChar( ratio ) );
-								Metering ( ratioMin, ratioMax, ratio );
 								break;
 							}
 						}
@@ -1245,9 +1235,9 @@ int Rotary()
 
 /*----------------------------------------------------------------------------*/
 /**
-  * @brief  Double to Char function.
-  * @param  None
-  * @retval None
+  * @brief  Double to Char look-up table.
+  * @param  Number to look up text
+  * @retval Text to display on screen
   */
 /*----------------------------------------------------------------------------*/
 
@@ -1498,19 +1488,24 @@ char* DoubleToChar ( double in )
 	else if ( in == 30 )
 		return "        30.0        ";
 	else
-		return "error               ";
+		return "                    ";
 }
 
 
-void Metering ( double minimum, double maximum, double current )
+/*----------------------------------------------------------------------------*/
+/**
+  * @brief  Metering for fourth line of display.
+				uses data from OutputData variable
+  * @param  None
+  * @retval None
+  */
+/*----------------------------------------------------------------------------*/
+
+void Metering ( )
 {
-	double normalized = current - minimum;
-	double step = ( maximum - minimum ) / 20;
-	int value = ( int ) ( normalized / step );
+	int value = ( int ) ( ( ( int ) OutputData ) / 3276 );		// ( 0xFFFF / 20 = 3276 )
 	
-	if( value == 20 )
-		DisplayLine( 3, "--------------------" );
-	else if( value == 0 )
+	if( value == 0 )
 		DisplayLine( 3, " -------------------" );
 	else if( value == 1 )
 		DisplayLine( 3, "- ------------------" );
@@ -1550,6 +1545,10 @@ void Metering ( double minimum, double maximum, double current )
 		DisplayLine( 3, "------------------ -" );
 	else if( value == 19 )
 		DisplayLine( 3, "------------------- " );
+	else if( value == 20 )
+		DisplayLine( 3, "--------------------" );
+	else
+		DisplayLine( 3, "--------------------" );
 }
 
 
