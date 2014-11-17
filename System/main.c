@@ -107,6 +107,7 @@
 			
 			int 			autoEN = 0;
 			int 			bypassEN = 0;
+			int				SETRotary = 0;
 	
 			int 			Compress = 0;
 			int				Att = 0;
@@ -120,7 +121,7 @@
 /* Timer CC Register values */
 __IO 	uint16_t 		CCR1_TIM2_Val = 1;
 __IO 	uint16_t 		CCR1_TIM3_Val = 1;
-__IO 	uint16_t 		CCR1_TIM4_Val = 300;
+__IO 	uint16_t 		CCR1_TIM4_Val = 1600;
 
 /* ADC Calibration value */
 __IO 	uint16_t  	calibration_value = 0;
@@ -497,8 +498,8 @@ void TIM4_Config(void)
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE);
 
   /* Time base configuration */
-	TIM_TimeBaseStructure.TIM_Period = 499;
-  TIM_TimeBaseStructure.TIM_Prescaler = 3599;
+	TIM_TimeBaseStructure.TIM_Period = 65535;
+  TIM_TimeBaseStructure.TIM_Prescaler = 1;
   TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
   TIM_TimeBaseStructure.TIM_ClockDivision = 0;
 	
@@ -530,9 +531,9 @@ void TIM4_Config(void)
   TIM_OCInitStructure.TIM_OCPolarity = TIM_OCPolarity_High;
 	
 	// These settings must be applied on the timer 1.
-    TIM_OCInitStructure.TIM_OutputNState = TIM_OutputNState_Disable;
-    TIM_OCInitStructure.TIM_OCNPolarity = TIM_OCNPolarity_High;
-    TIM_OCInitStructure.TIM_OCNIdleState = TIM_OCIdleState_Set;
+  TIM_OCInitStructure.TIM_OutputNState = TIM_OutputNState_Disable;
+  TIM_OCInitStructure.TIM_OCNPolarity = TIM_OCNPolarity_High;
+  TIM_OCInitStructure.TIM_OCNIdleState = TIM_OCIdleState_Set;
 	
 	TIM_OC1Init(TIM4, &TIM_OCInitStructure);
 	
@@ -548,7 +549,7 @@ void TIM4_Config(void)
 
 
 
-
+	
 
 
 /*----------------------------------------------------------------------------*/
@@ -669,6 +670,11 @@ void DisplayLine( int line, char* array )
 			Display(USART1, 0x94); //Move to position 20 ( 0x80 + 0x14 = 0x94 )
 	 }
 	 
+	 if( line == 3 )
+	 {
+			Display(USART1, 0xFE); //Command
+			Display(USART1, 0xD4); //Move to position 84 ( 0x80 + 0x54 = 0xD4 )
+	 }
 	 
 	 
 	 //Set array to the line
@@ -738,7 +744,7 @@ void UI_hl(void)
 	
 	while ( 1 )
 	{
-		
+		Metering();
 		
 		switch ( Rotary () )
 		{
@@ -862,6 +868,9 @@ void UI_hl(void)
 							if ( mug == mugMax )
 								break;
 							mug += mugStep;
+							CCR1_TIM4_Val = 133 * mug;
+							TIM_OCInitStructure.TIM_Pulse = CCR1_TIM4_Val;
+							TIM_OC1Init(TIM4, &TIM_OCInitStructure);
 							DisplayLine ( 2, DoubleToChar( mug ) );
 							break;
 						case 2:
@@ -991,6 +1000,9 @@ void UI_hl(void)
 							if ( mug == mugMin )
 								break;
 							mug -= mugStep;
+							CCR1_TIM4_Val = 133 * mug;
+							TIM_OCInitStructure.TIM_Pulse = CCR1_TIM4_Val;
+							TIM_OC1Init(TIM4, &TIM_OCInitStructure);
 							DisplayLine ( 2, DoubleToChar( mug ) );
 							break;
 						case 2:
@@ -1141,7 +1153,6 @@ void UI_hl(void)
 					case 3:
 						currentLevel-- ;
 						DisplayLine ( 2, "                    " );
-						DisplayLine ( 3, "                    " );
 						break;
 				}	
 			}
@@ -1192,39 +1203,49 @@ int Rotary()
 		//Change occurs when value != old value
 		//Old value should be equal to 0, current value should be high ( greater than 0 )
 	
-		if( CW > 0 )
+	
+		switch( CW + CCW + SETRotary )
 		{
 			
-			while( CW > 0 )
-			{
-				CW = GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_7);
-				CCW = GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_8);
-	
-				if( CCW > 0 )
+			//No input
+			case 0:
+				break;
+			
+			//Either CC or CCW trigger, next statement is CASE 3
+			case 1:
+				
+				if( CW == 1 )
 				{
 					OUT = 1;
+					SETRotary = 2;
 				}
-			}
-		}
-		
-		if( CCW > 0 )
-		{
 			
-			while( CCW > 0 )
-			{
-				CW = GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_7);
-				CCW = GPIO_ReadInputDataBit(GPIOE, GPIO_Pin_8);
-	
-				if( CW > 0 )
+				if( CCW == 1 )
 				{
 					OUT = 2;
-				}
+					SETRotary = 2;
 					
+				}
 				
-			}
+				break;
+				
+			//Reset SET here
+			case 2:
+				
+				OUT = 0;
+				SETRotary = 0;
+			
+				break;
+			
+			//Hold here until both outputs trigger
+			case 3:
+				OUT = 0;
+			
+				break;
 		}
+			
 		
-	return OUT;
+		return OUT;
 		
 } //end Rotary Function
 
@@ -1503,52 +1524,52 @@ char* DoubleToChar ( double in )
 
 void Metering ( )
 {
-	int value = ( int ) ( ( ( int ) OutputData ) / 3276 );		// ( 0xFFFF / 20 = 3276 )
+	int value = ( int ) ( ( ( int ) OutputData ) / 204.8 );		// ( 0x0FFF / 20 = 204.8 )
 	
 	if( value == 0 )
-		DisplayLine( 3, " -------------------" );
+		DisplayLine( 3, "                    " );
 	else if( value == 1 )
-		DisplayLine( 3, "- ------------------" );
+		DisplayLine( 3, "-                   " );
 	else if( value == 2 )
-		DisplayLine( 3, "-- -----------------" );
+		DisplayLine( 3, "--                  " );
 	else if( value == 3 )
-		DisplayLine( 3, "--- ----------------" );
+		DisplayLine( 3, "---                 " );
 	else if( value == 4 )
-		DisplayLine( 3, "---- ---------------" );
+		DisplayLine( 3, "----                " );
 	else if( value == 5 )
-		DisplayLine( 3, "----- --------------" );
+		DisplayLine( 3, "-----               " );
 	else if( value == 6 )
-		DisplayLine( 3, "------ -------------" );
+		DisplayLine( 3, "------              " );
 	else if( value == 7 )
-		DisplayLine( 3, "------- ------------" );
+		DisplayLine( 3, "-------             " );
 	else if( value == 8 )
-		DisplayLine( 3, "-------- -----------" );
+		DisplayLine( 3, "--------            " );
 	else if( value == 9 )
-		DisplayLine( 3, "--------- ----------" );
+		DisplayLine( 3, "---------           " );
 	else if( value == 10 )
-		DisplayLine( 3, "---------- ---------" );
+		DisplayLine( 3, "----------          " );
 	else if( value == 11 )
-		DisplayLine( 3, "----------- --------" );
+		DisplayLine( 3, "-----------         " );
 	else if( value == 12 )
-		DisplayLine( 3, "------------ -------" );
+		DisplayLine( 3, "------------        " );
 	else if( value == 13 )
-		DisplayLine( 3, "------------- ------" );
+		DisplayLine( 3, "-------------       " );
 	else if( value == 14 )
-		DisplayLine( 3, "-------------- -----" );
+		DisplayLine( 3, "--------------      " );
 	else if( value == 15 )
-		DisplayLine( 3, "--------------- ----" );
+		DisplayLine( 3, "---------------     " );
 	else if( value == 16 )
-		DisplayLine( 3, "---------------- ---" );
+		DisplayLine( 3, "----------------    " );
 	else if( value == 17 )
-		DisplayLine( 3, "----------------- --" );
+		DisplayLine( 3, "-----------------   " );
 	else if( value == 18 )
-		DisplayLine( 3, "------------------ -" );
+		DisplayLine( 3, "------------------  " );
 	else if( value == 19 )
 		DisplayLine( 3, "------------------- " );
 	else if( value == 20 )
 		DisplayLine( 3, "--------------------" );
 	else
-		DisplayLine( 3, "--------------------" );
+		DisplayLine( 3, "                    " );
 }
 
 
