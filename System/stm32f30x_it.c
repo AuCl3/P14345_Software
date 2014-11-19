@@ -82,6 +82,7 @@ extern __IO uint16_t CCR1_TIM2_Val;
 				double		OutputDataRel = 0; 
 				double 		GainReduction = 0;
 				uint16_t 	OutputData = 0;
+				uint16_t  OutputDataAvg = 0;
 
 
 /* Private function prototypes -----------------------------------------------*/
@@ -369,7 +370,7 @@ void TIM2_IRQHandler(void)
 		
 		//if signal above threshold, and compression not running,
 		// enable Attack Time and Compression
-		if( SSdB >= threshold && Compress == 0 )
+		if( SSdB >= threshold && Compress == 0 && Rel == 0 )
 		{
 			TIM_Cmd(TIM3, ENABLE );
 			Compress = 1;
@@ -413,6 +414,10 @@ void TIM2_IRQHandler(void)
 				OutputData = 183.183 * GainReduction;
 				
 						//Note, 183.183 = 0.0061 * 22 * ( 0xFFF / 3 )
+				
+				OutputDataAvg = ( (OutputDataAvg * 1.5 ) + OutputData ) / 2;
+				
+				OutputData = OutputDataAvg ;
 				
 			}
 		

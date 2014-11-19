@@ -100,9 +100,9 @@
 /* Global Variables ----------------------------------------------------------*/
 
 			double 			threshold = -20;		// -10 	dB
-			double 			ratio = 1;					// 5:1
-			double 			attack = 30;				//  15	ms
-			double 			release = 1.2;			// 0.6	s
+			double 			ratio = 20;					// 5:1
+			double 			attack = 20;				//  15	ms
+			double 			release = 0.1;			// 0.6	s
 			double 			mug = 0;						//	 0
 			
 			int 			autoEN = 0;
