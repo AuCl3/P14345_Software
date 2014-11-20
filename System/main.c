@@ -87,7 +87,7 @@
 	static const double ratioMin = 1;						//  1:1
 	static const double ratioMax = 20;					//  20:1
 	
-	static const double attackMin = 0.1;				//  0.1ms
+	static const double attackMin = 0.5;				//  0.1ms
 	static const double attackMax = 30;					// 30.0ms
 	
 	static const double releaseMin = 0.1;				//  0.1s	=	 100ms
@@ -178,7 +178,7 @@ __IO 	uint16_t  	TimingDelay = 0;
 int main(void)
 {
  
-	INPUT_Config();
+  	INPUT_Config();
 	
 	TIM2_Config();
 	TIM3_Config();
