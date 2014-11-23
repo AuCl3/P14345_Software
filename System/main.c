@@ -99,8 +99,8 @@
 	
 /* Global Variables ----------------------------------------------------------*/
 
-			double 			threshold = -20;		// -10 	dB
-			double 			ratio = 20;					// 5:1
+			double 			threshold = 0;		// -10 	dB
+			double 			ratio = 4;					// 5:1
 			double 			attack = 20;				//  15	ms
 			double 			release = 0.1;			// 0.6	s
 			double 			mug = 0;						//	 0
@@ -125,7 +125,9 @@ __IO 	uint16_t 		CCR1_TIM4_Val = 1600;
 
 /* ADC Calibration value */
 __IO 	uint16_t  	calibration_value = 0;
-__IO 	uint16_t  	TimingDelay = 0;
+__IO 	uint32_t  	TimingDelay = 0;
+
+__IO 	uint32_t  	nTime = 2000000;
 
 			uint16_t 		Data = 0;
 			
@@ -142,6 +144,8 @@ __IO 	uint16_t  	TimingDelay = 0;
 	void TIM4_Config(void);
 	
 	void UART_Config(void);
+	
+	void Delay(__IO uint32_t);
 	
 	void DisplayLine( int line, char* array );
 	void Display(USART_TypeDef* USARTx, uint16_t Data);
@@ -178,7 +182,7 @@ __IO 	uint16_t  	TimingDelay = 0;
 int main(void)
 {
  
-  	INPUT_Config();
+  INPUT_Config();
 	
 	TIM2_Config();
 	TIM3_Config();
@@ -186,6 +190,8 @@ int main(void)
 	
 	ADC_Config();
 	DAC_Config();
+	
+	//Delay(nTime);
 	
 	UART_Config();
 	
@@ -296,7 +302,17 @@ void DAC_Config( void )
 	
   /* DAC Periph clock enable */
   RCC_APB1PeriphClockCmd(RCC_APB1Periph_DAC, ENABLE);
-
+	
+	
+	/* Setup SysTick Timer for 1 µsec interrupts  */
+  if (SysTick_Config(SystemCoreClock / 1000000))
+  { 
+    /* Capture error */ 
+    while (1)
+    {}
+  }
+	
+	
   /* GPIOA clock enable */
   //RCC_AHBPeriphClockCmd(RCC_AHBPeriph_GPIOA, ENABLE);
   
@@ -595,6 +611,7 @@ void UART_Config(void)
   USART1_InitStructure.USART_HardwareFlowControl = USART_HardwareFlowControl_None;
   USART1_InitStructure.USART_Mode = USART_Mode_Tx;
   USART_Init(USART1, &USART1_InitStructure);
+
 	
 	/* Turn on USART1 */
 	USART_Cmd(USART1,ENABLE);
@@ -755,7 +772,7 @@ void UI_hl(void)
 			break;
 		
 		
-		case 1:			// Clockwise
+		case 2:			// Clockwise
 			if ( rotaryFlag == 1 )
 				break;
 			rotaryFlag = 1;
@@ -806,16 +823,16 @@ void UI_hl(void)
 							switch ( level2CurrentSelection )
 							{
 								case 0:
-									DisplayLine ( 1, "      Threshold     " );
+									DisplayLine ( 1, "   Threshold (dBu)  " );
 									break;
 								case 1:
-									DisplayLine ( 1, "     MakeUp Gain    " );
+									DisplayLine ( 1, "  MakeUp Gain (dB)  " );
 									break;
 								case 2:
-									DisplayLine ( 1, "       Attack       " );
+									DisplayLine ( 1, "     Attack (ms)    " );
 									break;
 								case 3:
-									DisplayLine ( 1, "      Release       " );
+									DisplayLine ( 1, "     Release (s)    " );
 									break;
 								case 4:
 									DisplayLine ( 1, "       Ratio        " );
@@ -880,8 +897,11 @@ void UI_hl(void)
 							DisplayLine ( 2, DoubleToChar( attack ) );
 							break;
 						case 3:
-							if ( release == releaseMax )
+							if ( release >= releaseMax )
+							{
+								release = releaseMax;
 								break;
+							}
 							release += releaseStep;
 							DisplayLine ( 2, DoubleToChar( release ) );
 							break;
@@ -898,7 +918,7 @@ void UI_hl(void)
 				default:
 					break;
 			}
-		case 2:			// Counter-Clockwise
+		case 1:			// Counter-Clockwise
 			if ( rotaryFlag == 1 )
 				break;
 			rotaryFlag = 1;
@@ -943,16 +963,16 @@ void UI_hl(void)
 							switch ( level2CurrentSelection )
 							{
 								case 0:
-									DisplayLine ( 1, "      Threshold     " );
+									DisplayLine ( 1, "   Threshold (dBu)  " );
 									break;
 								case 1:
-									DisplayLine ( 1, "     MakeUp Gain    " );
+									DisplayLine ( 1, "  MakeUp Gain (dB)  " );
 									break;
 								case 2:
-									DisplayLine ( 1, "       Attack       " );
+									DisplayLine ( 1, "     Attack (ms)    " );
 									break;
 								case 3:
-									DisplayLine ( 1, "      Release       " );
+									DisplayLine ( 1, "     Release (s)    " );
 									break;
 								case 4:
 									DisplayLine ( 1, "       Ratio        " );
@@ -1056,16 +1076,16 @@ void UI_hl(void)
 								switch ( level2CurrentSelection )
 								{
 								case 0:
-									DisplayLine ( 1, "      Threshold     " );
+									DisplayLine ( 1, "   Threshold (dBu)  " );
 									break;
 								case 1:
-									DisplayLine ( 1, "     MakeUp Gain    " );
+									DisplayLine ( 1, "  MakeUp Gain (dB)  " );
 									break;
 								case 2:
-									DisplayLine ( 1, "       Attack       " );
+									DisplayLine ( 1, "     Attack (ms)    " );
 									break;
 								case 3:
-									DisplayLine ( 1, "      Release       " );
+									DisplayLine ( 1, "     Release (s)    " );
 									break;
 								case 4:
 									DisplayLine ( 1, "       Ratio        " );
@@ -1569,7 +1589,7 @@ void Metering ( )
 	else if( value == 20 )
 		DisplayLine( 3, "--------------------" );
 	else
-		DisplayLine( 3, "                    " );
+		DisplayLine( 3, "--------------------" );
 }
 
 

@@ -46,6 +46,10 @@ extern	int 			Compress;
 extern	int				Att;
 extern	int				Rel;
 
+extern	int 			bypassEN;
+
+extern __IO uint32_t TimingDelay;
+
 
 /* RCC Clock Variables */
 
@@ -258,6 +262,7 @@ void PendSV_Handler(void)
 
 void SysTick_Handler(void)
 {
+	TimingDelay--;
 }
 
 
@@ -391,7 +396,7 @@ void TIM2_IRQHandler(void)
 		
 		
 		//if not compressing, output = 0
-		if( Compress == 0 )
+		if( Compress == 0 || bypassEN == 1 )
 		{
 			//Output 0x000 to DAC
 
@@ -400,7 +405,7 @@ void TIM2_IRQHandler(void)
 		
 		
 		//if compressing, determine VCA voltage
-		if( Compress == 1 )
+		else
 		{
 			
 			if( Rel == 0 )
@@ -450,7 +455,7 @@ void TIM2_IRQHandler(void)
 				if( OutputData >= 0xFFF )
 				{
 					//Output to DAC
-					DAC_SetChannel1Data(DAC_Align_12b_R, 0xFFF);
+					DAC_SetChannel1Data(DAC_Align_12b_R, 0x00000FFF);
 				}
 				else
 				{
