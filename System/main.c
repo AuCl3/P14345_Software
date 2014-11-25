@@ -103,7 +103,7 @@
 			double 			ratio = 4;					// 5:1
 			double 			attack = 20;				//  15	ms
 			double 			release = 0.1;			// 0.6	s
-			double 			mug = 0;						//	 0
+			double 			mug = 0.5;						//	 0
 			
 			int 			autoEN = 0;
 			int 			bypassEN = 0;
@@ -514,8 +514,8 @@ void TIM4_Config(void)
 	RCC_APB1PeriphClockCmd(RCC_APB1Periph_TIM4, ENABLE);
 
   /* Time base configuration */
-	TIM_TimeBaseStructure.TIM_Period = 65535;
-  TIM_TimeBaseStructure.TIM_Prescaler = 1;
+	TIM_TimeBaseStructure.TIM_Period = 6553;
+  TIM_TimeBaseStructure.TIM_Prescaler = 0;
   TIM_TimeBaseStructure.TIM_CounterMode = TIM_CounterMode_Up;
   TIM_TimeBaseStructure.TIM_ClockDivision = 0;
 	
@@ -540,6 +540,7 @@ void TIM4_Config(void)
 	
 	
 	/* Output PWM Mode configuration: Channel1 */
+	CCR1_TIM4_Val = 8.19 * mug;
 	
   TIM_OCInitStructure.TIM_OCMode = TIM_OCMode_PWM1;
   TIM_OCInitStructure.TIM_OutputState = TIM_OutputState_Enable;
@@ -885,7 +886,7 @@ void UI_hl(void)
 							if ( mug == mugMax )
 								break;
 							mug += mugStep;
-							CCR1_TIM4_Val = 133 * mug;
+							CCR1_TIM4_Val = 8.19 * mug;
 							TIM_OCInitStructure.TIM_Pulse = CCR1_TIM4_Val;
 							TIM_OC1Init(TIM4, &TIM_OCInitStructure);
 							DisplayLine ( 2, DoubleToChar( mug ) );
@@ -1020,7 +1021,7 @@ void UI_hl(void)
 							if ( mug == mugMin )
 								break;
 							mug -= mugStep;
-							CCR1_TIM4_Val = 133 * mug;
+							CCR1_TIM4_Val = 8.19 * mug;
 							TIM_OCInitStructure.TIM_Pulse = CCR1_TIM4_Val;
 							TIM_OC1Init(TIM4, &TIM_OCInitStructure);
 							DisplayLine ( 2, DoubleToChar( mug ) );
