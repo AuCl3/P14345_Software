@@ -435,7 +435,7 @@ void TIM2_IRQHandler(void)
 				
 			}
 			
-			if( Rel == 1 )
+			if( Rel == 1  )
 			{
 				
 				
