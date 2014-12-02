@@ -41,6 +41,7 @@ extern	double		threshold;
 extern	double 		attack;
 extern	double 		release;
 extern	double 		ratio;
+extern	double 		mug;
 
 extern	int 			Compress;
 extern	int				Att;
@@ -413,8 +414,12 @@ void TIM2_IRQHandler(void)
 				//Compute VCA dB
 				VCAdB = threshold + (( SSdB - threshold ) / ratio );
 			
-				GainReduction = SSdB - VCAdB
-				;
+				GainReduction = SSdB - VCAdB;
+				
+				if( mug < 0 )
+				{
+					GainReduction = GainReduction - mug;
+				}
 				
 				OutputData = 183.183 * GainReduction;
 				

@@ -191,7 +191,7 @@ int main(void)
 	ADC_Config();
 	DAC_Config();
 	
-	//Delay(nTime);
+	Delay(nTime);
 	
 	UART_Config();
 	
