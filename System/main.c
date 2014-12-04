@@ -103,7 +103,7 @@
 			double 			ratio = 4;					// 5:1
 			double 			attack = 20;				//  15	ms
 			double 			release = 0.1;			// 0.6	s
-			double 			mug = 0.5;						//	 0
+			double 			mug = -1.0;						//	 0
 			
 			int 			autoEN = 0;
 			int 			bypassEN = 0;
